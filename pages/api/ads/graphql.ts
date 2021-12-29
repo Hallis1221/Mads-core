@@ -3,18 +3,17 @@ import { ApolloServer } from "apollo-server-micro";
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   ApolloServerPluginLandingPageGraphQLPlayground,
-  ApolloServerPluginLandingPageProductionDefault,
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
 
-import resolvers from "../../../bones/resolvers/ads";
-import { typeDefs } from "../../../bones/typedefs/ads";
+import resolvers from "../../../bones/resolver";
+import { typeDefs } from "../../../bones/typedefs";
 import { connectDB } from "../../../utils/connection";
 
 connectDB();
 
 const apolloServer = new ApolloServer({
-  typeDefs,
+  typeDefs: typeDefs,
   resolvers,
   plugins: [
     // Install a landing page plugin based on NODE_ENV
