@@ -37,10 +37,10 @@ const AdSchema = new mongoose.Schema({
   // Tags are used to filter ads to be relevant to the content
   tags: {
     // The lower the number, the higher the priority. High priority tags are the most likely to be matched with a content.
-    type: {
+    type: [{
       tag: String,
       priority: Number,
-    },
+    }],
     required: true,
   },
 
@@ -48,7 +48,7 @@ const AdSchema = new mongoose.Schema({
   owner: {
     type: {
       uid: String,
-      displauName: String,
+      displayName: String,
     },
     required: true,
   },
