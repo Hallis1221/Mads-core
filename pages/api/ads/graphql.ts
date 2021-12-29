@@ -1,7 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { ApolloServer } from "apollo-server-micro";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginLandingPageProductionDefault, ApolloServerPluginLandingPageLocalDefault} from "apollo-server-core";
+import {
+  ApolloServerPluginLandingPageGraphQLPlayground,
+  ApolloServerPluginLandingPageProductionDefault,
+} from "apollo-server-core";
 
 import resolvers from "../../../bones/resolvers/ads";
 import { typeDefs } from "../../../bones/typedefs/ads";
@@ -19,7 +22,14 @@ const apolloServer = new ApolloServer({
           graphRef: "my-graph-id@my-graph-variant",
           footer: false,
         })
-      : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+      : ApolloServerPluginLandingPageGraphQLPlayground({
+          workspaceName: "MADS api",
+          settings: {
+            "request.credentials": "include",
+            "schema.polling.enable": true,
+            "editor.theme": "dark",
+          },
+        }),
   ],
 });
 
