@@ -13,7 +13,7 @@ import { connectDB } from "../../../utils/connection";
 connectDB();
 
 const apolloServer = new ApolloServer({
-  typeDefs,
+  typeDefs: typeDefs,
   resolvers,
   plugins: [
     // Install a landing page plugin based on NODE_ENV
