@@ -30,17 +30,17 @@ const AdDataSchema = new mongoose.Schema({
     },
     
     startDate: {
-        type: Date,
+        type: String,
         required: false,
     },
 
     endDate: {
-        type: Date,
+        type: String!,
         required: false,
     },
 });
 
-const AdData = mongoose.models.analytics || mongoose.model("AdData", AdDataSchema);
+const AdData = mongoose.models.AdData || mongoose.model("AdData", AdDataSchema);
 
 // EXPORTING OUR MODEL
 export default AdData;
