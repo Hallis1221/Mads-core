@@ -44,7 +44,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const response = handleCase[method]
   if (response) response(req, res)
   else res.status(400).json({ error: "No Response for This Request" })
-  res.status(200).json({ message: "Success" });
 }
 
 export default handler
