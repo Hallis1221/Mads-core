@@ -1,9 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { connect } from "../../utils/connection";
+import { connect } from "../../../utils/connection";
 import { ApolloServer,  } from "apollo-server-micro";
-import { typeDefs } from "../../bones/typeDefs";
-import resolvers from "../../bones/resolvers";
+import { typeDefs } from "../../../bones/typeDefs";
+import resolvers from "../../../bones/resolvers";
 
 connect();
 
@@ -28,7 +28,7 @@ export default async function handler(req: any, res: any) {
 
   await startServer
   await apolloServer.createHandler({
-    path: '/api/graphql',
+    path: '/api/ads',
   })(req, res)
 }
 
