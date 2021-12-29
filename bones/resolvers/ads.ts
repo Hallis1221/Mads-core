@@ -22,7 +22,7 @@ const resolvers = {
   Mutation: {
     createAd: async (_: any, { input }: any) => {
       try {
-        const ad = new Ad(input );
+        const ad = new Ad(input);
         const newAd = await ad.save();
 
         return newAd;
@@ -33,7 +33,7 @@ const resolvers = {
 
     updateAd: async (_: any, { id, input }: any) => {
       try {
-       let ad = await Ad.findById(id);
+        let ad = await Ad.findById(id);
         if (!ad) {
           throw new Error("Ad not found");
         }
@@ -47,15 +47,15 @@ const resolvers = {
     deleteAd: async (_: any, { id }: any) => {
       try {
         const ad = await Ad.findById(id);
-         if (!ad) {
-           throw new Error("Ad not found");
-         }
-         await Ad.findByIdAndDelete(id);
-         return "Ad deleted";
-       } catch (error) {
-         console.error(error);
-       }
-    }
+        if (!ad) {
+          throw new Error("Ad not found");
+        }
+        await Ad.findByIdAndDelete(id);
+        return "Ad deleted";
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 };
 
