@@ -6,8 +6,8 @@ import {
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
 
-import resolvers from "../../../bones/resolvers/ads";
-import { typeDefs } from "../../../bones/typedefs/ads";
+import resolvers from "../../../bones/resolver";
+import { typeDefs } from "../../../bones/typedefs";
 import { connectDB } from "../../../utils/connection";
 
 connectDB();
