@@ -5,7 +5,7 @@ import mongoose, { Model } from "mongoose";
 const { MONGO_DATABASE_URL } = process.env;
 
 // connection function
-export const connect = async () =>
+export const connectDB = async () =>
   await mongoose
     .connect(MONGO_DATABASE_URL as string)
     .catch((err: any) => console.log(err));
