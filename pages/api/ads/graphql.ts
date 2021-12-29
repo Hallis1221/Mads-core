@@ -3,7 +3,6 @@ import { ApolloServer } from "apollo-server-micro";
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   ApolloServerPluginLandingPageGraphQLPlayground,
-  ApolloServerPluginLandingPageProductionDefault,
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
 
