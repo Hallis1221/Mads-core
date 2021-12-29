@@ -1,59 +1,26 @@
 import Ad from "../models/ad";
-import { adQueries } from "./queries/ad";
+import { createAd, deleteAd, updateAd } from "./mutations/ad";
+import { createData, deleteData, updateData, updateDataLimits } from "./mutations/data";
+import { getAd, getAds } from "./queries/ad";
+import { getAdData, getData} from "./queries/data";
 
 const resolvers = {
   Query: {
-...adQueries
+    getAd,
+    getAds,
+    getAdData,
+    getData
   },
 
   // TODO implement authentication for Mutation endpoints
   Mutation: {
-    createAd: async (_: any, { input }: any) => {
-      if (  process.env.NODE_ENV === "production"){
-        return null;
-      }
-      try {
-        const ad = new Ad(input);
-        const newAd = await ad.save();
-
-        return newAd;
-      } catch (error) {
-        console.error(error);
-      }
-    },
-
-    updateAd: async (_: any, { id, input }: any) => {
-      if (  process.env.NODE_ENV === "production"){
-        return null;
-      }
-      try {
-        let ad = await Ad.findById(id);
-        if (!ad) {
-          throw new Error("Ad not found");
-        }
-        ad = await Ad.findByIdAndUpdate(id, { $set: input }, { new: true });
-        
-        return ad;
-      } catch (error) {
-        console.error(error);
-      }
-    },
-
-    deleteAd: async (_: any, { id }: any) => {
-      if (  process.env.NODE_ENV === "production"){
-        return null;
-      }
-      try {
-        const ad = await Ad.findById(id);
-        if (!ad) {
-          throw new Error("Ad not found");
-        }
-        await Ad.findByIdAndDelete(id);
-        return "Ad deleted";
-      } catch (error) {
-        console.error(error);
-      }
-    },
+    createAd,
+    deleteAd,
+    updateAd,
+    createData,
+    deleteData,
+    updateData,
+    updateDataLimits
   },
 };
 
