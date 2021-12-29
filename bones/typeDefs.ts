@@ -29,10 +29,16 @@ export const typeDefs = gql`
     title: String!
     link: String!
     image: String
-    tags: [TagInput]
+    owner: AdOwnerInput!
+    tags: [TagInput]!
   }
 
   type AdOwner {
+    uid: String!
+    displayName: String!
+  }
+
+  input AdOwnerInput {
     uid: String!
     displayName: String!
   }
