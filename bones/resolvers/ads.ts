@@ -1,4 +1,4 @@
-import Ad from "./models/ad";
+import Ad from "../models/ad";
 
 const resolvers = {
   Query: {
