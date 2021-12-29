@@ -22,7 +22,7 @@ const resolvers = {
   Mutation: {
     createAd: async (_: any, { input }: any) => {
       try {
-        const ad = new Ad({ input });
+        const ad = new Ad(input );
         const newAd = await ad.save();
 
         return newAd;
