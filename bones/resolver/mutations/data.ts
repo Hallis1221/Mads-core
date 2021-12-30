@@ -1,9 +1,9 @@
+import { authenticated } from "../../auth";
 import AdData from "../../models/data";
 
 export async function createData(_: any, { input }: any) {
-  if (process.env.NODE_ENV === "production") {
-    return null;
-  }
+  if (process.env.NODE_ENV === "production" && !authenticated) 
+
   try {
     const data = new AdData(input);
     const newData = await data.save();
@@ -15,9 +15,8 @@ export async function createData(_: any, { input }: any) {
 }
 
 export async function updateDataLimits(_: any, { id, input }: any) {
-  if (process.env.NODE_ENV === "production") {
-    return null;
-  }
+  if (process.env.NODE_ENV === "production" && !authenticated) 
+
   try {
     let ad = await AdData.findOne({ adID: id });
     if (!ad) {
@@ -36,9 +35,8 @@ export async function updateDataLimits(_: any, { id, input }: any) {
 }
 
 export async function updateData(_: any, { id, input }: any) {
-  if (process.env.NODE_ENV === "production") {
-    return null;
-  }
+  if (process.env.NODE_ENV === "production" && !authenticated) 
+
   try {
     let ad = await AdData.findOne({ adID: id });
     if (!ad) {
@@ -57,9 +55,8 @@ export async function updateData(_: any, { id, input }: any) {
 }
 
 export async function deleteData(_: any, { id }: any) {
-  if (process.env.NODE_ENV === "production") {
-    return null;
-  }
+  if (process.env.NODE_ENV === "production" && !authenticated) 
+
   try {
     const ad = await AdData.findOne({ adID: id });
     if (!ad) {

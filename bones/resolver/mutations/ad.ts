@@ -1,9 +1,10 @@
+import { authenticated } from "../../auth";
 import Ad from "../../models/ad";
 
 export async function createAd(_: any, { input }: any) {
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production" && !authenticated) 
     return null;
-  }
+  
   try {
     const ad = new Ad(input);
     const newAd = await ad.save();
@@ -15,9 +16,8 @@ export async function createAd(_: any, { input }: any) {
 }
 
 export async function updateAd(_: any, { id, input }: any) {
-  if (process.env.NODE_ENV === "production") {
-    return null;
-  }
+  if (process.env.NODE_ENV === "production" && !authenticated) 
+
   try {
     let ad = await Ad.findById(id);
     if (!ad) {
@@ -32,9 +32,8 @@ export async function updateAd(_: any, { id, input }: any) {
 }
 
 export async function deleteAd(_: any, { id }: any) {
-  if (process.env.NODE_ENV === "production") {
-    return null;
-  }
+  if (process.env.NODE_ENV === "production" && !authenticated) 
+
   try {
     const ad = await Ad.findById(id);
     if (!ad) {
