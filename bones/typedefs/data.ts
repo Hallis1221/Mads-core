@@ -40,7 +40,7 @@ type Query {
     endDate: String!
   }
   input DataInput {
-    clicks: Int!
-    views: Int!
+    clicks: Int
+    views: Int
   }
 `;
