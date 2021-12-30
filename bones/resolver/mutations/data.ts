@@ -1,9 +1,9 @@
+import { authenticated } from "../../auth";
 import AdData from "../../models/data";
 
 export async function createData(_: any, { input }: any) {
-  if (process.env.NODE_ENV === "production") {
-    return null;
-  }
+  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+
   try {
     const data = new AdData(input);
     const newData = await data.save();
@@ -15,9 +15,8 @@ export async function createData(_: any, { input }: any) {
 }
 
 export async function updateDataLimits(_: any, { id, input }: any) {
-  if (process.env.NODE_ENV === "production") {
-    return null;
-  }
+  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+
   try {
     let ad = await AdData.findOne({ adID: id });
     if (!ad) {
@@ -35,34 +34,33 @@ export async function updateDataLimits(_: any, { id, input }: any) {
   }
 }
 
-export async function updateData(_: any, { id, input }: any) {
-  if (process.env.NODE_ENV === "production") {
-    return null;
-  }
+export async function updateData(_: any, { adID, input }: any) {
+  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+
   try {
-    let ad = await AdData.findOne({ adID: id });
-    if (!ad) {
+    let data = (await AdData.find((data: any) => data?.adID === adID).clone())[0];
+
+    if (!data) {
       throw new Error("Data not found");
     }
-    ad = await AdData.findOneAndUpdate(
-      { adID: id },
+    data = await AdData.findOneAndUpdate(
+      { adID: adID },
       { $set: input },
       { new: true }
     );
 
-    return ad;
+    return data;
   } catch (error) {
     console.error(error);
   }
 }
 
 export async function deleteData(_: any, { id }: any) {
-  if (process.env.NODE_ENV === "production") {
-    return null;
-  }
+  if (process.env.NODE_ENV === "production" && !authenticated)  return null;
+
   try {
-    const ad = await AdData.findOne({ adID: id });
-    if (!ad) {
+    const data = await AdData.findOne({ adID: id });
+    if (!data) {
       throw new Error("Data not found");
     }
     await AdData.findOneAndDelete({ adID: id });

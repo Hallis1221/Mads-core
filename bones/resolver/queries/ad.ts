@@ -1,6 +1,9 @@
+import { authenticated } from "../../auth";
+import registerView from "../../data/registerView";
 import Ad from "../../models/ad";
 
 export async function getAds() {
+  if (process.env.NODE_ENV === "production" && !authenticated) return null;
   try {
     const ads = await Ad.find({});
     return ads;
@@ -13,6 +16,8 @@ export async function getAd(_: any, { id }: any) {
   const ad = await Ad.findById(id);
   if (!ad) {
     throw new Error("Ad not found");
+  }else {
+    registerView(id);
   }
   return ad;
 }
