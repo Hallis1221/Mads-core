@@ -1,5 +1,6 @@
 import { gql } from "graphql-request";
-import { client, correctPassword } from "../../auth";
+import { correctPassword } from "../../auth";
+import { client } from "../../network";
 import Ad from "../../models/ad";
 
 const query = gql`
@@ -22,7 +23,7 @@ export default async function findAd(_: any, { input }: any) {
         password: correctPassword,
       },
     })
-    .then((data) => {
+    .then((data: { [x: string]: any; }) => {
       return data["getAds"];
     });
 

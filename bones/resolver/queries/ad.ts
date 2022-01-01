@@ -1,4 +1,5 @@
-import { authenticated, correctPassword } from "../../auth";
+import { correctPassword } from "../../auth";
+import { authenticated } from "../../network";
 import registerView from "../../data/registerAdView";
 import Ad from "../../models/ad";
 
