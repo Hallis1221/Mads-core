@@ -1,7 +1,6 @@
-import { GraphQLClient, gql } from "graphql-request";
-import { correctPassword } from "../auth";
+import {  gql } from "graphql-request";
+import { client, correctPassword, host } from "../auth";
 
-const client = new GraphQLClient("http://localhost:3000/api/graphql");
 
 const mutation = gql`
   mutation Mutation($adID: String!, $input: AdDataInput) {
