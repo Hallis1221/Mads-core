@@ -13,6 +13,12 @@ import {
   updateContent,
 } from "./mutations/content";
 import { getContent } from "./queries/content";
+import { getContentData } from "./queries/contentData";
+import {
+  createContentData,
+  deleteContentData,
+  updateContentData,
+} from "./mutations/contentData";
 
 const resolvers = {
   Query: {
@@ -21,6 +27,7 @@ const resolvers = {
     getAdData,
     getAdsData,
     getContent,
+    getContentData,
   },
 
   // TODO implement authentication for Mutation endpoints
@@ -35,6 +42,9 @@ const resolvers = {
     createContent,
     deleteContent,
     updateContent,
+    createContentData,
+    deleteContentData,
+    updateContentData,
   },
 };
 

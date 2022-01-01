@@ -35,7 +35,7 @@ export async function updateContent(_: any, { id, input }: any) {
 }
 
 export async function deleteContent(_: any, { id }: any) {
-  if (process.env.NODE_ENV === "production" && !!authenticated) return null;
+  if (process.env.NODE_ENV === "production" && !authenticated) return null;
 
   try {
     const content = await Content.findById(id);
