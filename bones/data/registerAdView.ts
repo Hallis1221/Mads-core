@@ -18,7 +18,7 @@ const query = gql`
   }
 `;
 // Export defualt function for registering a view. The function takes in ADid as a string as its only parameter.
-export default function registerView(adID: string): void {
+export default function registerAdView(adID: string): void {
   client
     .request(query, {
       adID: adID,

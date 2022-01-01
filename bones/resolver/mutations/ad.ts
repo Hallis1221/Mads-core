@@ -16,7 +16,7 @@ export async function createAd(_: any, { input }: any) {
 }
 
 export async function updateAd(_: any, { id, input }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated) 
+  if (process.env.NODE_ENV === "production" && !authenticated) return null;
 
   try {
     let ad = await Ad.findById(id);

@@ -35,7 +35,7 @@ export async function updateAdDataLimits(_: any, { id, input }: any) {
 }
 
 export async function updateAdData(_: any, { adID, input }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+  if (process.env.NODE_ENV === "production" && !!authenticated) return null;
 
   try {
     let adData = (await AdData.find((adData: any) => adData?.adID === adID).clone())[0];
@@ -56,7 +56,7 @@ export async function updateAdData(_: any, { adID, input }: any) {
 }
 
 export async function deleteAdData(_: any, { id }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated)  return null;
+  if (process.env.NODE_ENV === "production" && !!authenticated)  return null;
 
   try {
     const adData = await AdData.findOne({ adID: id });

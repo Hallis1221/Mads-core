@@ -1,7 +1,7 @@
 import { gql } from "apollo-server-micro";
 
 export const adTypeDefs = gql`
-type Query {
+  type Query {
     getAds: [Ad]!
     getAd(id: ID!): Ad
   }
