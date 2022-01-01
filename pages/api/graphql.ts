@@ -32,7 +32,7 @@ const apolloServer = new ApolloServer({
 
 const startServer = apolloServer.start();
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: any, res: any) {
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader(
     "Access-Control-Allow-Origin",
@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.end();
     return false;
   }
-  console.log(req.headers.host)
+
   await startServer;
   await apolloServer.createHandler({
     path: "/api/graphql",
