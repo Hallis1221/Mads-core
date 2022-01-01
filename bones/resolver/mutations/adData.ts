@@ -20,7 +20,7 @@ export async function updateAdDataLimits(_: any, { id, input }: any) {
   try {
     let ad = await AdData.findOne({ adID: id });
     if (!ad) {
-      throw new Error("Data not found");
+      throw new Error("AdData not found");
     }
     ad = await AdData.findOneAndUpdate(
       { adID: id },
@@ -61,10 +61,10 @@ export async function deleteAdData(_: any, { id }: any) {
   try {
     const adData = await AdData.findOne({ adID: id });
     if (!adData) {
-      throw new Error("Data not found");
+      throw new Error("AdData not found");
     }
     await AdData.findOneAndDelete({ adID: id });
-    return "Data deleted";
+    return "AdData deleted";
   } catch (error) {
     console.error(error);
   }

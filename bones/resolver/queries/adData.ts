@@ -10,7 +10,7 @@ export async function getAdsData() {
 }
 
 export async function getAdData(_: any, { adID }: any) {
-  const adData = (await AdData.find((data: any) => data?.adID === adID).clone())[0];
+  const adData = (await AdData.find((adData: any) => adData?.adID === adID).clone())[0];
   if (!adData) {
     throw new Error("Data not found");
   }
