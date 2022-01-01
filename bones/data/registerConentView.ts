@@ -1,6 +1,6 @@
-import { GraphQLClient, gql } from "graphql-request";
+import {  gql } from "graphql-request";
+import { client } from "../auth";
 
-const client = new GraphQLClient("http://localhost:3000/api/ads/graphql");
 
 const mutation = gql`
   mutation Mutation($contentID: String!, $input: ContentDataInput) {
@@ -33,7 +33,7 @@ export default function registerContentView(contentID: string): void {
       contentID: contentID,
     })
     .then(
-      (contentData) => {
+      (contentData: any) => {
         incrementView(contentData);
       },
       // on error

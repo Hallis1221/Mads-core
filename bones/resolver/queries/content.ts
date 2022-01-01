@@ -1,3 +1,4 @@
+import { authenticated } from "../../auth";
 import registerContentView from "../../data/registerConentView";
 import Content from "../../models/content";
 
@@ -9,4 +10,14 @@ export async function getContent(_: any, { id }: any) {
     registerContentView(id);
   }
   return content;
+}
+
+export async function getContents(_ : any, { input } : any) {
+  if (!authenticated(input["password"])) return null;
+  try {
+    const contents = await Content.find({});
+    return contents;
+  } catch (error) {
+    console.error(error);
+  }
 }

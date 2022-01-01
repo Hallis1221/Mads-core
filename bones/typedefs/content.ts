@@ -5,6 +5,7 @@ import { gql } from "apollo-server-micro";
 export const contentTypeDefs = gql`
   type Query {
     getContent(id: ID!): Content
+    getContents(input: PasswordInput): [Content]!
   }
 
   type Mutation {
