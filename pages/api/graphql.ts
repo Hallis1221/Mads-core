@@ -51,7 +51,7 @@ export default async function handler(
     return false;
   }
   if (!host && req.headers.host) {
-    setHost(req.headers.host);
+    setHost(req.headers.host.replace(/^https?:\/\//, "").replace(/^https?:\/\//, ""));
     console.log("Set host to: " + req.headers.host);
   }
   await startServer;
