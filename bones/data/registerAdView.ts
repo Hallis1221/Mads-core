@@ -1,6 +1,7 @@
 import { GraphQLClient, gql } from "graphql-request";
+import { correctPassword } from "../auth";
 
-const client = new GraphQLClient("http://localhost:3000/api/ads/graphql");
+const client = new GraphQLClient("http://localhost:3000/api/graphql");
 
 const mutation = gql`
   mutation Mutation($adID: String!, $input: AdDataInput) {
@@ -31,6 +32,7 @@ export default function registerAdView(adID: string): void {
   client
     .request(query, {
       adID: adID,
+      password: correctPassword
     })
     .then(
       (adData) => {
@@ -53,6 +55,7 @@ export default function registerAdView(adID: string): void {
           maxViews: 0,
           startDate: "null",
           endDate: "null",
+          password: correctPassword
         },
       })
       .then((data) => {
@@ -71,6 +74,7 @@ export default function registerAdView(adID: string): void {
       adID: adID,
       input: {
         views: newViews,
+        password: correctPassword
       },
     });
   }
