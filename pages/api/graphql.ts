@@ -50,10 +50,10 @@ export default async function handler(
     res.end();
     return false;
   }
-  if (!host && req.headers.host) {
+  if (!host && req.headers.host) 
     setHost(req.headers.host.replace(/^https?:\/\//, "").replace(/^https?:\/\//, ""));
-    console.log("Set host to: " + req.headers.host);
-  }
+ 
+  
   await startServer;
   await apolloServer.createHandler({
     path: "/api/graphql",
