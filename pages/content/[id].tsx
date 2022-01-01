@@ -26,7 +26,6 @@ const contentQuery = gql`
 const findadQuery = gql`
   query Query($input: FindAdInput) {
     findAd(input: $input) {
-      type
       title
       link
       image
@@ -41,8 +40,6 @@ const findadQuery = gql`
 function AdPage(props: any): ReactElement {
 const ad = props.ad
 const content = props.content
-
-console.log(content)
 // TODO check for other types of ads
   return (
     <div className="py-0 px-8">
@@ -145,7 +142,6 @@ AdPage.getInitialProps = async (context: any) => {
     })).findAd;
 
   }
-
   return { ad, content };
 };
 export default AdPage;
