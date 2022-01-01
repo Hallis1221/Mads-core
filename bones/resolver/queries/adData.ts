@@ -1,4 +1,4 @@
-import AdData from "../../models/data";
+import AdData from "../../models/adData";
 
 export async function getAdsData() {
   try {

@@ -1,5 +1,5 @@
 import { authenticated } from "../../auth";
-import AdData from "../../models/data";
+import AdData from "../../models/adData";
 
 export async function createAdData(_: any, { input }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated) return null;
@@ -38,18 +38,18 @@ export async function updateAdData(_: any, { adID, input }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated) return null;
 
   try {
-    let data = (await AdData.find((data: any) => data?.adID === adID).clone())[0];
+    let adData = (await AdData.find((adData: any) => adData?.adID === adID).clone())[0];
 
-    if (!data) {
+    if (!adData) {
       throw new Error("Data not found");
     }
-    data = await AdData.findOneAndUpdate(
+    adData = await AdData.findOneAndUpdate(
       { adID: adID },
       { $set: input },
       { new: true }
     );
 
-    return data;
+    return adData;
   } catch (error) {
     console.error(error);
   }
@@ -59,8 +59,8 @@ export async function deleteAdData(_: any, { id }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated)  return null;
 
   try {
-    const data = await AdData.findOne({ adID: id });
-    if (!data) {
+    const adData = await AdData.findOne({ adID: id });
+    if (!adData) {
       throw new Error("Data not found");
     }
     await AdData.findOneAndDelete({ adID: id });
