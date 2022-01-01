@@ -14,7 +14,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="min-h-screen py-8 px-0 flex-1 flex flex-col ">
+      <main className="min-h-screen py-8 px-0 flex-1 flex flex-col">
         <div className="items-end justify-start flex">
           <Image
             src="/mads.svg"
@@ -23,7 +23,7 @@ const Home: NextPage = () => {
             height={128 * 0.3}
           />
         </div>
-        <div className="flex items-center justify-center flex-wrap">
+        <div className="flex items-center flex-wrap flex-col absolute pt-56 lg:relative lg:pt-14 md:pt-40 ">
           <a className="m-4 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
             <a href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app">
               <Image
