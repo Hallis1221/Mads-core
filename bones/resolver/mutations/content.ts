@@ -1,4 +1,4 @@
-import { authenticated } from "../../network";
+import { authenticated } from "../../auth";
 import Content from "../../models/content";
 
 export async function createContent(_: any, { input }: any) {
