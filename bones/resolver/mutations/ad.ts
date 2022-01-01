@@ -2,7 +2,7 @@ import { authenticated } from "../../auth";
 import Ad from "../../models/ad";
 
 export async function createAd(_: any, { input }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated) 
+  if (!authenticated(input["password"])) 
     return null;
   
   try {
@@ -16,7 +16,7 @@ export async function createAd(_: any, { input }: any) {
 }
 
 export async function updateAd(_: any, { id, input }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+  if (!authenticated(input["password"])) return null;
 
   try {
     let ad = await Ad.findById(id);
@@ -31,8 +31,8 @@ export async function updateAd(_: any, { id, input }: any) {
   }
 }
 
-export async function deleteAd(_: any, { id }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated) 
+export async function deleteAd(_: any, { id, input }: any,)  {
+  if (!authenticated(input["password"])) return null;
 
   try {
     const ad = await Ad.findById(id);

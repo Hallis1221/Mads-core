@@ -2,7 +2,7 @@ import { authenticated } from "../../auth";
 import AdData from "../../models/adData";
 
 export async function createAdData(_: any, { input }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+  if (!authenticated(input["password"])) return null;
 
   try {
     const adData = new AdData(input);
@@ -15,7 +15,7 @@ export async function createAdData(_: any, { input }: any) {
 }
 
 export async function updateAdDataLimits(_: any, { id, input }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+  if (!authenticated(input["password"])) return null;
 
   try {
     let ad = await AdData.findOne({ adID: id });
@@ -35,7 +35,7 @@ export async function updateAdDataLimits(_: any, { id, input }: any) {
 }
 
 export async function updateAdData(_: any, { adID, input }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+  if (!authenticated(input["password"])) return null;
 
   try {
     let adData = (await AdData.find((adData: any) => adData?.adID === adID).clone())[0];
@@ -55,8 +55,8 @@ export async function updateAdData(_: any, { adID, input }: any) {
   }
 }
 
-export async function deleteAdData(_: any, { adID }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated)  return null;
+export async function deleteAdData(_: any, { adID,input }: any, ) {
+  if (!authenticated(input["password"]))  return null;
 
   try {
     const adData = await AdData.findOne({ adID });

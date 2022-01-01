@@ -10,7 +10,7 @@ type Query {
     createAdData(input: AdDataCreateInput): AdData
     updateAdDataLimits(adID: String!, input: DataLimitsInput): AdData
     updateAdData(adID: String!, input: AdDataInput): AdData
-    deleteAdData(adID: String!): AdData
+    deleteAdData(adID: String!, input: PasswordInput): AdData
   }
 
   type AdData {
@@ -23,11 +23,16 @@ type Query {
     endDate: String!
   }
 
+  input PasswordInput {
+    password: String
+  }
+
   input DataLimitsInput {
     maxClicks: Int!
     maxViews: Int!
     startDate: String!
     endDate: String!
+    password: String
   }
   
   input AdDataCreateInput {
@@ -38,9 +43,11 @@ type Query {
     maxViews: Int!
     startDate: String!
     endDate: String!
+    password: String
   }
   input AdDataInput {
     clicks: Int
     views: Int
+    password: String
   }
 `;

@@ -2,14 +2,14 @@ import { gql } from "apollo-server-micro";
 
 export const adTypeDefs = gql`
   type Query {
-    getAds: [Ad]!
+    getAds(input: PasswordInput): [Ad]!
     getAd(id: ID!): Ad
   }
 
   type Mutation {
     createAd(input: AdInput): Ad
     updateAd(id: ID!, input: AdInput): Ad
-    deleteAd(id: ID!): Ad
+    deleteAd(id: ID!, input: PasswordInput): Ad
   }
 
   type Ad {
@@ -30,6 +30,7 @@ export const adTypeDefs = gql`
     link: String!
     image: String
     owner: AdOwnerInput!
+    password: String
     tags: [TagInput]!
   }
 
@@ -41,6 +42,10 @@ export const adTypeDefs = gql`
   input AdOwnerInput {
     uid: String!
     displayName: String!
+  }
+  
+  input PasswordInput {
+    password: String
   }
 
   input TagInput {

@@ -1,9 +1,9 @@
-import { authenticated } from "../../auth";
+import { authenticated, correctPassword } from "../../auth";
 import registerView from "../../data/registerAdView";
 import Ad from "../../models/ad";
 
-export async function getAds() {
-  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+export async function getAds(_ : any, { input } : any) {
+  if (!authenticated(input["password"])) return null;
   try {
     const ads = await Ad.find({});
     return ads;
