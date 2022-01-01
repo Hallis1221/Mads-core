@@ -1,20 +1,20 @@
 import { authenticated } from "../../auth";
 import AdData from "../../models/data";
 
-export async function createData(_: any, { input }: any) {
+export async function createAdData(_: any, { input }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated) return null;
 
   try {
-    const data = new AdData(input);
-    const newData = await data.save();
+    const adData = new AdData(input);
+    const newAdData = await adData.save();
 
-    return newData;
+    return newAdData;
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function updateDataLimits(_: any, { id, input }: any) {
+export async function updateAdDataLimits(_: any, { id, input }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated) return null;
 
   try {
@@ -34,7 +34,7 @@ export async function updateDataLimits(_: any, { id, input }: any) {
   }
 }
 
-export async function updateData(_: any, { adID, input }: any) {
+export async function updateAdData(_: any, { adID, input }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated) return null;
 
   try {
@@ -55,7 +55,7 @@ export async function updateData(_: any, { adID, input }: any) {
   }
 }
 
-export async function deleteData(_: any, { id }: any) {
+export async function deleteAdData(_: any, { id }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated)  return null;
 
   try {

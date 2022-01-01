@@ -3,16 +3,16 @@ import { GraphQLClient, gql } from "graphql-request";
 const client = new GraphQLClient("http://localhost:3000/api/ads/graphql");
 
 const mutation = gql`
-  mutation Mutation($adId: String!, $input: DataInput) {
-    updateData(adID: $adId, input: $input) {
+  mutation Mutation($adID: String!, $input: AdDataInput) {
+    updateAdData(adID: $adID, input: $input) {
       adID
     }
   }
 `;
 
 const query = gql`
-  query Query($adId: String!) {
-    getAdData(adID: $adId) {
+  query Query($adID: String!) {
+    getAdData(adID: $adID) {
       views
     }
   }
@@ -21,16 +21,16 @@ const query = gql`
 export default function registerView(adID: string): void {
   client
     .request(query, {
-      adId: adID,
+      adID: adID,
     })
     .then(
-      (data) => {
-        const prevViews = data["getAdData"]["views"];
+      (adData) => {
+        const prevViews = adData["getAdData"]["views"];
         const newViews = prevViews + 1;
 
         client
           .request(mutation, {
-            adId: adID,
+            adID: adID,
             input: {
               views: newViews,
             },

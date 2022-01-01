@@ -1,18 +1,18 @@
 import AdData from "../../models/data";
 
-export async function getData() {
+export async function getAdsData() {
   try {
-    const data = await AdData.find({});
-    return data;
+    const adData = await AdData.find({});
+    return adData;
   } catch (error) {
     console.error(error);
   }
 }
 
 export async function getAdData(_: any, { adID }: any) {
-  const data = (await AdData.find((data: any) => data?.adID === adID).clone())[0];
-  if (!data) {
+  const adData = (await AdData.find((data: any) => data?.adID === adID).clone())[0];
+  if (!adData) {
     throw new Error("Data not found");
   }
-  return data;
+  return adData;
 }

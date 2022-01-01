@@ -1,15 +1,15 @@
 import Ad from "../models/ad";
 import { createAd, deleteAd, updateAd } from "./mutations/ad";
-import { createData, deleteData, updateData, updateDataLimits } from "./mutations/data";
+import { createAdData, deleteAdData, updateAdData, updateAdDataLimits } from "./mutations/data";
 import { getAd, getAds } from "./queries/ad";
-import { getAdData, getData} from "./queries/data";
+import { getAdData, getAdsData} from "./queries/data";
 
 const resolvers = {
   Query: {
     getAd,
     getAds,
     getAdData,
-    getData
+    getAdsData
   },
 
   // TODO implement authentication for Mutation endpoints
@@ -17,10 +17,10 @@ const resolvers = {
     createAd,
     deleteAd,
     updateAd,
-    createData,
-    deleteData,
-    updateData,
-    updateDataLimits
+    createAdData,
+    deleteAdData,
+    updateAdData,
+    updateAdDataLimits
   },
 };
 
