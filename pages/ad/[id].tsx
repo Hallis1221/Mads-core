@@ -3,9 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Countdown from "react-countdown";
 
-// dont use this, just inspo. Use tailwind. Tho this works as insporation. Image needs to be bigger.
-
-const Home: NextPage = () => {
+const AdPage: NextPage = () => {
   return (
     <div className="py-0 px-8">
       <Head>
@@ -27,11 +25,12 @@ const Home: NextPage = () => {
           <a className="m-4 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
             <a href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app">
               <Image
-                src={"/ad.png"}
+                src={"https://pixelpoly.co/assets/img/store/maps/CaptureTheFlag.jpg"}
                 alt="Deploy"
                 height={630 * 1.2}
                 width={1200 * 1.2}
                 layout="intrinsic"
+                className="rounded-xl h-full"
               />
             </a>
             <div className="flex flex-row p-4 pt-2 pb-3 text-left justify-between">
@@ -57,7 +56,11 @@ const Home: NextPage = () => {
                     );
                   }
 
-                  return <a href="https://google.com" className="text-xl font-bold ">Skip</a>
+                  return (
+                    <a href="https://google.com" className="text-xl font-bold ">
+                      Skip
+                    </a>
+                  );
                 }}
               />
             </div>
@@ -66,12 +69,7 @@ const Home: NextPage = () => {
       </main>
 
       <footer className="flex flex-1 py-8 px-0 border-t-2 border-solid border-gray-300 justify-center items-center">
-        <a
-          href="https://vercel.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex "
-        >
+        <a target="_blank" href="https://vercel.com" rel="opener noreferrer">
           Made with ❤️ and Powered by{" "}
           <span className="h-4 ml-2">
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
@@ -82,4 +80,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default AdPage;
