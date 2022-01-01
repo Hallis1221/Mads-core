@@ -8,5 +8,5 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Moved>
 ) {
-  res.redirect(301, '/api/ads/graphql')
+  res.redirect(301, '/api/graphql')
 }

@@ -1,5 +1,7 @@
 import { gql } from "apollo-server-micro";
 import { adTypeDefs } from "./ad";
-import { dataTypeDefs } from "./data";
+import { adDataTypeDefs } from "./adData";
+import { contentTypeDefs } from "./content";
+import { contentDataTypeDefs } from "./contentData";
 
-export const typeDefs = [adTypeDefs,dataTypeDefs];
+export const typeDefs = [adTypeDefs,adDataTypeDefs, contentTypeDefs, contentDataTypeDefs];

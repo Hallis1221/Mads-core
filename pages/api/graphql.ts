@@ -6,9 +6,9 @@ import {
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
 
-import resolvers from "../../../bones/resolver";
-import { typeDefs } from "../../../bones/typedefs";
-import { connectDB } from "../../../utils/connection";
+import resolvers from "../../bones/resolver";
+import { typeDefs } from "../../bones/typedefs";
+import { connectDB } from "../../utils/connection";
 
 connectDB();
 
@@ -49,7 +49,7 @@ export default async function handler(req: any, res: any) {
 
   await startServer;
   await apolloServer.createHandler({
-    path: "/api/ads/graphql",
+    path: "/api/graphql",
   })(req, res);
 }
 

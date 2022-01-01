@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 mongoose.Promise = global.Promise;
 
-// OUR TODO SCHEMA
 const AdSchema = new mongoose.Schema({
   // The type of ad, e.g. "image" or "video"
   type: {
@@ -54,7 +53,6 @@ const AdSchema = new mongoose.Schema({
   },
 });
 
-// OUR TODO MODEL
 const Ad = mongoose.models.Ad || mongoose.model("Ad", AdSchema);
 
 // EXPORTING OUR MODEL
