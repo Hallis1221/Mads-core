@@ -1,9 +1,49 @@
+import { gql } from "graphql-request";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { ReactElement } from "react";
 import Countdown from "react-countdown";
+import { client, setHost } from "../../bones/network";
 
-const AdPage: NextPage = () => {
+const contentQuery = gql`
+  query Query($getContentId: ID!) {
+    getContent(id: $getContentId) {
+      theme
+      tags {
+        tag
+      }
+      title
+      link
+      owner {
+        displayName
+      }
+    }
+  }
+`;
+
+const findadQuery = gql`
+  query Query($input: FindAdInput) {
+    findAd(input: $input) {
+      type
+      title
+      link
+      image
+      owner {
+        displayName
+      }
+      id
+    }
+  }
+`;
+
+function AdPage(props: any): ReactElement {
+const ad = props.ad
+const content = props.content
+
+console.log(content)
+// TODO check for other types of ads
   return (
     <div className="py-0 px-8">
       <Head>
@@ -23,9 +63,11 @@ const AdPage: NextPage = () => {
         </div>
         <div className="flex items-center flex-wrap flex-col absolute pt-56 lg:relative lg:pt-14 md:pt-40 ">
           <a className="m-4 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
-            <a href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app">
+            <a href={ad.link}>
               <Image
-                src={"https://pixelpoly.co/assets/img/store/maps/CaptureTheFlag.jpg"}
+                src={
+                 ad.image
+                }
                 alt="Deploy"
                 height={630 * 1.2}
                 width={1200 * 1.2}
@@ -35,7 +77,7 @@ const AdPage: NextPage = () => {
             </a>
             <div className="flex flex-row p-4 pt-2 pb-3 text-left justify-between">
               <p className="justify-start">
-                Currently viewing Actual Guns 3D by PixelPoly digital.
+                Currently viewing {ad.title} by {ad.owner.displayName}
               </p>
               <Countdown
                 date={Date.now() + 5000}
@@ -57,7 +99,7 @@ const AdPage: NextPage = () => {
                   }
 
                   return (
-                    <a href="https://google.com" className="text-xl font-bold ">
+                    <a href={content.link} className="text-xl font-bold ">
                       Skip
                     </a>
                   );
@@ -78,6 +120,32 @@ const AdPage: NextPage = () => {
       </footer>
     </div>
   );
-};
+}
 
+AdPage.getInitialProps = async (context: any) => {
+  const { req, query, props } = context;
+  if (req) setHost(req.headers.host);
+
+  let ad = props?.ad;
+  let content = query?.content;
+
+  if (!ad || !content) {
+    content = (await client.request(contentQuery, {
+      getContentId: query.id,
+    })).getContent;
+
+    let tags = content.tags.map((tag: { tag: any; }) => tag.tag);
+    let theme = content.theme;
+
+    ad = (await client.request(findadQuery, {
+      input: {
+        tags,
+        theme,
+      },
+    })).findAd;
+
+  }
+
+  return { ad, content };
+};
 export default AdPage;
