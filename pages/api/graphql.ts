@@ -9,6 +9,7 @@ import {
 import resolvers from "../../bones/resolver";
 import { typeDefs } from "../../bones/typedefs";
 import { connectDB } from "../../utils/connection";
+import { host, setHost } from "../../bones/auth";
 
 connectDB();
 
@@ -32,7 +33,10 @@ const apolloServer = new ApolloServer({
 
 const startServer = apolloServer.start();
 
-export default async function handler(req: any, res: any) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader(
     "Access-Control-Allow-Origin",
@@ -46,7 +50,10 @@ export default async function handler(req: any, res: any) {
     res.end();
     return false;
   }
-
+  if (!host && req.headers.host) 
+    setHost(req.headers.host.replace(/^https?:\/\//, "").replace(/^https?:\/\//, ""));
+ 
+  
   await startServer;
   await apolloServer.createHandler({
     path: "/api/graphql",
