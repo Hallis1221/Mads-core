@@ -42,22 +42,20 @@ export default async function findAd(_: any, { input }: any) {
   if (1 >= potentialAds.length) return potentialAds[0];
 
   // Sort the list of potential ads by their relevance, according to their tags and their tag priorities
-  let winner: {score: number; ad: any} = {score: 0, ad: potentialAds[0]};
+  let winner: { score: number; ad: any } = { score: 0, ad: potentialAds[0] };
   potentialAds.forEach((ad: any) => {
     let adrelevance = 0;
-    let hasMatch = ad.tags.some((tag: any) => input.tags.includes(tag.tag));
-    if (hasMatch) {
-      ad.tags.forEach((tag: any) => {
-        if (input.tags.includes(tag.tag)) {
-          adrelevance += tag.priority;
-        }
-      });
-    }
-    console.log(adrelevance);
+
+    ad.tags.forEach((tag: any) => {
+      if (input.tags.includes(tag.tag)) {
+        adrelevance += tag.priority;
+      }
+    });
+
     if (adrelevance > winner.score) {
-      winner = {score: adrelevance, ad: ad};
+      winner = { score: adrelevance, ad: ad };
     }
   });
-  
+
   return winner.ad;
 }
