@@ -17,6 +17,15 @@ const query = gql`
     }
   }
 `;
+
+const createMutation = gql`
+  mutation Mutation($input: AdDataCreateInput) {
+    createAdData(input: $input) {
+      adID
+    }
+  }
+`;
+
 // Export defualt function for registering a view. The function takes in ADid as a string as its only parameter.
 export default function registerAdView(adID: string): void {
   client
@@ -35,12 +44,28 @@ export default function registerAdView(adID: string): void {
               views: newViews,
             },
           })
-          .catch((error) => {
-            console.error(error);
-          });
       },
-      (error) => {
-        console.error(error);
+      (_) => {
+    
+          client
+            .request(createMutation, {
+              input: {
+                adID: adID,
+                clicks: 0,
+                maxClicks: 0,
+                views: 0,
+                maxViews: 0,
+                startDate: "null",
+                endDate: "null",
+              },
+            })
+            .then((data) => {
+              registerAdView( data["createAdData"]["adID"]);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+     
       }
     );
 }
