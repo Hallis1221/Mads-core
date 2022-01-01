@@ -1,5 +1,6 @@
 import {  gql } from "graphql-request";
-import { client, correctPassword, host } from "../auth";
+import {  correctPassword } from "../auth";
+import { client } from "../network";
 
 
 const mutation = gql`
