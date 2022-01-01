@@ -2,7 +2,7 @@ import { authenticated } from "../../auth";
 import ContentData from "../../models/contentData";
 
 export async function createContentData(_: any, { input }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+  if (!authenticated(input["password"])) return null;
 
   try {
     const contentData = new ContentData(input);
@@ -15,7 +15,7 @@ export async function createContentData(_: any, { input }: any) {
 }
 
 export async function updateContentData(_: any, { contentID, input }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated) return null;
+  if (!authenticated(input["password"])) return null;
 
   try {
     let contentData = (await ContentData.find((contentData: any) => contentData?.contentID === contentID).clone())[0];
@@ -35,8 +35,8 @@ export async function updateContentData(_: any, { contentID, input }: any) {
   }
 }
 
-export async function deleteContentData(_: any, { contentID }: any) {
-  if (process.env.NODE_ENV === "production" && !authenticated)  return null;
+export async function deleteContentData(_: any, { contentID,input }: any,) {
+  if (!authenticated(input["password"]))  return null;
 
   try {
     const contentData = await ContentData.findOne({ contentID });

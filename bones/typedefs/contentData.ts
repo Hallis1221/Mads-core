@@ -1,14 +1,14 @@
 import { gql } from "apollo-server-micro";
 
 export const contentDataTypeDefs = gql`
-type Query {
+  type Query {
     getContentData(contentID: String!): ContentData!
   }
 
   type Mutation {
     createContentData(input: ContentDataCreateInput): ContentData
     updateContentData(contentID: String!, input: ContentDataInput): ContentData
-    deleteContentData(contentID: String!): ContentData
+    deleteContentData(contentID: String!, input: PasswordInput): ContentData
   }
 
   type ContentData {
@@ -17,16 +17,22 @@ type Query {
     views: Int!
     uploadDate: String!
   }
-  
+
   input ContentDataCreateInput {
     contentID: String!
     clicks: Int!
     views: Int!
     uploadDate: String!
+    password: String
   }
-  
+
+  input PasswordInput {
+    password: String
+  }
+
   input ContentDataInput {
     clicks: Int
     views: Int
+    password: String
   }
 `;
