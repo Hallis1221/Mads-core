@@ -4,6 +4,7 @@ export const adTypeDefs = gql`
   type Query {
     getAds(input: PasswordInput): [Ad]!
     getAd(id: ID!): Ad
+    findAd(input: FindAdInput): Ad!
   }
 
   type Mutation {
@@ -57,4 +58,10 @@ export const adTypeDefs = gql`
     tag: String!
     priority: Int!
   }
+
+  input FindAdInput {
+    theme: String!
+    tags: [String]!
+  }
+
 `;

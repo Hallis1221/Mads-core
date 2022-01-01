@@ -12,21 +12,24 @@ import {
   deleteContent,
   updateContent,
 } from "./mutations/content";
-import { getContent } from "./queries/content";
+import { getContent, getContents } from "./queries/content";
 import { getContentData } from "./queries/contentData";
 import {
   createContentData,
   deleteContentData,
   updateContentData,
 } from "./mutations/contentData";
+import findAd from "./queries/findAd";
 
 const resolvers = {
   Query: {
     getAd,
     getAds,
+    findAd,
     getAdData,
     getAdsData,
     getContent,
+    getContents,
     getContentData,
   },
 
