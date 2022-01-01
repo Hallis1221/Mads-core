@@ -1,5 +1,5 @@
 import { authenticated } from "../../auth";
-import registerView from "../../data/registerView";
+import registerView from "../../data/registerAdView";
 import Ad from "../../models/ad";
 
 export async function getAds() {

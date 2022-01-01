@@ -1,19 +1,19 @@
 import { gql } from "apollo-server-micro";
 
-export const dataTypeDefs = gql`
+export const adDataTypeDefs = gql`
 type Query {
-    getData: [Data]!
-    getAdData(adID: String!): Data!
+    getAdsData: [AdData]!
+    getAdData(adID: String!): AdData!
   }
 
   type Mutation {
-    createData(input: DataCreateInput): Data
-    updateDataLimits(adID: String!, input: DataLimitsInput): Data
-    updateData(adID: String!, input: DataInput): Data
-    deleteData(adID: String!): Data
+    createAdData(input: AdDataCreateInput): AdData
+    updateAdDataLimits(adID: String!, input: DataLimitsInput): AdData
+    updateAdData(adID: String!, input: AdDataInput): AdData
+    deleteAdData(adID: String!): AdData
   }
 
-  type Data {
+  type AdData {
     adID: String!
     clicks: Int!
     maxClicks: Int!
@@ -30,7 +30,7 @@ type Query {
     endDate: String!
   }
   
-  input DataCreateInput {
+  input AdDataCreateInput {
     adID: String!
     clicks: Int!
     maxClicks: Int!
@@ -39,7 +39,7 @@ type Query {
     startDate: String!
     endDate: String!
   }
-  input DataInput {
+  input AdDataInput {
     clicks: Int
     views: Int
   }

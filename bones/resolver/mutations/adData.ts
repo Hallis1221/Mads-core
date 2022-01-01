@@ -1,26 +1,26 @@
 import { authenticated } from "../../auth";
-import AdData from "../../models/data";
+import AdData from "../../models/adData";
 
-export async function createData(_: any, { input }: any) {
+export async function createAdData(_: any, { input }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated) return null;
 
   try {
-    const data = new AdData(input);
-    const newData = await data.save();
+    const adData = new AdData(input);
+    const newAdData = await adData.save();
 
-    return newData;
+    return newAdData;
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function updateDataLimits(_: any, { id, input }: any) {
+export async function updateAdDataLimits(_: any, { id, input }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated) return null;
 
   try {
     let ad = await AdData.findOne({ adID: id });
     if (!ad) {
-      throw new Error("Data not found");
+      throw new Error("AdData not found");
     }
     ad = await AdData.findOneAndUpdate(
       { adID: id },
@@ -34,37 +34,37 @@ export async function updateDataLimits(_: any, { id, input }: any) {
   }
 }
 
-export async function updateData(_: any, { adID, input }: any) {
+export async function updateAdData(_: any, { adID, input }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated) return null;
 
   try {
-    let data = (await AdData.find((data: any) => data?.adID === adID).clone())[0];
+    let adData = (await AdData.find((adData: any) => adData?.adID === adID).clone())[0];
 
-    if (!data) {
-      throw new Error("Data not found");
+    if (!adData) {
+      throw new Error("AdData not found");
     }
-    data = await AdData.findOneAndUpdate(
+    adData = await AdData.findOneAndUpdate(
       { adID: adID },
       { $set: input },
       { new: true }
     );
 
-    return data;
+    return adData;
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function deleteData(_: any, { id }: any) {
+export async function deleteAdData(_: any, { adID }: any) {
   if (process.env.NODE_ENV === "production" && !authenticated)  return null;
 
   try {
-    const data = await AdData.findOne({ adID: id });
-    if (!data) {
-      throw new Error("Data not found");
+    const adData = await AdData.findOne({ adID });
+    if (!adData) {
+      throw new Error("AdData not found");
     }
-    await AdData.findOneAndDelete({ adID: id });
-    return "Data deleted";
+    await AdData.findOneAndDelete({ adID });
+    return "AdData deleted";
   } catch (error) {
     console.error(error);
   }
