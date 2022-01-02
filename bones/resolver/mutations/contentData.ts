@@ -18,10 +18,9 @@ export async function updateContentData(_: any, { contentID, input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
-    let contentData = (await ContentData.find((contentData: any) => contentData?.contentID === contentID).clone())[0];
-
+    let contentData = await ContentData.findOne({ contentID: contentID });
     if (!contentData) {
-      throw new Error("ContentData not found");
+      return null;
     }
     contentData = await ContentData.findOneAndUpdate(
       { contentID: contentID },
@@ -35,8 +34,8 @@ export async function updateContentData(_: any, { contentID, input }: any) {
   }
 }
 
-export async function deleteContentData(_: any, { contentID,input }: any,) {
-  if (!authenticated(input["password"]))  return null;
+export async function deleteContentData(_: any, { contentID, input }: any) {
+  if (!authenticated(input["password"])) return null;
 
   try {
     const contentData = await ContentData.findOne({ contentID });
