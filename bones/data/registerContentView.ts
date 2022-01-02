@@ -1,11 +1,12 @@
-import {  gql } from "graphql-request";
+import { gql } from "graphql-request";
+import { correctPassword } from "../auth";
 import { client } from "../network";
-
 
 const mutation = gql`
   mutation Mutation($contentID: String!, $input: ContentDataInput) {
     updateContentData(contentID: $contentID, input: $input) {
       contentID
+      views
     }
   }
 `;
@@ -31,18 +32,16 @@ export default function registerContentView(contentID: string): void {
   client
     .request(query, {
       contentID: contentID,
+      password: correctPassword,
     })
-    .then(
-      (contentData: any) => {
-        incrementView(contentData);
-      },
-      // on error
-      (_) => {
-        createContentData(registerContentView);
-      }
-    );
+    .then(async (contentData) => {
+      await incrementView(contentData);
+    })
+    .catch(async (_) => {
+      await createContentData();
+    });
 
-  function createContentData(registerContentView: (contentID: string) => void) {
+  function createContentData() {
     client
       .request(createMutation, {
         input: {
@@ -50,25 +49,36 @@ export default function registerContentView(contentID: string): void {
           clicks: 0,
           views: 0,
           uploadDate: "null",
+          password: correctPassword,
         },
       })
       .then((data) => {
+        console.log(
+          data.createContentData.title,
+          ":",
+          data.createContentData.id,
+          "created as its contentdata was not found"
+        );
         registerContentView(data["createContentData"]["contentID"]);
-      })
-      .catch((error) => {
-        console.error(error);
       });
   }
 
-  function incrementView(contentData: any) {
-    const prevViews = contentData["getContentData"]["views"];
-    const newViews = prevViews + 1;
-
-    client.request(mutation, {
-      contentID: contentID,
-      input: {
-        views: newViews,
-      },
-    });
+  async function incrementView(contentData: any) {
+    client
+      .request(mutation, {
+        contentID: contentID,
+        input: {
+          views: contentData.getContentData.views + 1,
+          password: correctPassword,
+        },
+      })
+      .then((data) => {
+        if (
+          data.updateContentData === null ||
+          data.updateContentData === undefined
+        ) {
+          createContentData();
+        }
+      });
   }
 }

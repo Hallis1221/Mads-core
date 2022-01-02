@@ -1,4 +1,3 @@
-import { correctPassword } from "../../auth";
 import { authenticated } from "../../auth";
 import registerView from "../../data/registerAdView";
 import Ad from "../../models/ad";

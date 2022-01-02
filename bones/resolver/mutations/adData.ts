@@ -38,17 +38,15 @@ export async function updateAdData(_: any, { adID, input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
-    let adData = (await AdData.find((adData: any) => adData?.adID === adID).clone())[0];
-
-    if (!adData) {
-      throw new Error("AdData not found");
+    let adData = await AdData.findOne({ adID: adID });
+    if (!adData ) {
+     return null;
     }
     adData = await AdData.findOneAndUpdate(
       { adID: adID },
       { $set: input },
       { new: true }
     );
-
     return adData;
   } catch (error) {
     console.error(error);
