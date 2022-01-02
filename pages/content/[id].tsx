@@ -37,10 +37,23 @@ const findadQuery = gql`
   }
 `;
 
+const regView = gql`
+  mutation RegisterAdView($registerAdViewId: ID!) {
+    registerAdView(id: $registerAdViewId)
+  }
+`;
+
 function AdPage(props: any): ReactElement {
-const ad = props.ad
-const content = props.content
-// TODO check for other types of ads
+  const ad = props.ad;
+  const content = props.content;
+  console.log(ad.id)
+
+  client.request(regView, { registerAdViewId: ad.id }).catch(err => {
+    // !! TODO: handle error, tho it's not critical as it dosnt appear to affect anything
+    console.log(err);
+  });
+  // TODO check for other types of ads
+
   return (
     <div className="py-0 px-8">
       <Head>
@@ -62,9 +75,7 @@ const content = props.content
           <a className="m-4 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
             <a href={ad.link}>
               <Image
-                src={
-                 ad.image
-                }
+                src={ad.image}
                 alt="Deploy"
                 height={630 * 1.2}
                 width={1200 * 1.2}
@@ -109,10 +120,7 @@ const content = props.content
 
       <footer className="flex flex-1 py-8 px-0 border-t-2 border-solid border-gray-300 justify-center items-center">
         <a target="_blank" href="https://vercel.com" rel="opener noreferrer">
-          Made with ❤️ and Powered by{" "}
-          <span className="h-4 ml-2">
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
+          Made with ❤️ and a fck ton of monster
         </a>
       </footer>
     </div>
@@ -127,20 +135,23 @@ AdPage.getInitialProps = async (context: any) => {
   let content = query?.content;
 
   if (!ad || !content) {
-    content = (await client.request(contentQuery, {
-      getContentId: query.id,
-    })).getContent;
+    content = (
+      await client.request(contentQuery, {
+        getContentId: query.id,
+      })
+    ).getContent;
 
-    let tags = content.tags.map((tag: { tag: any; }) => tag.tag);
+    let tags = content.tags.map((tag: { tag: any }) => tag.tag);
     let theme = content.theme;
 
-    ad = (await client.request(findadQuery, {
-      input: {
-        tags,
-        theme,
-      },
-    })).findAd;
-
+    ad = (
+      await client.request(findadQuery, {
+        input: {
+          tags,
+          theme,
+        },
+      })
+    ).findAd;
   }
   return { ad, content };
 };
