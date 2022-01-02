@@ -1,4 +1,4 @@
-import { gql } from "graphql-request";
+import { gql } from "apollo-server-micro";
 
 export const dataTypeDefs = gql`
   type Mutation {
