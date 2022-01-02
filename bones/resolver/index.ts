@@ -20,7 +20,7 @@ import {
   updateContentData,
 } from "./mutations/contentData";
 import findAd from "./queries/findAd";
-import { registerViews } from "./mutations/data";
+import { registerViews, registerClicks } from "./mutations/data";
 
 const resolvers = {
   Query: {
@@ -50,6 +50,7 @@ const resolvers = {
     deleteContentData,
     updateContentData,
     registerViews,
+    registerClicks
   },
 };
 

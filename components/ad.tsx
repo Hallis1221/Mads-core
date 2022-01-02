@@ -2,8 +2,15 @@ import { ReactElement, useState } from "react";
 import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
 import toast from "react-hot-toast";
+import { gql } from "graphql-request";
+import { client } from "../bones/network";
 
-export default function MainAd({ ad, setIsDone }: any): ReactElement {
+const regClick= gql`
+  mutation Mutation($adId: ID!, $contentId: ID!) {
+    registerClicks(adID: $adId, contentID: $contentId)
+  }
+`;
+export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
   if (!ad) return <div>Ad not found</div>;
   if (
     ad.type === "image" ||
@@ -22,6 +29,10 @@ export default function MainAd({ ad, setIsDone }: any): ReactElement {
           layout="intrinsic"
           className="rounded-xl h-full"
           onClick={() => {
+            client.request(regClick, {
+              adId: ad.id,
+              contentId: content.id,
+            });
             window.open(ad.link, "_blank");
 
           }}
@@ -40,6 +51,10 @@ export default function MainAd({ ad, setIsDone }: any): ReactElement {
           className="absolute top-0 left-0"
           onPause={() => {
             if (startedPlayer) {
+              client.request(regClick, {
+                adId: ad.id,
+                contentId: content.id,
+              });
               window.open(ad.link, "_blank");
             }
           }}

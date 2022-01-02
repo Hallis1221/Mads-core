@@ -84,7 +84,7 @@ function AdPage(props: any): ReactElement {
         </div>
         <div className="flex items-center flex-wrap flex-col relative pt-56 lg:relative lg:pt-14 md:pt-40 ">
           <div className="m-4 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
-            <MainAd ad={ad} setIsDone={setIsDone} />
+            <MainAd ad={ad} content={content} setIsDone={setIsDone} />
 
             <div className="flex flex-row p-4 pt-2 pb-3 text-left justify-between">
               <p className="justify-start">
@@ -97,7 +97,7 @@ function AdPage(props: any): ReactElement {
                 precision={1}
                 intervalDelay={1000}
                 className=""
-                renderer={(props) => {
+                                renderer={(props) => {
                   if (isDone)
                     return (
                       <a href={content.link} className="text-xl font-bold ">
@@ -112,9 +112,7 @@ function AdPage(props: any): ReactElement {
                     );
                   if (props.api.isCompleted()) {
                     setIsDone(true);
-                    return (  <a  className="text-xl font-bold ">
-                    Loading...
-                  </a>)
+                 
                       
                   }
 
@@ -136,6 +134,9 @@ function AdPage(props: any): ReactElement {
                         Skip
                       </a>
                     );
+                    return (  <a  className="text-xl font-bold ">
+                    Loading...
+                  </a>) 
                 }}
               />
             </div>
