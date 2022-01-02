@@ -1,8 +1,8 @@
+// TODO implement isr
+
 import { gql, GraphQLClient } from "graphql-request";
-import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 import Countdown from "react-countdown";
 import { client, setHost } from "../../bones/network";
@@ -48,6 +48,7 @@ const regView = gql`
 `;
 
 function AdPage(props: any): ReactElement {
+  console.log("initial")
   const ad = props.ad;
   const content = props.content;
   const [isDone, setIsDone] = useState(false);
