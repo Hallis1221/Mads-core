@@ -3,7 +3,7 @@
 import { gql, GraphQLClient } from "graphql-request";
 import Head from "next/head";
 import Image from "next/image";
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import Countdown from "react-countdown";
 import { client, setHost } from "../../bones/network";
 import MainAd from "../../components/ad";
@@ -48,23 +48,24 @@ const regView = gql`
 `;
 
 function AdPage(props: any): ReactElement {
-  console.log("initial")
   const ad = props.ad;
   const content = props.content;
   const [isDone, setIsDone] = useState(false);
 
+  useEffect(() => {
+    if (ad.id && content.id)
+      client.request(regView, {
+        adId: ad.id,
+        contentId: content.id,
+      });
+  }, [ad.id, content.id]);
+
   if (!ad || !content) return <div>Ad not found</div>;
   if (typeof window !== "undefined") setHost(window.location.host);
 
-  if (ad.id && content.id)
-    client.request(regView, {
-      adId: ad.id,
-      contentId: content.id,
-    });
-
   let link = ad.link;
   if (ad.type == "video") link = undefined;
-  // TODO Warning: Cannot update a component (`AdPage`) while rendering a different component (`Countdown$1`). To locate the bad setState() call inside `Countdown$1`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render 
+  // TODO Warning: Cannot update a component (`AdPage`) while rendering a different component (`Countdown$1`). To locate the bad setState() call inside `Countdown$1`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
 
   return (
     <div className="py-0 px-8">
@@ -91,14 +92,13 @@ function AdPage(props: any): ReactElement {
               <p className="justify-start">
                 Currently viewing {ad.title} by {ad.owner.displayName}
               </p>
-              
-            
+
               <Countdown
                 date={Date.now() + 5000}
                 precision={1}
                 intervalDelay={1000}
                 className=""
-                                renderer={(props) => {
+                renderer={(props) => {
                   if (isDone)
                     return (
                       <a href={content.link} className="text-xl font-bold ">
@@ -113,8 +113,6 @@ function AdPage(props: any): ReactElement {
                     );
                   if (props.api.isCompleted()) {
                     setIsDone(true);
-                 
-                      
                   }
 
                   if (props.seconds > 0)
@@ -135,9 +133,7 @@ function AdPage(props: any): ReactElement {
                         Skip
                       </a>
                     );
-                    return (  <a  className="text-xl font-bold ">
-                    Loading...
-                  </a>) 
+                  return <a className="text-xl font-bold ">Loading...</a>;
                 }}
               />
             </div>
@@ -160,7 +156,6 @@ AdPage.getInitialProps = async (context: any) => {
 
   let ad = props?.ad;
   let content = query?.content;
-
   if (!ad || (!content && (ad.id || content.id))) {
     content = (
       await client.request(contentQuery, {
