@@ -2,9 +2,8 @@ import { authenticated } from "../../auth";
 import Ad from "../../models/ad";
 
 export async function createAd(_: any, { input }: any) {
-  if (!authenticated(input["password"])) 
-    return null;
-  
+  if (!authenticated(input["password"])) return null;
+
   try {
     const ad = new Ad(input);
     const newAd = await ad.save();
@@ -31,7 +30,7 @@ export async function updateAd(_: any, { id, input }: any) {
   }
 }
 
-export async function deleteAd(_: any, { id, input }: any,)  {
+export async function deleteAd(_: any, { id, input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
