@@ -5,12 +5,14 @@ import toast from "react-hot-toast";
 import { gql } from "graphql-request";
 import { client } from "../bones/network";
 
-const regClick= gql`
+const regClick = gql`
   mutation Mutation($adId: ID!, $contentId: ID!) {
     registerClicks(adID: $adId, contentID: $contentId)
   }
 `;
 export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
+  let [paused, setPaused] = useState(false);
+
   if (!ad) return <div>Ad not found</div>;
   if (
     ad.type === "image" ||
@@ -34,7 +36,6 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
               contentId: content.id,
             });
             window.open(ad.link, "_blank");
-
           }}
         />
       </div>
@@ -42,82 +43,110 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
   if (ad.video !== "" && ad.video !== null && ad.video !== undefined) {
     let startedPlayer = false;
     let toastId: string | undefined;
+    let loadingtoastId: string | undefined;
     let requiredWatchTime =
       (Math.floor(Math.random() * (150 - 125)) + 125 - 100) * 0.01;
     return (
-      <div className="relative pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
-        <ReactPlayer
-          url={ad.video}
-          className="absolute top-0 left-0"
-          onPause={() => {
+      <>
+        <button
+          onClick={() => {
             if (startedPlayer) {
               client.request(regClick, {
                 adId: ad.id,
                 contentId: content.id,
               });
+              console.log("clicked");
+              setPaused(true)
               window.open(ad.link, "_blank");
             }
           }}
-          onProgress={(progress) => {
-            if (progress.played > 0) startedPlayer = true;
-            if (progress.played >= requiredWatchTime) {
+          className="text-3xl font-bold font-sans text-white absolute z-10 text-shadow-lg pl-4 lg:pl-4 bottom-24 lg:bottom-20 xl:bottom-20 md:bottom-16"
+        >
+          Visit advertiser
+        </button>
+
+        <div className="relative pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
+          <ReactPlayer
+            url={ad.video}
+            playing={!paused}
+            onPlay={() => {
+              setPaused(false);
+            }}
+            className="absolute top-0 left-0"
+            onBuffer={() => {
+              if (!startedPlayer) {
+                loadingtoastId = toast.loading("Loading video...");
+              }
+            }}
+            onBufferEnd={() => {
+              if (loadingtoastId) {
+                toast.dismiss(loadingtoastId);
+              }
+            }}
+                  onProgress={(progress) => {
+              if (progress.played > 0) startedPlayer = true;
+              if (progress.played >= requiredWatchTime) {
+                setIsDone(true);
+              }
+              if (progress.playedSeconds > 0.25) toast.dismiss(toastId);
+            }}
+            onEnded={() => {
               setIsDone(true);
-            }
-            if (progress.playedSeconds > 0.25) toast.dismiss(toastId);
-          }}
-          onEnded={() => {
-            setIsDone(true);
-          }}
-          onReady={() => {
-            console.log("ready");
-            setTimeout(() => {
-              if (!startedPlayer)
-                toastId = toast(
-                  "Unable to auto play. Please click the play button",
-                  {
-                    duration: 40000,
-                    position: "top-center",
-                    // Styling
-                    style: {},
-                    className: "warn",
-                    // Custom Icon
-                    icon: "⚠️",
-                    // Change colors of success/error/loading icon
-                    iconTheme: {
-                      primary: "#000",
-                      secondary: "#fff",
-                    },
-                    // Aria
-                    ariaProps: {
-                      role: "status",
-                      "aria-live": "polite",
-                    },
-                  }
-                );
-            }, 1000);
-          }}
-          onError={() => {
-            toast.error("Error loading video");
-          }}
-          muted={false}
-          config={{
-            youtube: {
-              playerVars: {
-                autoplay: 1,
-                controls: 0,
-                disablekb: 1,
-                fs: 0,
-                modestbranding: 1,
-                rel: 0,
-                showinfo: 0,
-                playsinline: 0,
+            }}
+            onReady={() => {
+              setTimeout(() => {
+                if (!startedPlayer)
+                  toastId = toast(
+                    "Unable to auto play. Please click the play button",
+                    {
+                      duration: 40000,
+                      position: "top-center",
+                      // Styling
+                      style: {},
+                      className: "warn",
+                      // Custom Icon
+                      icon: "⚠️",
+                      // Change colors of success/error/loading icon
+                      iconTheme: {
+                        primary: "#000",
+                        secondary: "#fff",
+                      },
+                      // Aria
+                      ariaProps: {
+                        role: "status",
+                        "aria-live": "polite",
+                      },
+                    }
+                  );
+              }, 1000);
+            }}
+            onError={() => {
+              toast.error("Error loading video");
+            }}
+            muted={false}
+            config={{
+              youtube: {
+                playerVars: {
+                  autoplay: 1,
+                  controls: 0,
+                  disablekb: 1,
+                  fs: 0,
+                  modestbranding: 0,
+                  rel: 0,
+                  showinfo: 0,
+                  playsinline: 0,
+                  iv_load_policy: 3,
+                  cc_load_policy: 0,
+                  cc_lang_pref: "en",
+                  autohide: 1,
+                },
               },
-            },
-          }}
-          width="100%"
-          height="100%"
-        />
-      </div>
+            }}
+            width="100%"
+            height="100%"
+          />
+        </div>
+      </>
     );
   }
   return <div>Ad not found</div>;
