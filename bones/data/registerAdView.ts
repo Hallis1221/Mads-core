@@ -1,3 +1,5 @@
+// TODO rate limit
+
 import { gql } from "graphql-request";
 import { correctPassword } from "../auth";
 import { client } from "../network";
@@ -28,7 +30,9 @@ const createMutation = gql`
 `;
 
 // Export defualt function for registering a view. The function takes in ADid as a string as its only parameter.
-export default async function registerAdView(adID: string): Promise<void> {
+export default async function registerAdView(id: any): Promise<void> {
+  let adID = id;
+
   await client
     .request(query, {
       adID: adID,

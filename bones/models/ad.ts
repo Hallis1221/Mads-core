@@ -33,6 +33,12 @@ const AdSchema = new mongoose.Schema({
     required: false,
   },
 
+  // if the ad has type "video", this is the video's URL
+  video: {
+    type: String,
+    required: false,
+  },
+
   // Tags are used to filter ads to be relevant to the content
   tags: {
     // The higher the number, the higher the priority. High priority tags are the most likely to be matched with a content.

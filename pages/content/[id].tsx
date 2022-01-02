@@ -1,11 +1,12 @@
-import { gql } from "graphql-request";
+import { gql, GraphQLClient } from "graphql-request";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import Countdown from "react-countdown";
 import { client, setHost } from "../../bones/network";
+import MainAd from "../../components/ad";
 
 const contentQuery = gql`
   query Query($getContentId: ID!) {
@@ -16,6 +17,7 @@ const contentQuery = gql`
       }
       title
       link
+      id
       owner {
         displayName
       }
@@ -29,6 +31,8 @@ const findadQuery = gql`
       title
       link
       image
+      video
+      type
       owner {
         displayName
       }
@@ -37,10 +41,30 @@ const findadQuery = gql`
   }
 `;
 
+const regView = gql`
+  mutation Mutation($adId: ID!, $contentId: ID!) {
+    registerViews(adID: $adId, contentID: $contentId)
+  }
+`;
+
 function AdPage(props: any): ReactElement {
-const ad = props.ad
-const content = props.content
-// TODO check for other types of ads
+  const ad = props.ad;
+  const content = props.content;
+  const [isDone, setIsDone] = useState(false);
+
+  if (!ad || !content) return <div>Ad not found</div>;
+  if (typeof window !== "undefined") setHost(window.location.host);
+
+  if (ad.id && content.id)
+    client.request(regView, {
+      adId: ad.id,
+      contentId: content.id,
+    });
+
+  let link = ad.link;
+  if (ad.type == "video") link = undefined;
+  // TODO Warning: Cannot update a component (`AdPage`) while rendering a different component (`Countdown$1`). To locate the bad setState() call inside `Countdown$1`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render 
+
   return (
     <div className="py-0 px-8">
       <Head>
@@ -58,31 +82,43 @@ const content = props.content
             height={128 * 0.3}
           />
         </div>
-        <div className="flex items-center flex-wrap flex-col absolute pt-56 lg:relative lg:pt-14 md:pt-40 ">
-          <a className="m-4 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
-            <a href={ad.link}>
-              <Image
-                src={
-                 ad.image
-                }
-                alt="Deploy"
-                height={630 * 1.2}
-                width={1200 * 1.2}
-                layout="intrinsic"
-                className="rounded-xl h-full"
-              />
-            </a>
+        <div className="flex items-center flex-wrap flex-col relative pt-56 lg:relative lg:pt-14 md:pt-40 ">
+          <div className="m-4 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
+            <MainAd ad={ad} setIsDone={setIsDone} />
+
             <div className="flex flex-row p-4 pt-2 pb-3 text-left justify-between">
               <p className="justify-start">
                 Currently viewing {ad.title} by {ad.owner.displayName}
               </p>
+              
+            
               <Countdown
                 date={Date.now() + 5000}
                 precision={1}
                 intervalDelay={1000}
                 className=""
                 renderer={(props) => {
-                  if (props.seconds > 0) {
+                  if (isDone)
+                    return (
+                      <a href={content.link} className="text-xl font-bold ">
+                        Skip
+                      </a>
+                    );
+                  if (ad.type === "video" && !isDone)
+                    return (
+                      <a href={content.link} className="text-xl font-bold ">
+                        Waiting...
+                      </a>
+                    );
+                  if (props.api.isCompleted()) {
+                    setIsDone(true);
+                    return (  <a  className="text-xl font-bold ">
+                    Loading...
+                  </a>)
+                      
+                  }
+
+                  if (props.seconds > 0)
                     return (
                       <a
                         className="text-xl font-bold"
@@ -93,26 +129,23 @@ const content = props.content
                         {props.seconds}
                       </a>
                     );
-                  }
 
-                  return (
-                    <a href={content.link} className="text-xl font-bold ">
-                      Skip
-                    </a>
-                  );
+                  if (isDone)
+                    return (
+                      <a href={content.link} className="text-xl font-bold ">
+                        Skip
+                      </a>
+                    );
                 }}
               />
             </div>
-          </a>
+          </div>
         </div>
       </main>
 
       <footer className="flex flex-1 py-8 px-0 border-t-2 border-solid border-gray-300 justify-center items-center">
         <a target="_blank" href="https://vercel.com" rel="opener noreferrer">
-          Made with ❤️ and Powered by{" "}
-          <span className="h-4 ml-2">
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
+          Made with ❤️ and a fck ton of monster
         </a>
       </footer>
     </div>
@@ -126,21 +159,24 @@ AdPage.getInitialProps = async (context: any) => {
   let ad = props?.ad;
   let content = query?.content;
 
-  if (!ad || !content) {
-    content = (await client.request(contentQuery, {
-      getContentId: query.id,
-    })).getContent;
+  if (!ad || (!content && (ad.id || content.id))) {
+    content = (
+      await client.request(contentQuery, {
+        getContentId: query.id,
+      })
+    ).getContent;
 
-    let tags = content.tags.map((tag: { tag: any; }) => tag.tag);
+    let tags = content.tags.map((tag: { tag: any }) => tag.tag);
     let theme = content.theme;
 
-    ad = (await client.request(findadQuery, {
-      input: {
-        tags,
-        theme,
-      },
-    })).findAd;
-
+    ad = (
+      await client.request(findadQuery, {
+        input: {
+          tags,
+          theme,
+        },
+      })
+    ).findAd;
   }
   return { ad, content };
 };
