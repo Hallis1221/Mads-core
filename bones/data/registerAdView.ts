@@ -1,11 +1,12 @@
-import {  gql } from "graphql-request";
-import { client, correctPassword, host } from "../auth";
-
+import { gql } from "graphql-request";
+import { correctPassword } from "../auth";
+import { client } from "../network";
 
 const mutation = gql`
   mutation Mutation($adID: String!, $input: AdDataInput) {
     updateAdData(adID: $adID, input: $input) {
       adID
+      views
     }
   }
 `;
@@ -27,23 +28,19 @@ const createMutation = gql`
 `;
 
 // Export defualt function for registering a view. The function takes in ADid as a string as its only parameter.
-export default function registerAdView(adID: string): void {
-  client
+export default async function registerAdView(adID: string): Promise<void> {
+  await client
     .request(query, {
       adID: adID,
-      password: correctPassword
+      password: correctPassword,
     })
-    .then(
-      (adData) => {
-        incrementView(adData);
-      },
-      // on error
-      (_) => {
-        createAdData(registerAdView);
-      }
-    );
+    .then(async (adData) => {
+      await incrementView(adData);
+    }).catch(async (_) => {
+      await createAdData();
+    });
 
-  function createAdData(registerAdView: (adID: string) => void) {
+  function createAdData() {
     client
       .request(createMutation, {
         input: {
@@ -54,27 +51,30 @@ export default function registerAdView(adID: string): void {
           maxViews: 0,
           startDate: "null",
           endDate: "null",
-          password: correctPassword
+          password: correctPassword,
         },
       })
       .then((data) => {
+        console.log(data.createAdData.title, ":",data.createAdData.id, "created as its addata was not found"); 
         registerAdView(data["createAdData"]["adID"]);
-      })
-      .catch((error) => {
-        console.error(error);
       });
   }
 
-  function incrementView(adData: any) {
-    const prevViews = adData["getAdData"]["views"];
-    const newViews = prevViews + 1;
+  async function incrementView(adData: any) {
 
-    client.request(mutation, {
-      adID: adID,
-      input: {
-        views: newViews,
-        password: correctPassword
-      },
-    });
-  }
+    await client
+      .request(mutation, {
+        adID: adID,
+        input: {
+          views: adData.getAdData.views + 1,
+          password: correctPassword,
+        },
+      })
+      .then((data) => {
+        if (data.updateAdData === null || data.updateAdData === undefined) {
+          createAdData();
+        }
+      })
+    }
+
 }

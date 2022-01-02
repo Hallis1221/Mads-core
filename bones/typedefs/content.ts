@@ -19,7 +19,7 @@ export const contentTypeDefs = gql`
     theme: String!
     title: String!
     link: String!
-    tags: [Tag]!
+    tags: [CTag]!
     owner: ContentOwner!
   }
 
@@ -50,7 +50,7 @@ export const contentTypeDefs = gql`
     password: String
   }
 
-  type Tag {
+  type CTag {
     tag: String!
   }
 `;

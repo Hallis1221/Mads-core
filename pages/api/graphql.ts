@@ -9,7 +9,7 @@ import {
 import resolvers from "../../bones/resolver";
 import { typeDefs } from "../../bones/typedefs";
 import { connectDB } from "../../utils/connection";
-import { host, setHost } from "../../bones/auth";
+import { host, setHost } from "../../bones/network";
 
 connectDB();
 
