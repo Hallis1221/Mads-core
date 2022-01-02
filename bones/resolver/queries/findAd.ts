@@ -12,6 +12,7 @@ const query = gql`
       link
       id
       image
+      video
       owner {
         uid
         displayName

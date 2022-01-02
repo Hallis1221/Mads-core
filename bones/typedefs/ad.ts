@@ -20,6 +20,7 @@ export const adTypeDefs = gql`
     title: String!
     link: String!
     image: String
+    video: String
     tags: [Tag]!
     owner: AdOwner!
   }
@@ -30,6 +31,7 @@ export const adTypeDefs = gql`
     title: String!
     link: String!
     image: String
+    video: String
     owner: AdOwnerInput!
     password: String
     tags: [TagInput]!
