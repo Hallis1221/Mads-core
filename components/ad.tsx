@@ -43,7 +43,7 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
     let startedPlayer = false;
     let toastId: string | undefined;
     let requiredWatchTime =
-      (Math.floor(Math.random() * (200 - 125)) + 125 - 100) * 0.01;
+      (Math.floor(Math.random() * (150 - 125)) + 125 - 100) * 0.01;
     return (
       <div className="relative pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
         <ReactPlayer
