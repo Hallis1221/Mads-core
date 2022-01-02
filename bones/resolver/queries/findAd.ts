@@ -2,7 +2,6 @@ import { gql } from "graphql-request";
 import { correctPassword } from "../../auth";
 import { client } from "../../network";
 import Ad from "../../models/ad";
-import registerAdView from "../../data/registerAdView";
 
 const query = gql`
   query Query($input: PasswordInput) {
@@ -64,6 +63,5 @@ export default async function findAd(_: any, { input }: any) {
     }
   });
 
-  registerAdView(winner.ad.id);
   return winner.ad;
 }
