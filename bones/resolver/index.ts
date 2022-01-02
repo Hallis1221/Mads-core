@@ -1,4 +1,4 @@
-import { createAd, deleteAd, updateAd } from "./mutations/ad";
+import { createAd, deleteAd, updateAd,  } from "./mutations/ad";
 import {
   createAdData,
   deleteAdData,
@@ -20,6 +20,7 @@ import {
   updateContentData,
 } from "./mutations/contentData";
 import findAd from "./queries/findAd";
+import { registerViews } from "./mutations/data";
 
 const resolvers = {
   Query: {
@@ -48,6 +49,7 @@ const resolvers = {
     createContentData,
     deleteContentData,
     updateContentData,
+    registerViews,
   },
 };
 
