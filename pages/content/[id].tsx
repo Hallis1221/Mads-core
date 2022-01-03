@@ -1,14 +1,12 @@
 // TODO implement isr
 
-import { NOTFOUND } from "dns";
-import { gql, GraphQLClient } from "graphql-request";
+import { gql, } from "graphql-request";
 import Head from "next/head";
 import Image from "next/image";
 import { ReactElement, useEffect, useState } from "react";
 import Countdown from "react-countdown";
-import useSWR from "swr";
 import { correctPassword } from "../../bones/auth";
-import { client, setHost } from "../../bones/network";
+import { gqc } from "../../bones/network/client";
 import MainAd from "../../components/ad";
 
 const contentQuery = gql`
@@ -65,14 +63,13 @@ function AdPage(props: any): ReactElement {
 
   useEffect(() => {
     if (ad.id && content.id)
-      client.request(regView, {
+      gqc.request(regView, {
         adId: ad.id,
         contentId: content.id,
       });
   }, [ad.id, content.id]);
 
   if (!ad || !content) return <div>Ad not found</div>;
-  if (typeof window !== "undefined") setHost(window.location.host);
 
   let link = ad.link;
   if (ad.type == "video") link = undefined;
@@ -168,9 +165,8 @@ export async function getStaticProps({ params }: any) {
   let ad;
 
   try {
-    setHost("mads-core.vercel.app");
     content = (
-      await client.request(contentQuery, {
+      await gqc.request(contentQuery, {
         getContentId: id,
       })
     ).getContent;
@@ -179,7 +175,7 @@ export async function getStaticProps({ params }: any) {
     let theme = content.theme;
 
     ad = (
-      await client.request(findadQuery, {
+      await gqc.request(findadQuery, {
         input: {
           tags,
           theme,
@@ -187,7 +183,6 @@ export async function getStaticProps({ params }: any) {
       })
     ).findAd;
   } catch (error) {
-    console.log(error)
     return { notFound: true };
   }
 
@@ -196,15 +191,14 @@ export async function getStaticProps({ params }: any) {
       ad,
       content,
     },
-    revalidate: 120000,
+    revalidate: 1200,
   };
 }
 
 export async function getStaticPaths() {
   var ids: { getContents: { id: string }[] };
 
-  setHost("mads-core.vercel.app");
-  ids = await client.request(contentIDs, {
+  ids = await gqc.request(contentIDs, {
     input: {
       password: correctPassword,
     },
@@ -216,7 +210,6 @@ export async function getStaticPaths() {
     },
   }));
 
-  console.log(paths)
   return {
     paths,
     fallback: "blocking",
