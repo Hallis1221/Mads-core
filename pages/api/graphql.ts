@@ -9,7 +9,6 @@ import {
 import resolvers from "../../bones/resolver";
 import { typeDefs } from "../../bones/typedefs";
 import { connectDB } from "../../utils/connection";
-import { host, setHost } from "../../bones/network";
 
 connectDB();
 
@@ -37,21 +36,20 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://studio.apollographql.com"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
+const allowedOrigins = ["https://studio.apollographql.com", "http://localhost:3000", "https://mads.vercel.app"];
+const origin = req.headers.origin;
+
+  if (origin && allowedOrigins.includes(origin)) 
+    res.setHeader("Access-Control-Allow-Origin", origin);
+
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', "true");
+
   if (req.method === "OPTIONS") {
     res.end();
     return false;
   }
-  if (!host && req.headers.host) 
-    setHost(req.headers.host.replace(/^https?:\/\//, "").replace(/^https?:\/\//, ""));
  
   
   await startServer;

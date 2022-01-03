@@ -1,6 +1,6 @@
 import { gql } from "graphql-request";
 import { correctPassword } from "../auth";
-import { client } from "../network";
+import { gqc} from "../network/client";
 
 const mutation = gql`
   mutation Mutation($contentID: String!, $input: ContentDataInput) {
@@ -28,8 +28,9 @@ const createMutation = gql`
 `;
 
 // Export defualt function for registering a view. The function takes in ADid as a string as its only parameter.
-export default function registerContentView(contentID: string): void {
-  client
+export default async function registerContentView(contentID: string): Promise<void> {
+
+  await gqc
     .request(query, {
       contentID: contentID,
       password: correctPassword,
@@ -42,7 +43,7 @@ export default function registerContentView(contentID: string): void {
     });
 
   function createContentData() {
-    client
+    gqc
       .request(createMutation, {
         input: {
           contentID,
@@ -64,7 +65,7 @@ export default function registerContentView(contentID: string): void {
   }
 
   async function incrementView(contentData: any) {
-    client
+    gqc
       .request(mutation, {
         contentID: contentID,
         input: {

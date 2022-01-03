@@ -2,7 +2,7 @@
 
 import { gql } from "graphql-request";
 import { correctPassword } from "../auth";
-import { client } from "../network";
+import {gqc } from "../network/client"
 
 const mutation = gql`
   mutation Mutation($adID: String!, $input: AdDataInput) {
@@ -30,22 +30,21 @@ const createMutation = gql`
 `;
 
 // Export defualt function for registering a view. The function takes in ADid as a string as its only parameter.
-export default async function registerAdView(id: any): Promise<void> {
-  let adID = id;
-
-  await client
+export default async function registerAdView(adID: any): Promise<void> {
+  await gqc
     .request(query, {
       adID: adID,
       password: correctPassword,
     })
     .then(async (adData) => {
       await incrementView(adData);
-    }).catch(async (_) => {
+    })
+    .catch(async (_) => {
       await createAdData();
     });
 
   function createAdData() {
-    client
+    gqc
       .request(createMutation, {
         input: {
           adID: adID,
@@ -59,14 +58,18 @@ export default async function registerAdView(id: any): Promise<void> {
         },
       })
       .then((data) => {
-        console.log(data.createAdData.title, ":",data.createAdData.id, "created as its addata was not found"); 
+        console.log(
+          data.createAdData.title,
+          ":",
+          data.createAdData.id,
+          "created as its addata was not found"
+        );
         registerAdView(data["createAdData"]["adID"]);
       });
   }
 
   async function incrementView(adData: any) {
-
-    await client
+    await gqc
       .request(mutation, {
         adID: adID,
         input: {
@@ -78,7 +81,6 @@ export default async function registerAdView(id: any): Promise<void> {
         if (data.updateAdData === null || data.updateAdData === undefined) {
           createAdData();
         }
-      })
-    }
-
+      });
+  }
 }

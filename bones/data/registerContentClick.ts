@@ -1,6 +1,6 @@
 import { gql } from "graphql-request";
 import { correctPassword } from "../auth";
-import { client } from "../network";
+import { gqc } from "../network/client";
 
 const mutation = gql`
   mutation Mutation($contentID: String!, $input: ContentDataInput) {
@@ -29,7 +29,7 @@ const createMutation = gql`
 
 // Export defualt function for registering a click. The function takes in ADid as a string as its only parameter.
 export default function registerContentClick(contentID: string): void {
-  client
+  gqc
     .request(query, {
       contentID: contentID,
       password: correctPassword,
@@ -42,7 +42,7 @@ export default function registerContentClick(contentID: string): void {
     });
 
   function createContentData() {
-    client
+    gqc
       .request(createMutation, {
         input: {
           contentID,
@@ -64,7 +64,7 @@ export default function registerContentClick(contentID: string): void {
   }
 
   async function incrementView(contentData: any) {
-    client
+    gqc
       .request(mutation, {
         contentID: contentID,
         input: {

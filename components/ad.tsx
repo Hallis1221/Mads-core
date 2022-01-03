@@ -3,7 +3,7 @@ import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
 import toast from "react-hot-toast";
 import { gql } from "graphql-request";
-import { client } from "../bones/network";
+import { gqc } from "../bones/network/client";
 
 const regClick = gql`
   mutation Mutation($adId: ID!, $contentId: ID!) {
@@ -12,6 +12,7 @@ const regClick = gql`
 `;
 export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
   let [paused, setPaused] = useState(false);
+  let [muted, setMuted] = useState(true);
 
   if (!ad) return <div>Ad not found</div>;
   if (
@@ -29,9 +30,9 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
           height={630 * 1.2}
           width={1200 * 1.2}
           layout="intrinsic"
-          className="rounded-xl h-full"
+          className="rounded-xl h-full hover:cursor-pointer"
           onClick={() => {
-            client.request(regClick, {
+            gqc.request(regClick, {
               adId: ad.id,
               contentId: content.id,
             });
@@ -49,30 +50,30 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
     return (
       <>
         <button
+          className="text-xl font-bold font-sans text-white absolute z-10 text-shadow-lg pl-4 bottom-20 md:text-2xl lg:text-3xl xl:text-4xl lg:pl-4 lg:bottom-20 xl:bottom-[4.75rem] md:bottom-20 hover:cursor-pointer"
           onClick={() => {
             if (startedPlayer) {
-              client.request(regClick, {
+              gqc.request(regClick, {
                 adId: ad.id,
                 contentId: content.id,
               });
               console.log("clicked");
-              setPaused(true)
+              setPaused(false);
               window.open(ad.link, "_blank");
             }
           }}
-          className="text-3xl font-bold font-sans text-white absolute z-10 text-shadow-lg pl-4 lg:pl-4 bottom-24 lg:bottom-20 xl:bottom-20 md:bottom-16"
         >
           Visit advertiser
         </button>
-
-        <div className="relative pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
+        <div className="relative float-left overflow-auto rounded-t-xl w-[400px] pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
           <ReactPlayer
+            className="absolute top-0 left-0"
             url={ad.video}
             playing={!paused}
+            muted={muted}
             onPlay={() => {
               setPaused(false);
             }}
-            className="absolute top-0 left-0"
             onBuffer={() => {
               if (!startedPlayer) {
                 loadingtoastId = toast.loading("Loading video...");
@@ -83,17 +84,21 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
                 toast.dismiss(loadingtoastId);
               }
             }}
-                  onProgress={(progress) => {
+            onProgress={(progress) => {
               if (progress.played > 0) startedPlayer = true;
               if (progress.played >= requiredWatchTime) {
                 setIsDone(true);
               }
-              if (progress.playedSeconds > 0.25) toast.dismiss(toastId);
+              if (progress.playedSeconds > 0.25) {
+                toast.dismiss(toastId);
+              }
             }}
             onEnded={() => {
               setIsDone(true);
             }}
             onReady={() => {
+              // Attempt to unmute the video, it is muted by default to enable autoplay on some browsers
+              setMuted(false);
               setTimeout(() => {
                 if (!startedPlayer)
                   toastId = toast(
@@ -123,7 +128,6 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
             onError={() => {
               toast.error("Error loading video");
             }}
-            muted={false}
             config={{
               youtube: {
                 playerVars: {
