@@ -200,7 +200,7 @@ export async function getStaticProps({ params }: any) {
       ad,
       content,
     },
-    revalidate: 1200,
+    revalidate: 7200, // one hour
   };
 }
 
