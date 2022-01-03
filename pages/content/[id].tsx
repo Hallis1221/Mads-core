@@ -98,7 +98,8 @@ function AdPage(props: any): ReactElement {
 
             <div className="flex flex-row p-4 pt-2 pb-3 text-left justify-between">
               <p className="justify-start">
-                Currently viewing {ad.title} by {ad.owner.displayName}
+                <a className="invisible absolute md:visible md:relative lg:visible lg:relative xl:visible xl:relative">Currently viewing </a>
+          <a>  {ad.title} by {ad.owner.displayName}</a>
               </p>
 
               <Countdown

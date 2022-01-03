@@ -3,7 +3,7 @@ import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
 import toast from "react-hot-toast";
 import { gql } from "graphql-request";
-import { client } from "../bones/network";
+import { gqc } from "../bones/network/client";
 
 const regClick = gql`
   mutation Mutation($adId: ID!, $contentId: ID!) {
@@ -29,9 +29,9 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
           height={630 * 1.2}
           width={1200 * 1.2}
           layout="intrinsic"
-          className="rounded-xl h-full"
+          className="rounded-xl h-full hover:cursor-pointer"
           onClick={() => {
-            client.request(regClick, {
+            gqc.request(regClick, {
               adId: ad.id,
               contentId: content.id,
             });
@@ -49,9 +49,10 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
     return (
       <>
         <button
+          className="text-3xl font-bold font-sans text-white absolute z-10 text-shadow-lg pl-4 lg:pl-4 bottom-24 lg:bottom-20 xl:bottom-20 md:bottom-16 hover:cursor-pointer"
           onClick={() => {
             if (startedPlayer) {
-              client.request(regClick, {
+              gqc.request(regClick, {
                 adId: ad.id,
                 contentId: content.id,
               });
@@ -60,7 +61,7 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
               window.open(ad.link, "_blank");
             }
           }}
-          className="text-3xl font-bold font-sans text-white absolute z-10 text-shadow-lg pl-4 lg:pl-4 bottom-24 lg:bottom-20 xl:bottom-20 md:bottom-16"
+        
         >
           Visit advertiser
         </button>
