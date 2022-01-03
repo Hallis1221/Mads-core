@@ -1,5 +1,5 @@
 //IMPORT MONGOOSE
-import mongoose, { Model } from "mongoose";
+import mongoose from "mongoose";
 
 // CONNECTING TO MONGOOSE (Get Database Url from .env.local)
 const { MONGO_DATABASE_URL } = process.env;
