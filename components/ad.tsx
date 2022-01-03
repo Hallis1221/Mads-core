@@ -76,7 +76,7 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
             }}
             onBuffer={() => {
               if (!startedPlayer) {
-                loadingtoastId = toast.loading("Loading video...");
+                loadingtoastId = toast.loading("Loading video...", {"duration": 100});
               }
             }}
             onBufferEnd={() => {
