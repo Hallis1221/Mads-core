@@ -12,6 +12,7 @@ const regClick = gql`
 `;
 export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
   let [paused, setPaused] = useState(false);
+  let [muted, setMuted] = useState(true);
 
   if (!ad) return <div>Ad not found</div>;
   if (
@@ -57,23 +58,22 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
                 contentId: content.id,
               });
               console.log("clicked");
-              setPaused(true)
+              setPaused(true);
               window.open(ad.link, "_blank");
             }
           }}
-        
         >
           Visit advertiser
         </button>
-
-        <div className="relative pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
+        <div className="relative rounded-t-xl w-[400px] pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px] overflow-hidden">
           <ReactPlayer
+            className="absolute top-0 left-0"
             url={ad.video}
             playing={!paused}
+            muted={muted}
             onPlay={() => {
               setPaused(false);
             }}
-            className="absolute top-0 left-0"
             onBuffer={() => {
               if (!startedPlayer) {
                 loadingtoastId = toast.loading("Loading video...");
@@ -84,17 +84,22 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
                 toast.dismiss(loadingtoastId);
               }
             }}
-                  onProgress={(progress) => {
+            onProgress={(progress) => {
+              // Attempt to unmute the video, it is muted by default to enable autoplay on some browsers
+              setMuted(false);
               if (progress.played > 0) startedPlayer = true;
               if (progress.played >= requiredWatchTime) {
                 setIsDone(true);
               }
-              if (progress.playedSeconds > 0.25) toast.dismiss(toastId);
+              if (progress.playedSeconds > 0.25) {
+                toast.dismiss(toastId);
+              }
             }}
             onEnded={() => {
               setIsDone(true);
             }}
             onReady={() => {
+
               setTimeout(() => {
                 if (!startedPlayer)
                   toastId = toast(
@@ -124,7 +129,6 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
             onError={() => {
               toast.error("Error loading video");
             }}
-            muted={false}
             config={{
               youtube: {
                 playerVars: {

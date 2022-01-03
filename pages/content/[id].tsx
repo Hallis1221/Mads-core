@@ -1,6 +1,6 @@
 // TODO implement isr
 
-import { gql, } from "graphql-request";
+import { gql } from "graphql-request";
 import Head from "next/head";
 import Image from "next/image";
 import { ReactElement, useEffect, useState } from "react";
@@ -92,14 +92,22 @@ function AdPage(props: any): ReactElement {
             height={128 * 0.3}
           />
         </div>
-        <div className="flex items-center flex-wrap flex-col relative pt-56 lg:relative lg:pt-14 md:pt-40 ">
+        <div className="flex items-center flex-wrap flex-col relative pt-56 lg:relative lg:pt-14 md:pt-40">
           <div className="m-4 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
             <MainAd ad={ad} content={content} setIsDone={setIsDone} />
 
             <div className="flex flex-row p-4 pt-2 pb-3 text-left justify-between">
               <p className="justify-start">
-                <a className="invisible absolute md:visible md:relative lg:visible lg:relative xl:visible xl:relative">Currently viewing </a>
-          <a>  {ad.title} by {ad.owner.displayName}</a>
+                <div className="absolute hidden lg:block lg:relative xl:block xl:relative">
+                  Currently viewing {ad.title} by {ad.owner.displayName}
+                </div>
+                <div className="absolute hidden md:block md:relative lg:hidden lg:relative xl:hidden xl:relative ">
+                  {" "}
+                  {ad.title} by {ad.owner.displayName}
+                </div>
+                <div className="relative block md:hidden md:absolute lg:hidden lg:absolute xl:hidden xl:absolute">
+                  {ad.title}
+                </div>
               </p>
 
               <Countdown
