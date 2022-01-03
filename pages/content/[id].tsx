@@ -1,10 +1,13 @@
 // TODO implement isr
 
+import { NOTFOUND } from "dns";
 import { gql, GraphQLClient } from "graphql-request";
 import Head from "next/head";
 import Image from "next/image";
 import { ReactElement, useEffect, useState } from "react";
 import Countdown from "react-countdown";
+import useSWR from "swr";
+import { correctPassword } from "../../bones/auth";
 import { client, setHost } from "../../bones/network";
 import MainAd from "../../components/ad";
 
@@ -44,6 +47,14 @@ const findadQuery = gql`
 const regView = gql`
   mutation Mutation($adId: ID!, $contentId: ID!) {
     registerViews(adID: $adId, contentID: $contentId)
+  }
+`;
+
+const contentIDs = gql`
+  query Query($input: PasswordInput) {
+    getContents(input: $input) {
+      id
+    }
   }
 `;
 
@@ -149,17 +160,18 @@ function AdPage(props: any): ReactElement {
     </div>
   );
 }
+export default AdPage;
 
-AdPage.getInitialProps = async (context: any) => {
-  const { req, query, props } = context;
-  if (req) setHost(req.headers.host);
+export async function getStaticProps({ params }: any) {
+  const { id } = params;
+  let content;
+  let ad;
 
-  let ad = props?.ad;
-  let content = query?.content;
-  if (!ad || (!content && (ad.id || content.id))) {
+  try {
+    setHost("mads-core.vercel.app");
     content = (
       await client.request(contentQuery, {
-        getContentId: query.id,
+        getContentId: id,
       })
     ).getContent;
 
@@ -174,7 +186,39 @@ AdPage.getInitialProps = async (context: any) => {
         },
       })
     ).findAd;
+  } catch (error) {
+    console.log(error)
+    return { notFound: true };
   }
-  return { ad, content };
-};
-export default AdPage;
+
+  return {
+    props: {
+      ad,
+      content,
+    },
+    revalidate: 120000,
+  };
+}
+
+export async function getStaticPaths() {
+  var ids: { getContents: { id: string }[] };
+
+  setHost("mads-core.vercel.app");
+  ids = await client.request(contentIDs, {
+    input: {
+      password: correctPassword,
+    },
+  });
+
+  const paths = ids.getContents.map((id: { id: string }) => ({
+    params: {
+      id: id.id,
+    },
+  }));
+
+  console.log(paths)
+  return {
+    paths,
+    fallback: "blocking",
+  };
+}
