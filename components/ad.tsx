@@ -50,7 +50,7 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
     return (
       <>
         <button
-          className="text-3xl font-bold font-sans text-white absolute z-10 text-shadow-lg pl-4 lg:pl-4 bottom-24 lg:bottom-20 xl:bottom-20 md:bottom-16 hover:cursor-pointer"
+          className="text-xl font-bold font-sans text-white absolute z-10 text-shadow-lg pl-4 bottom-20 md:text-2xl lg:text-3xl xl:text-4xl lg:pl-4 lg:bottom-20 xl:bottom-[4.75rem] md:bottom-20 hover:cursor-pointer"
           onClick={() => {
             if (startedPlayer) {
               gqc.request(regClick, {
@@ -58,14 +58,14 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
                 contentId: content.id,
               });
               console.log("clicked");
-              setPaused(true);
+              setPaused(false);
               window.open(ad.link, "_blank");
             }
           }}
         >
           Visit advertiser
         </button>
-        <div className="relative rounded-t-xl w-[400px] pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px] overflow-hidden">
+        <div className="relative float-left overflow-auto rounded-t-xl w-[400px] pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
           <ReactPlayer
             className="absolute top-0 left-0"
             url={ad.video}
@@ -85,8 +85,6 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
               }
             }}
             onProgress={(progress) => {
-              // Attempt to unmute the video, it is muted by default to enable autoplay on some browsers
-              setMuted(false);
               if (progress.played > 0) startedPlayer = true;
               if (progress.played >= requiredWatchTime) {
                 setIsDone(true);
@@ -99,7 +97,8 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
               setIsDone(true);
             }}
             onReady={() => {
-
+              // Attempt to unmute the video, it is muted by default to enable autoplay on some browsers
+              setMuted(false);
               setTimeout(() => {
                 if (!startedPlayer)
                   toastId = toast(
