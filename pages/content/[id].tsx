@@ -84,7 +84,7 @@ function AdPage(props: any): ReactElement {
       </Head>
 
       <main className="min-h-screen py-8 flex-1 flex flex-col">
-        <div className="items-end justify-start flex px-8">
+        <div className="items-end justify-start flex px-4 md:px-8 lg:px-8 xl:px-8">
           <Image
             src="/mads.svg"
             alt="Vercel Logo"
