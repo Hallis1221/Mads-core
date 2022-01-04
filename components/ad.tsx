@@ -3,7 +3,7 @@ import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
 import toast from "react-hot-toast";
 import { gql } from "graphql-request";
-import { gqc } from "../bones/network/client";
+import { gqc } from "../lib/network/client";
 
 const regClick = gql`
   mutation Mutation($adId: ID!, $contentId: ID!) {

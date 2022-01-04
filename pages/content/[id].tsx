@@ -5,8 +5,8 @@ import Head from "next/head";
 import Image from "next/image";
 import { ReactElement, useEffect, useState } from "react";
 import Countdown from "react-countdown";
-import { correctPassword } from "../../bones/auth";
-import { gqc } from "../../bones/network/client";
+import { correctPassword } from "../../lib/auth";
+import { gqc } from "../../lib/network/client";
 import MainAd from "../../components/ad";
 
 const contentQuery = gql`
