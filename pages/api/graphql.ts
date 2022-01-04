@@ -8,7 +8,7 @@ import {
 
 import resolvers from "../../lib/resolver";
 import { typeDefinitions } from "../../lib/typedefs";
-import { connectDB } from "../../utils/connection";
+import { connectDB } from "../../lib/utils/connection";
 
 connectDB();
 
