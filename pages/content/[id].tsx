@@ -70,9 +70,6 @@ function AdPage(props: any): ReactElement {
   }, [ad.id, content.id]);
 
   if (!ad || !content) return <div>Ad not found</div>;
-
-  let link = ad.link;
-  if (ad.type == "video") link = undefined;
   // TODO Warning: Cannot update a component (`AdPage`) while rendering a different component (`Countdown$1`). To locate the bad setState() call inside `Countdown$1`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
 
   return (
@@ -124,7 +121,7 @@ function AdPage(props: any): ReactElement {
                     );
                   if (ad.type === "video" && !isDone)
                     return (
-                      <a href={content.link} className="text-xl font-bold ">
+                      <a className="text-xl font-bold ">
                         Waiting...
                       </a>
                     );
