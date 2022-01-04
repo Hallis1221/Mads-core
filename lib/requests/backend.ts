@@ -1,7 +1,7 @@
 // !! all of these should be protected by a login check / password for now
 
 import { gql } from "graphql-request";
-import { gqc } from "../network/client";
+import { gqc } from "../graphql/client";
 
 export async function getContentIDS(
   password: string

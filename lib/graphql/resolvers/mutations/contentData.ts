@@ -1,5 +1,5 @@
-import { authenticated } from "../../auth";
-import ContentData from "../../models/contentData";
+import { authenticated } from "../../../auth";
+import ContentData from "../../../models/contentData";
 
 export async function createContentData(_: any, { input }: any) {
   if (!authenticated(input["password"])) return null;

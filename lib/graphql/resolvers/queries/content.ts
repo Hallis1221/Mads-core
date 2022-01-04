@@ -1,6 +1,6 @@
-import { authenticated } from "../../auth";
-import registerContentView from "../../data/registerContentView";
-import Content from "../../models/content";
+import { authenticated } from "../../../auth";
+import registerContentView from "../../../data/registerContentView";
+import Content from "../../../models/content";
 
 export async function getContent(_: any, { id }: any) {
   const content = await Content.findById(id);

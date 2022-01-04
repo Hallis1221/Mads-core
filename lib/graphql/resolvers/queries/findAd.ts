@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
-import { correctPassword } from "../../auth";
-import { gqc } from "../../network/client"; 
-import Ad from "../../models/ad";
+import { correctPassword } from "../../../auth";
+import { gqc } from "../../client"; 
+import Ad from "../../../models/ad";
 
 const query = gql`
   query Query($input: PasswordInput) {

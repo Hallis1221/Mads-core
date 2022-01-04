@@ -1,4 +1,4 @@
-import ContentData from "../../models/contentData";
+import ContentData from "../../../models/contentData";
 
 export async function getContentData(_: any, { contentID }: any) {
   const contentData = (await ContentData.findOne({ contentID }))

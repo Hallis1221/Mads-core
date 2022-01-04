@@ -1,7 +1,7 @@
-import registerAdClick from "../../data/registerAdClick";
-import registerAdView from "../../data/registerAdView";
-import registerContentClick from "../../data/registerContentClick";
-import registerContentView from "../../data/registerContentView";
+import registerAdClick from "../../../data/registerAdClick";
+import registerAdView from "../../../data/registerAdView";
+import registerContentClick from "../../../data/registerContentClick";
+import registerContentView from "../../../data/registerContentView";
 
 export async function registerViews(_: any, { adID, contentID }: any) {
     await registerAdView(adID);

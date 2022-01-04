@@ -6,8 +6,8 @@ import {
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
 
-import resolvers from "../../lib/resolver";
-import { typeDefinitions } from "../../lib/typedefs";
+import resolvers from "../../lib/graphql/resolvers";
+import { typeDefinitions } from "../../lib/graphql/typedefs";
 import { connectDB } from "../../lib/utils/connection";
 
 connectDB();

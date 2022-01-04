@@ -1,5 +1,5 @@
-import { authenticated } from "../../auth";
-import Ad from "../../models/ad";
+import { authenticated } from "../../../auth";
+import Ad from "../../../models/ad";
 
 export async function createAd(_: any, { input }: any) {
   if (!authenticated(input["password"])) return null;

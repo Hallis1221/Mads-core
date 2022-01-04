@@ -1,7 +1,7 @@
 // TODO rate limit
 
 import { gql } from "graphql-request";
-import { gqc } from "../network/client";
+import { gqc } from "../graphql/client";
 
 export async function getContentWithID(id: string) {
   return (

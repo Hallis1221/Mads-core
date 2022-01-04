@@ -12,7 +12,7 @@ import {
   registerView,
 } from "../../lib/requests/frontend";
 import { createContentData, getContentIDS } from "../../lib/requests/backend";
-import { updateContentData } from "../../lib/resolver/mutations/contentData";
+import { updateContentData } from "../../lib/graphql/resolvers/mutations/contentData";
 
 function AdPage(props: any): ReactElement {
   const ad = props.ad;
