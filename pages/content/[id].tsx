@@ -1,73 +1,27 @@
 // TODO implement isr
 
-import { gql } from "graphql-request";
 import Head from "next/head";
 import Image from "next/image";
 import { ReactElement, useEffect, useState } from "react";
 import Countdown from "react-countdown";
 import { correctPassword } from "../../lib/auth";
-import { gqc } from "../../lib/network/client";
 import MainAd from "../../components/ad";
-
-const contentQuery = gql`
-  query Query($getContentId: ID!) {
-    getContent(id: $getContentId) {
-      theme
-      tags {
-        tag
-      }
-      title
-      link
-      id
-      owner {
-        displayName
-      }
-    }
-  }
-`;
-
-const findadQuery = gql`
-  query Query($input: FindAdInput) {
-    findAd(input: $input) {
-      title
-      link
-      image
-      video
-      type
-      owner {
-        displayName
-      }
-      id
-    }
-  }
-`;
-
-const regView = gql`
-  mutation Mutation($adId: ID!, $contentId: ID!) {
-    registerViews(adID: $adId, contentID: $contentId)
-  }
-`;
-
-const contentIDs = gql`
-  query Query($input: PasswordInput) {
-    getContents(input: $input) {
-      id
-    }
-  }
-`;
+import {
+  findAd,
+  getContentWithID,
+  registerView,
+} from "../../lib/requests/frontend";
+import { createContentData, getContentIDS } from "../../lib/requests/backend";
+import { updateContentData } from "../../lib/resolver/mutations/contentData";
 
 function AdPage(props: any): ReactElement {
   const ad = props.ad;
   const content = props.content;
   const [isDone, setIsDone] = useState(false);
-  
+
   useEffect(() => {
     console.log("Registering view");
-    if (ad.id && content.id)
-      gqc.request(regView, {
-        adId: ad.id,
-        contentId: content.id,
-      });
+    if (ad.id && content.id) registerView(ad.id, content.id);
   }, [ad.id, content.id]);
 
   if (!ad || !content) return <div>Ad not found</div>;
@@ -121,11 +75,7 @@ function AdPage(props: any): ReactElement {
                       </a>
                     );
                   if (ad.type === "video" && !isDone)
-                    return (
-                      <a className="text-xl font-bold ">
-                        Waiting...
-                      </a>
-                    );
+                    return <a className="text-xl font-bold ">Waiting...</a>;
                   if (props.api.isCompleted()) {
                     setIsDone(true);
                   }
@@ -172,23 +122,12 @@ export async function getStaticProps({ params }: any) {
   let ad;
 
   try {
-    content = (
-      await gqc.request(contentQuery, {
-        getContentId: id,
-      })
-    ).getContent;
+    content = await getContentWithID(id);
 
     let tags = content.tags.map((tag: { tag: any }) => tag.tag);
     let theme = content.theme;
 
-    ad = (
-      await gqc.request(findadQuery, {
-        input: {
-          tags,
-          theme,
-        },
-      })
-    ).findAd;
+    ad = await findAd(tags, theme);
   } catch (error) {
     return { notFound: true };
   }
@@ -203,20 +142,26 @@ export async function getStaticProps({ params }: any) {
 }
 
 export async function getStaticPaths() {
-  var ids: { getContents: { id: string }[] };
+  var ids: { id: string }[];
 
-  ids = await gqc.request(contentIDs, {
-    input: {
-      password: correctPassword,
-    },
+  if (!correctPassword) throw new Error("Password is not set in .env.local");
+  ids = await getContentIDS(correctPassword);
+
+  const paths = ids.map((id: { id: string }) => {
+    return {params: {
+      id: id.id,
+    },};
   });
 
-  const paths = ids.getContents.map((id: { id: string }) => ({
-    params: {
-      id: id.id,
-    },
-  }));
-
+  for (const id in ids) {
+    console.log(await updateContentData(ids[id].id, {}).catch(async (e) => {
+      console.log("Contentdata not found for id: " + ids[id].id, ". Creating... (", e, ")");
+      await createContentData(ids[id].id, correctPassword);
+    }));
+  }
+ 
+  
+console.log("paths");
   return {
     paths,
     fallback: "blocking",
