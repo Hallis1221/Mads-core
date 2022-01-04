@@ -29,6 +29,23 @@ export async function getContentWithID(id: string) {
   ).getContent;
 }
 
+export async function pingContentData(contentID: string) {
+  return (
+    await gqc.request(
+      gql`
+        query GetContentData($contentId: String!) {
+          getContentData(contentID: $contentId) {
+            contentID
+          }
+        }
+      `,
+     {
+      contentId: contentID
+    }
+    )
+  ).getContentData;
+}
+
 export async function findAd(tags: string[], theme: string) {
   return (
     await gqc.request(

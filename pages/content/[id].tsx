@@ -9,10 +9,12 @@ import MainAd from "../../components/ad";
 import {
   findAd,
   getContentWithID,
+  pingContentData,
   registerView,
 } from "../../lib/requests/frontend";
 import { createContentData, getContentIDS } from "../../lib/requests/backend";
 import { updateContentData } from "../../lib/graphql/resolvers/mutations/contentData";
+import { loadEnvConfig } from '@next/env'
 
 function AdPage(props: any): ReactElement {
   const ad = props.ad;
@@ -142,6 +144,7 @@ export async function getStaticProps({ params }: any) {
 }
 
 export async function getStaticPaths() {
+  loadEnvConfig("../../.env.local")
   var ids: { id: string }[];
 
   if (!correctPassword) throw new Error("Password is not set in .env.local");
@@ -154,10 +157,10 @@ export async function getStaticPaths() {
   });
 
   for (const id in ids) {
-    console.log(await updateContentData(ids[id].id, {}).catch(async (e) => {
+  await pingContentData(ids[id].id,).catch(async (e) => {
       console.log("Contentdata not found for id: " + ids[id].id, ". Creating... (", e, ")");
       await createContentData(ids[id].id, correctPassword);
-    }));
+    });
   }
  
   
