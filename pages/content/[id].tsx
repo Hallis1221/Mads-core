@@ -1,9 +1,7 @@
 // TODO implement isr
 
 import Head from "next/head";
-import Image from "next/image";
-import { ReactElement, useEffect, useState } from "react";
-import Countdown from "react-countdown";
+import { ReactElement, SetStateAction, useEffect, useState } from "react";
 import { correctPassword } from "../../lib/auth";
 import MainAd from "../../components/ad";
 import {
@@ -13,8 +11,9 @@ import {
   registerView,
 } from "../../lib/requests/frontend";
 import { createContentData, getContentIDS } from "../../lib/requests/backend";
-import { updateContentData } from "../../lib/graphql/resolvers/mutations/contentData";
-import { loadEnvConfig } from '@next/env'
+import { loadEnvConfig } from "@next/env";
+import CornerLogo from "../../components/logo";
+import ReactiveCountdown from "../../components/countdown";
 
 function AdPage(props: any): ReactElement {
   const ad = props.ad;
@@ -37,16 +36,9 @@ function AdPage(props: any): ReactElement {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="min-h-screen py-8 flex-1 flex flex-col">
-        <div className="items-end justify-start flex px-4 md:px-8 lg:px-16 xl:px-8">
-          <Image
-            src="/mads.svg"
-            alt="Vercel Logo"
-            width={300 * 0.3}
-            height={128 * 0.3}
-          />
-        </div>
-        <div className="flex items-center flex-wrap flex-col relative pt-40 lg:relative lg:pt-14 md:pt-40 mx-10">
+      <main className="min-h-screen  flex-1 flex flex-col">
+        <CornerLogo />
+        <div className="flex items-center flex-wrap flex-col relative pt-48 lg:relative lg:pt-24 md:pt-48 mx-10">
           <div className="overflow-auto m-4 ml-0 mr-0 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
             <MainAd ad={ad} content={content} setIsDone={setIsDone} />
 
@@ -64,44 +56,11 @@ function AdPage(props: any): ReactElement {
                 </div>
               </div>
 
-              <Countdown
-                date={Date.now() + 5000}
-                precision={1}
-                intervalDelay={1000}
-                className=""
-                renderer={(props) => {
-                  if (isDone)
-                    return (
-                      <a href={content.link} className="text-xl font-bold ">
-                        Skip
-                      </a>
-                    );
-                  if (ad.type === "video" && !isDone)
-                    return <a className="text-xl font-bold ">Waiting...</a>;
-                  if (props.api.isCompleted()) {
-                    setIsDone(true);
-                  }
-
-                  if (props.seconds > 0)
-                    return (
-                      <a
-                        className="text-xl font-bold"
-                        onClick={() => {
-                          console.log("Hi");
-                        }}
-                      >
-                        {props.seconds}
-                      </a>
-                    );
-
-                  if (isDone)
-                    return (
-                      <a href={content.link} className="text-xl font-bold ">
-                        Skip
-                      </a>
-                    );
-                  return <a className="text-xl font-bold ">Loading...</a>;
-                }}
+              <ReactiveCountdown
+                ad={ad}
+                content={content}
+                isDone={isDone}
+                setIsDone={setIsDone}
               />
             </div>
           </div>
@@ -144,27 +103,32 @@ export async function getStaticProps({ params }: any) {
 }
 
 export async function getStaticPaths() {
-  loadEnvConfig("../../.env.local")
+  loadEnvConfig("../../.env.local");
   var ids: { id: string }[];
 
   if (!correctPassword) throw new Error("Password is not set in .env.local");
   ids = await getContentIDS(correctPassword);
 
   const paths = ids.map((id: { id: string }) => {
-    return {params: {
-      id: id.id,
-    },};
+    return {
+      params: {
+        id: id.id,
+      },
+    };
   });
 
   for (const id in ids) {
-  await pingContentData(ids[id].id,).catch(async (e) => {
-      console.log("Contentdata not found for id: " + ids[id].id, ". Creating... (", e, ")");
+    await pingContentData(ids[id].id).catch(async (e) => {
+      console.log(
+        "Contentdata not found for id: " + ids[id].id,
+        ". Creating... (",
+        e,
+        ")"
+      );
       await createContentData(ids[id].id, correctPassword);
     });
   }
- 
-  
-console.log("paths");
+
   return {
     paths,
     fallback: "blocking",

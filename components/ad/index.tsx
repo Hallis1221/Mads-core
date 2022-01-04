@@ -2,7 +2,7 @@ import { ReactElement, useState } from "react";
 import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
 import toast from "react-hot-toast";
-import { registerClick } from "../lib/requests/frontend";
+import { registerClick } from "../../lib/requests/frontend";
 
 export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
   let [paused, setPaused] = useState(false);
