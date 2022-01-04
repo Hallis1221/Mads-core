@@ -60,8 +60,9 @@ function AdPage(props: any): ReactElement {
   const ad = props.ad;
   const content = props.content;
   const [isDone, setIsDone] = useState(false);
-
+  console.log(ad);
   useEffect(() => {
+    console.log("Registering view");
     if (ad.id && content.id)
       gqc.request(regView, {
         adId: ad.id,
@@ -169,7 +170,7 @@ export async function getStaticProps({ params }: any) {
   const { id } = params;
   let content;
   let ad;
-
+  
   try {
     content = (
       await gqc.request(contentQuery, {
