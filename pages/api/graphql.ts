@@ -7,26 +7,29 @@ import {
 } from "apollo-server-core";
 
 import resolvers from "../../lib/resolver";
-import { typeDefs } from "../../lib/typedefs";
+import { typeDefinitions } from "../../lib/typedefs";
 import { connectDB } from "../../utils/connection";
 
 connectDB();
 
+const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({
+  workspaceName: "MADS api",
+  settings: {
+    "request.credentials": "include",
+    "schema.polling.enable": true,
+    "editor.theme": "dark",
+  },
+});
+const ApiLocalLanding = ApolloServerPluginLandingPageLocalDefault({ footer: false });
+
 const apolloServer = new ApolloServer({
-  typeDefs: typeDefs,
+  typeDefs: typeDefinitions,
   resolvers,
   plugins: [
     // Install a landing page plugin based on NODE_ENV
     process.env.NODE_ENV === "production"
-      ? ApolloServerPluginLandingPageGraphQLPlayground({
-          workspaceName: "MADS api",
-          settings: {
-            "request.credentials": "include",
-            "schema.polling.enable": true,
-            "editor.theme": "dark",
-          },
-        })
-      : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+      ? ApiProductionLanding
+      : ApiLocalLanding
   ],
 });
 
