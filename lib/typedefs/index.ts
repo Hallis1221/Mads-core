@@ -5,4 +5,4 @@ import { contentTypeDefs } from "./content";
 import { contentDataTypeDefs } from "./contentData";
 import { dataTypeDefs } from "./data";
 
-export const typeDefs = [adTypeDefs,adDataTypeDefs, contentTypeDefs, contentDataTypeDefs,dataTypeDefs];
+export const typeDefinitions = [adTypeDefs,adDataTypeDefs, contentTypeDefs, contentDataTypeDefs,dataTypeDefs];
