@@ -27,10 +27,11 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
         <Image
           src={ad.image}
           alt="Deploy"
+          priority={true}
           height={630 * 1.2}
           width={1200 * 1.2}
           layout="intrinsic"
-          className="rounded-xl h-full hover:cursor-pointer"
+          className="h-full hover:cursor-pointer"
           onClick={() => {
             gqc.request(regClick, {
               adId: ad.id,
@@ -65,7 +66,7 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
         >
           Visit advertiser
         </button>
-        <div className="relative float-left overflow-auto rounded-t-xl w-[400px] pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
+        <div className="relative float-left w-[400px] pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
           <ReactPlayer
             className="absolute top-0 left-0"
             url={ad.video}

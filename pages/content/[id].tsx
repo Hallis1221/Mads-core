@@ -60,7 +60,7 @@ function AdPage(props: any): ReactElement {
   const ad = props.ad;
   const content = props.content;
   const [isDone, setIsDone] = useState(false);
-  console.log(ad);
+  
   useEffect(() => {
     console.log("Registering view");
     if (ad.id && content.id)
@@ -82,7 +82,7 @@ function AdPage(props: any): ReactElement {
       </Head>
 
       <main className="min-h-screen py-8 flex-1 flex flex-col">
-        <div className="items-end justify-start flex px-4 md:px-8 lg:px-8 xl:px-8">
+        <div className="items-end justify-start flex px-4 md:px-8 lg:px-16 xl:px-8">
           <Image
             src="/mads.svg"
             alt="Vercel Logo"
@@ -90,12 +90,12 @@ function AdPage(props: any): ReactElement {
             height={128 * 0.3}
           />
         </div>
-        <div className="flex items-center flex-wrap flex-col relative pt-40 lg:relative lg:pt-14 md:pt-40">
-          <div className="m-4 ml-0 mr-0 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
+        <div className="flex items-center flex-wrap flex-col relative pt-40 lg:relative lg:pt-14 md:pt-40 mx-10">
+          <div className="overflow-auto m-4 ml-0 mr-0 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
             <MainAd ad={ad} content={content} setIsDone={setIsDone} />
 
             <div className="flex flex-row p-4 pt-2 pb-3 text-left justify-between">
-              <p className="justify-start">
+              <div className="justify-start">
                 <div className="absolute hidden lg:block lg:relative xl:block xl:relative">
                   Currently viewing {ad.title} by {ad.owner.displayName}
                 </div>
@@ -106,7 +106,7 @@ function AdPage(props: any): ReactElement {
                 <div className="relative block md:hidden md:absolute lg:hidden lg:absolute xl:hidden xl:absolute">
                   {ad.title}
                 </div>
-              </p>
+              </div>
 
               <Countdown
                 date={Date.now() + 5000}
@@ -170,7 +170,7 @@ export async function getStaticProps({ params }: any) {
   const { id } = params;
   let content;
   let ad;
-  
+
   try {
     content = (
       await gqc.request(contentQuery, {
