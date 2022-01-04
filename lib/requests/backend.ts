@@ -1,3 +1,5 @@
+// !! all of these should be protected by a login check / password for now
+
 import { gql } from "graphql-request";
 import { gqc } from "../network/client";
 

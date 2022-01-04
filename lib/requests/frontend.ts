@@ -1,3 +1,5 @@
+// TODO rate limit
+
 import { gql } from "graphql-request";
 import { gqc } from "../network/client";
 
