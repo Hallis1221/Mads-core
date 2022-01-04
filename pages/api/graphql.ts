@@ -36,7 +36,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-const allowedOrigins = ["https://studio.apollographql.com", "http://localhost:3000", "https://mads.vercel.app"];
+const allowedOrigins = ["https://studio.apollographql.com", "http://localhost:3000", "https://www.marketads.me"];
 const origin = req.headers.origin;
 
   if (origin && allowedOrigins.includes(origin)) 
