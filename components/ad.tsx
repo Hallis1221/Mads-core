@@ -2,14 +2,8 @@ import { ReactElement, useState } from "react";
 import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
 import toast from "react-hot-toast";
-import { gql } from "graphql-request";
-import { gqc } from "../lib/network/client";
+import { registerClick } from "../lib/requests/frontend";
 
-const regClick = gql`
-  mutation Mutation($adId: ID!, $contentId: ID!) {
-    registerClicks(adID: $adId, contentID: $contentId)
-  }
-`;
 export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
   let [paused, setPaused] = useState(false);
   let [muted, setMuted] = useState(true);
@@ -32,11 +26,8 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
           width={1200 * 1.2}
           layout="intrinsic"
           className="h-full hover:cursor-pointer"
-          onClick={() => {
-            gqc.request(regClick, {
-              adId: ad.id,
-              contentId: content.id,
-            });
+          onClick={async () => {
+          registerClick(ad.id, content.id)
             window.open(ad.link, "_blank");
           }}
         />
@@ -54,10 +45,7 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
           className="text-xl font-bold font-sans text-white absolute z-10 text-shadow-lg pl-4 bottom-20 md:text-2xl lg:text-3xl xl:text-4xl lg:pl-4 lg:bottom-20 xl:bottom-[4.75rem] md:bottom-20 hover:cursor-pointer"
           onClick={() => {
             if (startedPlayer) {
-              gqc.request(regClick, {
-                adId: ad.id,
-                contentId: content.id,
-              });
+              registerClick(ad.id, content.id);
               console.log("clicked");
               setPaused(false);
               window.open(ad.link, "_blank");
