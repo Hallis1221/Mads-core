@@ -6,27 +6,30 @@ import {
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
 
-import resolvers from "../../bones/resolver";
-import { typeDefs } from "../../bones/typedefs";
-import { connectDB } from "../../utils/connection";
+import resolvers from "../../lib/graphql/resolvers";
+import { typeDefinitions } from "../../lib/graphql/typedefs";
+import { connectDB } from "../../lib/utils/connection";
 
 connectDB();
 
+const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({
+  workspaceName: "MADS api",
+  settings: {
+    "request.credentials": "include",
+    "schema.polling.enable": true,
+    "editor.theme": "dark",
+  },
+});
+const ApiLocalLanding = ApolloServerPluginLandingPageLocalDefault({ footer: false });
+
 const apolloServer = new ApolloServer({
-  typeDefs: typeDefs,
+  typeDefs: typeDefinitions,
   resolvers,
   plugins: [
     // Install a landing page plugin based on NODE_ENV
     process.env.NODE_ENV === "production"
-      ? ApolloServerPluginLandingPageGraphQLPlayground({
-          workspaceName: "MADS api",
-          settings: {
-            "request.credentials": "include",
-            "schema.polling.enable": true,
-            "editor.theme": "dark",
-          },
-        })
-      : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+      ? ApiProductionLanding
+      : ApiLocalLanding
   ],
 });
 
@@ -41,6 +44,9 @@ const origin = req.headers.origin;
 
   if (origin && allowedOrigins.includes(origin)) 
     res.setHeader("Access-Control-Allow-Origin", origin);
+    else 
+    // Ensure we always allow CORS requests from the frontend
+      res.setHeader("Access-Control-Allow-Origin", "https://www.marketads.me");
 
     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST',);
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');

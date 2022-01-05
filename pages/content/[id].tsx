@@ -1,75 +1,41 @@
-// TODO implement isr
-
-import { gql } from "graphql-request";
 import Head from "next/head";
-import Image from "next/image";
 import { ReactElement, useEffect, useState } from "react";
-import Countdown from "react-countdown";
-import { correctPassword } from "../../bones/auth";
-import { gqc } from "../../bones/network/client";
+import { correctPassword } from "../../lib/auth";
 import MainAd from "../../components/ad";
+import {
+  getContentWithID,
+  pingAdData,
+  pingContentData,
+  registerView,
+} from "../../lib/logic/requests/frontend";
+import {
+  createContentData,
+  getContentIDS,
+  findAd,
+  getAdIDS,
+  createAdData,
+} from "../../lib/logic/requests/backend";
+import { loadEnvConfig } from "@next/env";
+import CornerLogo from "../../components/logo";
+import ReactiveCountdown from "../../components/countdown";
+import ReactiveAdInfo from "../../components/ad/info";
+import NotSeriousFooter from "../../components/footer";
 
-const contentQuery = gql`
-  query Query($getContentId: ID!) {
-    getContent(id: $getContentId) {
-      theme
-      tags {
-        tag
-      }
-      title
-      link
-      id
-      owner {
-        displayName
-      }
-    }
-  }
-`;
-
-const findadQuery = gql`
-  query Query($input: FindAdInput) {
-    findAd(input: $input) {
-      title
-      link
-      image
-      video
-      type
-      owner {
-        displayName
-      }
-      id
-    }
-  }
-`;
-
-const regView = gql`
-  mutation Mutation($adId: ID!, $contentId: ID!) {
-    registerViews(adID: $adId, contentID: $contentId)
-  }
-`;
-
-const contentIDs = gql`
-  query Query($input: PasswordInput) {
-    getContents(input: $input) {
-      id
-    }
-  }
-`;
-
-function AdPage(props: any): ReactElement {
+export default function AdPage(props: any): ReactElement {
+  // get the ad and content from props, fetched by the server in getStaticProps
   const ad = props.ad;
   const content = props.content;
+
+  // useState for isDone. This is used to indicate state on wheter or not the ad or countdown is done
   const [isDone, setIsDone] = useState(false);
-  
+
+  // useEffect for registering the view. Every time the page is loaded or the adID or contentID changes, this will be called
   useEffect(() => {
     console.log("Registering view");
-    if (ad.id && content.id)
-      gqc.request(regView, {
-        adId: ad.id,
-        contentId: content.id,
-      });
+    if (ad.id && content.id) registerView(ad.id, content.id);
   }, [ad.id, content.id]);
 
+  // incase something happend with getstaticprops and htis wasnt registered as a 404 already, we here ensure that ad nor the content is null. If either is null, we return a 404 page
   if (!ad || !content) return <div>Ad not found</div>;
   // TODO Warning: Cannot update a component (`AdPage`) while rendering a different component (`Countdown$1`). To locate the bad setState() call inside `Countdown$1`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
 
@@ -81,118 +47,58 @@ function AdPage(props: any): ReactElement {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="min-h-screen py-8 flex-1 flex flex-col">
-        <div className="items-end justify-start flex px-4 md:px-8 lg:px-16 xl:px-8">
-          <Image
-            src="/mads.svg"
-            alt="Vercel Logo"
-            width={300 * 0.3}
-            height={128 * 0.3}
-          />
-        </div>
-        <div className="flex items-center flex-wrap flex-col relative pt-40 lg:relative lg:pt-14 md:pt-40 mx-10">
+      <main className="min-h-screen  flex-1 flex flex-col">
+        <CornerLogo />
+        <div className="flex items-center flex-wrap flex-col relative pt-48 lg:relative lg:pt-24 md:pt-48 mx-10">
           <div className="overflow-auto m-4 ml-0 mr-0 mt-0 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">
             <MainAd ad={ad} content={content} setIsDone={setIsDone} />
 
             <div className="flex flex-row p-4 pt-2 pb-3 text-left justify-between">
-              <div className="justify-start">
-                <div className="absolute hidden lg:block lg:relative xl:block xl:relative">
-                  Currently viewing {ad.title} by {ad.owner.displayName}
-                </div>
-                <div className="absolute hidden md:block md:relative lg:hidden lg:relative xl:hidden xl:relative ">
-                  {" "}
-                  {ad.title} by {ad.owner.displayName}
-                </div>
-                <div className="relative block md:hidden md:absolute lg:hidden lg:absolute xl:hidden xl:absolute">
-                  {ad.title}
-                </div>
-              </div>
+              <ReactiveAdInfo ad={ad} />
 
-              <Countdown
-                date={Date.now() + 5000}
-                precision={1}
-                intervalDelay={1000}
-                className=""
-                renderer={(props) => {
-                  if (isDone)
-                    return (
-                      <a href={content.link} className="text-xl font-bold ">
-                        Skip
-                      </a>
-                    );
-                  if (ad.type === "video" && !isDone)
-                    return (
-                      <a className="text-xl font-bold ">
-                        Waiting...
-                      </a>
-                    );
-                  if (props.api.isCompleted()) {
-                    setIsDone(true);
-                  }
-
-                  if (props.seconds > 0)
-                    return (
-                      <a
-                        className="text-xl font-bold"
-                        onClick={() => {
-                          console.log("Hi");
-                        }}
-                      >
-                        {props.seconds}
-                      </a>
-                    );
-
-                  if (isDone)
-                    return (
-                      <a href={content.link} className="text-xl font-bold ">
-                        Skip
-                      </a>
-                    );
-                  return <a className="text-xl font-bold ">Loading...</a>;
-                }}
+              <ReactiveCountdown
+                ad={ad}
+                content={content}
+                isDone={isDone}
+                setIsDone={setIsDone}
               />
             </div>
           </div>
         </div>
       </main>
-
-      <footer className="flex flex-1 py-8 px-0 border-t-2 border-solid border-gray-300 justify-center items-center">
-        <a target="_blank" href="https://vercel.com" rel="opener noreferrer">
-          Made with ❤️ and a fck ton of monster
-        </a>
-      </footer>
+      <NotSeriousFooter />
     </div>
   );
 }
-export default AdPage;
 
+// getStaticProps is a function that is called by NextJS at build time. With revalidate we force the server to re-fetch the data every x seconds.
 export async function getStaticProps({ params }: any) {
+  // get the contentID from the url/params
   const { id } = params;
+
+  // initilize the ad and content as null
   let content;
   let ad;
 
   try {
-    content = (
-      await gqc.request(contentQuery, {
-        getContentId: id,
-      })
-    ).getContent;
+    // get the content from the database
+    console.log("Getting content with id: " + id);
 
+    content = await getContentWithID(id);
+    if (content === null) return { notFound: true };
+
+    // map the tags into an array
     let tags = content.tags.map((tag: { tag: any }) => tag.tag);
     let theme = content.theme;
 
-    ad = (
-      await gqc.request(findadQuery, {
-        input: {
-          tags,
-          theme,
-        },
-      })
-    ).findAd;
+    // find a relevant ad with similair tags and preferred theme
+    ad = await findAd(tags, theme, correctPassword);
   } catch (error) {
+    // if something went wrong, we return a 404 page. For example if the contentID or no ad was found
     return { notFound: true };
   }
 
+  console.log("returning props");
   return {
     props: {
       ad,
@@ -202,21 +108,66 @@ export async function getStaticProps({ params }: any) {
   };
 }
 
+// getStaticPaths is a function that is called by NextJS at build time. It returns an array of paths that are used to generate the pages.
 export async function getStaticPaths() {
-  var ids: { getContents: { id: string }[] };
+  // ensure that the env config is loaded
+  loadEnvConfig("../../.env.local");
 
-  ids = await gqc.request(contentIDs, {
-    input: {
-      password: correctPassword,
-    },
+  // create a list of all contentIDs initalized as an empty array
+  let contentids: { id: string }[] = [];
+  let adids: { id: string }[] = [];
+
+  // if we dont have a password in the env config, we throw an error
+  if (!correctPassword) throw new Error("Password is not set in .env.local");
+
+  // get all contentIDs from the database and save them in the ids array
+  contentids = await getContentIDS(correctPassword);
+  // get all adIDs from the database and save them in the ids array
+  adids = await getAdIDS(correctPassword);
+
+  // create an array of paths from the id of each element in the ids array
+  const paths = contentids.map((content: { id: string }) => {
+    return {
+      params: {
+        id: content.id,
+      },
+    };
   });
 
-  const paths = ids.getContents.map((id: { id: string }) => ({
-    params: {
-      id: id.id,
-    },
-  }));
+  try {
+    // go trough each contentID and ensure the contentData exists, if not create it
+    for (const id in contentids) {
+      await pingContentData(contentids[id].id).catch(async (e) => {
+        console.log(
+          "Contentdata not found for id: " + contentids[id].id,
+          ". Creating... (",
+          e,
+          ")"
+        );
+        await createContentData(contentids[id].id, correctPassword);
+      });
+    }
 
+    // go trough each adID and ensure the adData exists, if not create it
+    for (const id in adids) {
+      await pingAdData(adids[id].id).catch(async (e) => {
+        console.log(
+          "Addata not found for id: " + adids[id].id,
+          ". Creating... (",
+          e,
+          ")"
+        );
+        await createAdData(adids[id].id, correctPassword);
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  // return the paths with a fallback of blocking.
+  // We'll pre-render only these paths at build time.
+  // { fallback: blocking } will server-render pages
+  // on-demand if the path doesn't exist.
   return {
     paths,
     fallback: "blocking",
