@@ -34,9 +34,9 @@ export default function VideoAd({ ad, content, setIsDone }: any): ReactElement {
       >
         Visit advertiser
       </button>
-      <div className="relative float-left w-[400px] pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
+      <div className="relative float-right w-[400px] pt-[56.25%] xl:w-[1200px] lg:w-[900px] md:w-[600px]">
         <ReactPlayer
-          className="absolute top-0 left-0"
+          className="absolute top-0 right-0 justify-center"
           url={ad.video}
           playing={!paused}
           muted={muted}
