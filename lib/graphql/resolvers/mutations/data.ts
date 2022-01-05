@@ -10,8 +10,8 @@ export async function registerViews(_: any, { adID, contentID }: any) {
   await registerAdView(adID);
   // Register the contentView for the contentID.
   await registerContentView(contentID);
-  // Return the adID and contentID.
-  return { adID, contentID };
+  // Return true to indicate that the views were registered.
+  return true;
 }
 
 // This is the resolver for the registerClicks mutation. It takes in both an adID and contentID and registers the adClick and contentClick for the adID and contentID.
@@ -21,6 +21,6 @@ export async function registerClicks(_: any, { adID, contentID }: any) {
   await registerAdClick(adID);
   // Register the contentClick for the contentID.
   await registerContentClick(contentID);
-  // Return the adID and contentID.
-  return { adID, contentID };
+  // Return true to indicate that the clicks were registered.
+  return true;
 }
