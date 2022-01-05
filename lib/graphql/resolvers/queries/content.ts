@@ -1,5 +1,4 @@
 import { authenticated } from "../../../auth";
-import registerContentView from "../../../data/registerContentView";
 import Content from "../../../models/content";
 
 // This is the resolver for the getContent query. It takes in the id and returns the content with the matching id.
@@ -8,8 +7,10 @@ export async function getContent(_: any, { id }: any) {
     // Find the content with the matching id.
     const content = await Content.findById(id);
     // If the content doesn't exist, throw an error.
-    if (!content) 
+    if (!content) {
+      console.log("content not found with id: " + id);
       return null;
+    }
 
     // Return the content.
     return content;

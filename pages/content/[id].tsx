@@ -85,8 +85,10 @@ export async function getStaticProps({ params }: any) {
     console.log("Getting content with id: " + id);
 
     content = await getContentWithID(id);
-    if (content === null) return { notFound: true };
-
+    if (content === null) {
+      console.log("Error getting content with id: " + id);
+      return { notFound: true };
+    }
     // map the tags into an array
     let tags = content.tags.map((tag: { tag: any }) => tag.tag);
     let theme = content.theme;
