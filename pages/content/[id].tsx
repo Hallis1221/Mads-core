@@ -14,7 +14,7 @@ import ReactiveCountdown from "../../components/countdown";
 import ReactiveAdInfo from "../../components/ad/info";
 import NotSeriousFooter from "../../components/footer";
 
-function AdPage(props: any): ReactElement {
+export default function AdPage(props: any): ReactElement {
   // get the ad and content from props, fetched by the server in getStaticProps
   const ad = props.ad;
   const content = props.content;
@@ -63,7 +63,6 @@ function AdPage(props: any): ReactElement {
     </div>
   );
 }
-export default AdPage;
 
 // getStaticProps is a function that is called by NextJS at build time. With revalidate we force the server to re-fetch the data every x seconds.
 export async function getStaticProps({ params }: any) {
