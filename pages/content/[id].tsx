@@ -3,12 +3,11 @@ import { ReactElement, useEffect, useState } from "react";
 import { correctPassword } from "../../lib/auth";
 import MainAd from "../../components/ad";
 import {
-  findAd,
   getContentWithID,
   pingContentData,
   registerView,
 } from "../../lib/requests/frontend";
-import { createContentData, getContentIDS } from "../../lib/requests/backend";
+import { createContentData, getContentIDS, findAd } from "../../lib/requests/backend";
 import { loadEnvConfig } from "@next/env";
 import CornerLogo from "../../components/logo";
 import ReactiveCountdown from "../../components/countdown";
@@ -84,7 +83,7 @@ export async function getStaticProps({ params }: any) {
     let theme = content.theme;
 
     // find a relevant ad with similair tags and preferred theme
-    ad = await findAd(tags, theme);
+    ad = await findAd(tags, theme, correctPassword);
   } catch (error) {
     // if something went wrong, we return a 404 page. For example if the contentID or no ad was found
     return { notFound: true };

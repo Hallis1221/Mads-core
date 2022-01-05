@@ -66,6 +66,7 @@ export const adTypeDefs = gql`
   input FindAdInput {
     theme: String!
     tags: [String]!
+    password: String!
   }
 
 `;

@@ -63,6 +63,7 @@ export async function updateAdData(_: any, { adID, input }: any) {
   } catch (error) {
     // In case of an error, log the error and return null.
     console.error(error);
+    return null;
   }
 }
 
@@ -79,5 +80,6 @@ export async function deleteAdData(_: any, { adID, input }: any) {
   } catch (error) {
     // In case of an error, log the error and return null.
     console.error(error);
+    return null;
   }
 }

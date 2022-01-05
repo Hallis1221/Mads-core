@@ -266,3 +266,69 @@ export async function updateAdViews(
     )
   ).updateContentData.views;
 }
+
+export async function findAd(
+  tags: string[],
+  theme: string,
+  password: string
+): Promise<string> {
+  return (
+    await gqc.request(
+      gql`
+        query Query($input: FindAdInput) {
+          findAd(input: $input) {
+            title
+            link
+            image
+            video
+            type
+            owner {
+              displayName
+            }
+            id
+          }
+        }
+      `,
+      {
+        input: {
+          tags,
+          theme,
+          password,
+        },
+      }
+    )
+  ).findAd;
+}
+
+export async function getAds(password: string):  Promise<Array<any>> {
+  return (
+    await gqc.request(
+      gql`
+        query Query($input: PasswordInput) {
+          getAds(input: $input) {
+            theme
+            type
+            title
+            link
+            id
+            image
+            video
+            owner {
+              uid
+              displayName
+            }
+            tags {
+              tag
+              priority
+            }
+          }
+        }
+      `,
+      {
+        input: {
+          password: password,
+        },
+      }
+    )
+  ).getAds;
+}

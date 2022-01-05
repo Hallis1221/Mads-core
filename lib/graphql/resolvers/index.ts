@@ -1,4 +1,4 @@
-import { createAd, deleteAd, updateAd,  } from "./mutations/ad";
+import { createAd, deleteAd, updateAd } from "./mutations/ad";
 import {
   createAdData,
   deleteAdData,
@@ -22,6 +22,8 @@ import {
 import findAd from "./queries/findAd";
 import { registerViews, registerClicks } from "./mutations/data";
 
+// This is a list of all the resolvers in our app, both queries and mutations. 
+// It is more readable to have the actual resolvers in a seperate file but they are referenced here in order to have it nice and tidy for our api endpoint.
 const resolvers = {
   Query: {
     getAd,
@@ -50,7 +52,7 @@ const resolvers = {
     deleteContentData,
     updateContentData,
     registerViews,
-    registerClicks
+    registerClicks,
   },
 };
 
