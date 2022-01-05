@@ -1,5 +1,7 @@
 import { gql } from "apollo-server-micro";
 
+// See lib/models for the schema
+
 export const contentDataTypeDefs = gql`
   type Query {
     getContentData(contentID: String!): ContentData!

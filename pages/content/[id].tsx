@@ -16,15 +16,20 @@ import ReactiveAdInfo from "../../components/ad/info";
 import NotSeriousFooter from "../../components/footer";
 
 function AdPage(props: any): ReactElement {
+  // get the ad and content from props, fetched by the server in getStaticProps
   const ad = props.ad;
   const content = props.content;
+
+  // useState for isDone. This is used to indicate state on wheter or not the ad or countdown is done
   const [isDone, setIsDone] = useState(false);
 
+  // useEffect for registering the view. Every time the page is loaded or the adID or contentID changes, this will be called
   useEffect(() => {
     console.log("Registering view");
     if (ad.id && content.id) registerView(ad.id, content.id);
   }, [ad.id, content.id]);
 
+  // incase something happend with getstaticprops and htis wasnt registered as a 404 already, we here ensure that ad nor the content is null. If either is null, we return a 404 page
   if (!ad || !content) return <div>Ad not found</div>;
   // TODO Warning: Cannot update a component (`AdPage`) while rendering a different component (`Countdown$1`). To locate the bad setState() call inside `Countdown$1`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
 
@@ -61,19 +66,27 @@ function AdPage(props: any): ReactElement {
 }
 export default AdPage;
 
+// getStaticProps is a function that is called by NextJS at build time. With revalidate we force the server to re-fetch the data every x seconds.
 export async function getStaticProps({ params }: any) {
+  // get the contentID from the url/params
   const { id } = params;
+
+  // initilize the ad and content as null
   let content;
   let ad;
 
   try {
+    // get the content from the database
     content = await getContentWithID(id);
 
+    // map the tags into an array
     let tags = content.tags.map((tag: { tag: any }) => tag.tag);
     let theme = content.theme;
 
+    // find a relevant ad with similair tags and preferred theme
     ad = await findAd(tags, theme);
   } catch (error) {
+    // if something went wrong, we return a 404 page. For example if the contentID or no ad was found
     return { notFound: true };
   }
 
@@ -86,13 +99,21 @@ export async function getStaticProps({ params }: any) {
   };
 }
 
+// getStaticPaths is a function that is called by NextJS at build time. It returns an array of paths that are used to generate the pages.
 export async function getStaticPaths() {
+  // ensure that the env config is loaded
   loadEnvConfig("../../.env.local");
-  var ids: { id: string }[];
 
+  // create a list of all contentIDs initalized as an empty array
+  let ids: { id: string }[] = [];
+
+  // if we dont have a password in the env config, we throw an error
   if (!correctPassword) throw new Error("Password is not set in .env.local");
+
+  // get all contentIDs from the database and save them in the ids array
   ids = await getContentIDS(correctPassword);
 
+  // create an array of paths from the id of each element in the ids array
   const paths = ids.map((id: { id: string }) => {
     return {
       params: {
@@ -101,6 +122,7 @@ export async function getStaticPaths() {
     };
   });
 
+  // go trough each contentID and ensure the contentData exists, if not create it
   for (const id in ids) {
     await pingContentData(ids[id].id).catch(async (e) => {
       console.log(
@@ -113,6 +135,10 @@ export async function getStaticPaths() {
     });
   }
 
+  // return the paths with a fallback of blocking.
+  // We'll pre-render only these paths at build time.
+  // { fallback: blocking } will server-render pages
+  // on-demand if the path doesn't exist.
   return {
     paths,
     fallback: "blocking",
