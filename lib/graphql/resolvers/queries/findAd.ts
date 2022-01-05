@@ -1,6 +1,6 @@
 import { authenticated } from "../../../auth";
 import Ad from "../../../models/ad";
-import { getAds } from "../../../requests/backend";
+import { getAds } from "../../../logic/requests/backend";
 
 export default async function findAd(_: any, { input }: any) {
   // Check if the password is correct

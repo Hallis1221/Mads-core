@@ -1,7 +1,7 @@
 // TODO rate limit
 
 import { correctPassword } from "../auth";
-import { createAdData, getAdClicks, updateAdClicks } from "../requests/backend";
+import { createAdData, getAdClicks, updateAdClicks } from "../logic/requests/backend";
 
 // Export defualt function for registering a click. The function takes in ADid as a string as its only parameter.
 export default async function registerAdClick(adID: any): Promise<void> {

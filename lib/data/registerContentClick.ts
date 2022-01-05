@@ -1,5 +1,5 @@
 import { correctPassword } from "../auth";
-import { createContentData, getContentClicks, updateContentClicks } from "../requests/backend";
+import { createContentData, getContentClicks, updateContentClicks } from "../logic/requests/backend";
 
 // Export defualt function for registering a click. The function takes in contentID as a string as its only parameter.
 export default async function registerContentClick(contentID: any): Promise<void> {

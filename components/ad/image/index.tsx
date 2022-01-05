@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ReactElement } from "react";
-import { registerClick } from "../../../lib/requests/frontend";
+import { registerClick } from "../../../lib/logic/requests/frontend";
 
 export default function ImageAd({ad , content}: any): ReactElement {
 

@@ -6,9 +6,14 @@ import Content from "../../../models/content";
 export async function getContent(_: any, { id }: any) {
   try {
     // Find the content with the matching id.
-    const content = await Content.findById(id);
+    const content = await Content.findById(id).catch((error) => {
+      // In case of an error, log the error and return null.
+      return null;
+    });
     // If the content doesn't exist, throw an error.
-    if (!content) throw new Error("Content not found");
+    if (!content) 
+      throw new Error("Content with id " + id + " not found");
+
     // Return the content.
     return content;
   } catch (error) {

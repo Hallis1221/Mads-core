@@ -1,7 +1,7 @@
 import { ReactElement, useState } from "react";
 import toast from "react-hot-toast";
 import ReactPlayer from "react-player";
-import { registerClick } from "../../../lib/requests/frontend";
+import { registerClick } from "../../../lib/logic/requests/frontend";
 
 export default function VideoAd({ ad, content, setIsDone }: any): ReactElement {
   // Define state for whether the video is paused or not

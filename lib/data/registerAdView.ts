@@ -1,5 +1,5 @@
 import { correctPassword } from "../auth";
-import { createAdData, getAdViews, updateAdViews } from "../requests/backend";
+import { createAdData, getAdViews, updateAdViews } from "../logic/requests/backend";
 
 // Export defualt function for registering a view. The function takes in ADid as a string as its only parameter.
 export default async function registerAdView(adID: string): Promise<void> {

@@ -1,5 +1,5 @@
 import { correctPassword } from "../auth";
-import { createContentData, getContentViews, updateContentViews } from "../requests/backend";
+import { createContentData, getContentViews, updateContentViews } from "../logic/requests/backend";
 
 // Export defualt function for registering a view. The function takes in ADid as a string as its only parameter.
 export default async function registerContentView(contentID: string): Promise<void> {

@@ -1,7 +1,7 @@
 // TODO rate limit
 
 import { gql } from "graphql-request";
-import { gqc } from "../graphql/client";
+import { gqc } from "../../graphql/client";
 
 export async function getContentWithID(id: string) {
   return (
@@ -25,7 +25,10 @@ export async function getContentWithID(id: string) {
       {
         getContentId: id,
       }
-    )
+    ).catch((error) => {
+      console.error("error", error);
+      return null;
+    })
   ).getContent;
 }
 
@@ -39,11 +42,28 @@ export async function pingContentData(contentID: string) {
           }
         }
       `,
-     {
-      contentId: contentID
-    }
+      {
+        contentId: contentID,
+      }
     )
   ).getContentData;
+}
+
+export async function pingAdData(adID: string) {
+  return (
+    await gqc.request(
+      gql`
+        query GetAdData($adId: String!) {
+          getAdData(adID: $adId) {
+            adID
+          }
+        }
+      `,
+      {
+        adId: adID,
+      }
+    )
+  ).getAdData;
 }
 
 export async function registerView(adID: string, contentID: string) {

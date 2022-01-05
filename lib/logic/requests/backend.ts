@@ -1,7 +1,7 @@
 // !! all of these should be protected by a login check / password for now
 
 import { gql } from "graphql-request";
-import { gqc } from "../graphql/client";
+import { gqc } from "../../graphql/client";
 
 export async function getContentIDS(
   password: string
@@ -22,6 +22,25 @@ export async function getContentIDS(
       }
     )
   ).getContents;
+}
+
+export async function getAdIDS(password: string): Promise<{ id: string }[]> {
+  return (
+    await gqc.request(
+      gql`
+        query Query($input: PasswordInput) {
+          getAds(input: $input) {
+            id
+          }
+        }
+      `,
+      {
+        input: {
+          password: password,
+        },
+      }
+    )
+  ).getAds;
 }
 
 export async function updateAdClicks(
@@ -300,7 +319,7 @@ export async function findAd(
   ).findAd;
 }
 
-export async function getAds(password: string):  Promise<Array<any>> {
+export async function getAds(password: string): Promise<Array<any>> {
   return (
     await gqc.request(
       gql`
