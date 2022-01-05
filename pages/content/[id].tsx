@@ -1,7 +1,5 @@
-// TODO implement isr
-
 import Head from "next/head";
-import { ReactElement, SetStateAction, useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { correctPassword } from "../../lib/auth";
 import MainAd from "../../components/ad";
 import {
@@ -14,6 +12,8 @@ import { createContentData, getContentIDS } from "../../lib/requests/backend";
 import { loadEnvConfig } from "@next/env";
 import CornerLogo from "../../components/logo";
 import ReactiveCountdown from "../../components/countdown";
+import ReactiveAdInfo from "../../components/ad/info";
+import NotSeriousFooter from "../../components/footer";
 
 function AdPage(props: any): ReactElement {
   const ad = props.ad;
@@ -43,18 +43,7 @@ function AdPage(props: any): ReactElement {
             <MainAd ad={ad} content={content} setIsDone={setIsDone} />
 
             <div className="flex flex-row p-4 pt-2 pb-3 text-left justify-between">
-              <div className="justify-start">
-                <div className="absolute hidden lg:block lg:relative xl:block xl:relative">
-                  Currently viewing {ad.title} by {ad.owner.displayName}
-                </div>
-                <div className="absolute hidden md:block md:relative lg:hidden lg:relative xl:hidden xl:relative ">
-                  {" "}
-                  {ad.title} by {ad.owner.displayName}
-                </div>
-                <div className="relative block md:hidden md:absolute lg:hidden lg:absolute xl:hidden xl:absolute">
-                  {ad.title}
-                </div>
-              </div>
+              <ReactiveAdInfo ad={ad} />
 
               <ReactiveCountdown
                 ad={ad}
@@ -66,12 +55,7 @@ function AdPage(props: any): ReactElement {
           </div>
         </div>
       </main>
-
-      <footer className="flex flex-1 py-8 px-0 border-t-2 border-solid border-gray-300 justify-center items-center">
-        <a target="_blank" href="https://vercel.com" rel="opener noreferrer">
-          Made with ❤️ and a fck ton of monster
-        </a>
-      </footer>
+      <NotSeriousFooter />
     </div>
   );
 }
