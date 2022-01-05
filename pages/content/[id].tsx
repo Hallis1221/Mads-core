@@ -4,10 +4,17 @@ import { correctPassword } from "../../lib/auth";
 import MainAd from "../../components/ad";
 import {
   getContentWithID,
+  pingAdData,
   pingContentData,
   registerView,
-} from "../../lib/requests/frontend";
-import { createContentData, getContentIDS, findAd } from "../../lib/requests/backend";
+} from "../../lib/logic/requests/frontend";
+import {
+  createContentData,
+  getContentIDS,
+  findAd,
+  getAdIDS,
+  createAdData,
+} from "../../lib/logic/requests/backend";
 import { loadEnvConfig } from "@next/env";
 import CornerLogo from "../../components/logo";
 import ReactiveCountdown from "../../components/countdown";
@@ -75,7 +82,10 @@ export async function getStaticProps({ params }: any) {
 
   try {
     // get the content from the database
+    console.log("Getting content with id: " + id);
+
     content = await getContentWithID(id);
+    if (content === null) return { notFound: true };
 
     // map the tags into an array
     let tags = content.tags.map((tag: { tag: any }) => tag.tag);
@@ -88,6 +98,7 @@ export async function getStaticProps({ params }: any) {
     return { notFound: true };
   }
 
+  console.log("returning props");
   return {
     props: {
       ad,
@@ -103,34 +114,54 @@ export async function getStaticPaths() {
   loadEnvConfig("../../.env.local");
 
   // create a list of all contentIDs initalized as an empty array
-  let ids: { id: string }[] = [];
+  let contentids: { id: string }[] = [];
+  let adids: { id: string }[] = [];
 
   // if we dont have a password in the env config, we throw an error
   if (!correctPassword) throw new Error("Password is not set in .env.local");
 
   // get all contentIDs from the database and save them in the ids array
-  ids = await getContentIDS(correctPassword);
+  contentids = await getContentIDS(correctPassword);
+  // get all adIDs from the database and save them in the ids array
+  adids = await getAdIDS(correctPassword);
 
   // create an array of paths from the id of each element in the ids array
-  const paths = ids.map((id: { id: string }) => {
+  const paths = contentids.map((content: { id: string }) => {
     return {
       params: {
-        id: id.id,
+        id: content.id,
       },
     };
   });
 
-  // go trough each contentID and ensure the contentData exists, if not create it
-  for (const id in ids) {
-    await pingContentData(ids[id].id).catch(async (e) => {
-      console.log(
-        "Contentdata not found for id: " + ids[id].id,
-        ". Creating... (",
-        e,
-        ")"
-      );
-      await createContentData(ids[id].id, correctPassword);
-    });
+  try {
+    // go trough each contentID and ensure the contentData exists, if not create it
+    for (const id in contentids) {
+      await pingContentData(contentids[id].id).catch(async (e) => {
+        console.log(
+          "Contentdata not found for id: " + contentids[id].id,
+          ". Creating... (",
+          e,
+          ")"
+        );
+        await createContentData(contentids[id].id, correctPassword);
+      });
+    }
+
+    // go trough each adID and ensure the adData exists, if not create it
+    for (const id in adids) {
+      await pingAdData(adids[id].id).catch(async (e) => {
+        console.log(
+          "Addata not found for id: " + adids[id].id,
+          ". Creating... (",
+          e,
+          ")"
+        );
+        await createAdData(adids[id].id, correctPassword);
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 
   // return the paths with a fallback of blocking.
