@@ -44,6 +44,9 @@ const origin = req.headers.origin;
 
   if (origin && allowedOrigins.includes(origin)) 
     res.setHeader("Access-Control-Allow-Origin", origin);
+    else 
+    // Ensure we always allow CORS requests from the frontend
+      res.setHeader("Access-Control-Allow-Origin", "https://www.marketads.me");
 
     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST',);
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
