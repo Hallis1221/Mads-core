@@ -5,30 +5,32 @@ import { gqc } from "../../graphql/client";
 
 export async function getContentWithID(id: string) {
   return (
-    await gqc.request(
-      gql`
-        query Query($getContentId: ID!) {
-          getContent(id: $getContentId) {
-            theme
-            tags {
-              tag
-            }
-            title
-            link
-            id
-            owner {
-              displayName
+    await gqc
+      .request(
+        gql`
+          query Query($getContentId: ID!) {
+            getContent(id: $getContentId) {
+              theme
+              tags {
+                tag
+              }
+              title
+              link
+              id
+              owner {
+                displayName
+              }
             }
           }
+        `,
+        {
+          getContentId: id,
         }
-      `,
-      {
-        getContentId: id,
-      }
-    ).catch((error) => {
-      console.error("error", error);
-      return null;
-    })
+      )
+      .catch((error) => {
+        console.error("error", error);
+        return null;
+      })
   ).getContent;
 }
 
@@ -92,4 +94,49 @@ export async function registerClick(adID: string, contentID: string) {
       contentId: contentID,
     }
   );
+}
+
+export async function registerForCreatorWaitlist(email: string, URL: string) {
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation($email: String!, $url: String!) {
+          registerForCreatorWaitlist(email: $email, URL: $url) {
+            referral_link
+            current_priority
+            registered_email
+            total_users
+            total_referrals
+            user_id
+          }
+        }
+      `,
+      {
+        email: email,
+        url: URL,
+      }
+    )
+  ).registerForCreatorWaitlist;
+}
+
+export async function checkUserInfo(email: string) {
+  return (
+    await gqc.request(
+      gql`
+        query Query($email: String!) {
+          getUserInfo(email: $email) {
+            current_priority
+            referral_link
+            registered_email
+            user_id
+            total_referrals
+            total_users
+          }
+        }
+      `,
+      {
+        email: email,
+      }
+    )
+  ).getUserInfo;
 }
