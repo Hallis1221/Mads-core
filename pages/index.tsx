@@ -14,6 +14,7 @@ const Home: NextPage = () => {
           layout="fill"
           objectFit="cover"
           className="blur-sm"
+          priority={true}
           quality={100}
           src={"https://pixelpoly.co/assets/img/portfolio/ctf.png"}
           alt={"x.bannerImage.alternativeText"}
