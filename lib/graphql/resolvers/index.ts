@@ -20,6 +20,7 @@ import {
   updateContentData,
 } from "./mutations/contentData";
 import findAd from "./queries/findAd";
+import { registerForCreatorWaitlist, getUserInfo } from "./mutations/waitlist";
 import { registerViews, registerClicks } from "./mutations/data";
 
 // This is a list of all the resolvers in our app, both queries and mutations.
@@ -34,6 +35,7 @@ const resolvers = {
     getContent,
     getContents,
     getContentData,
+    getUserInfo,
   },
 
   // TODO implement authentication for Mutation endpoints
@@ -53,6 +55,7 @@ const resolvers = {
     updateContentData,
     registerViews,
     registerClicks,
+    registerForCreatorWaitlist,
   },
 };
 
