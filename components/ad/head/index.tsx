@@ -11,7 +11,7 @@ export default function Header({ title = "", description = "", image = undefined
             <meta property="og:url" content="https://marketads.me" />
             <meta property="og:image" content={image} />
             <meta property="og:description" content={description} />
-            <meta name="theme-color" content="#FF0000">
+            <meta name="theme-color" content="#FF0000" />
             <meta name="twitter:card" content="summary_large_image" />
         </Head>);
 }
