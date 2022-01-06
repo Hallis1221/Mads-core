@@ -42,7 +42,7 @@ export default function AdPage(props: any): ReactElement {
 
   return (
     <div className="py-0 px-0">
-      <Header title={content.tile + " by " + content.displayName + " | " + "Market Advertisments"} description={"Support " + content.owner.displayName + " by downloading " + content.title + " through mads!"} />
+      <Header title={content.title + " by " + content.owner.displayName + " | " + "Market Advertisments"} description={"Support " + content.owner.displayName + " by downloading " + content.title + " through mads!"} />
 
       <main className="min-h-screen  flex-1 flex flex-col">
         <CornerLogo />
