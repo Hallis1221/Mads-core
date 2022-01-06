@@ -1,28 +1,37 @@
 import type { NextPage } from "next";
+import Image from "next/image";
 
 const Home: NextPage = () => {
   return (
     <>
 
 
-      <div className="relative">
-    
-          <div className="relative h-[210vh] w-[210vw] md:h-screen md:w-screen lg:h-screen lg:w-screen bg-hero-image bg-cover bg-no-repeat overflow-auto">
-           { /* TODO use next Image component */}
-          </div>
 
-        <div className="absolute w-screen top-[40%] left-[40%] md:left-0 lg:lef-0 xl:left-0  text-center font-extrabold text-9xl mix-blend-overlay">
-  
+
+      <div className="w-screen h-screen relative">
+        <Image
+          layout="fill"
+          objectFit="cover"
+          className="blur-sm"
+          quality={100}
+          src={"https://pixelpoly.co/assets/img/portfolio/ctf.png"}
+          alt={"x.bannerImage.alternativeText"}
+        />
+
+
+
+
+        <div className="z-10 absolute text-center justify-center pb-24 flex flex-1 flex-col w-screen text-8xl lg:text-9xl xl:text-9xl h-screen font-extrabold mix-blend-overlay">
+
           Coming 2022.
 
         </div>
-        
-        <div className="absolute w-full top-[40%] left-[40%]  md:left-0 lg:lef-0 xl:left-0 text-center font-extrabold text-9xl mix-blend-overlay">
-  
+        <div className="absolute text-center justify-center pb-24 flex flex-1 flex-col w-screen text-8xl lg:text-9xl xl:text-9xl h-screen font-extrabold mix-blend-overlay">
+
           Coming 2022.
 
         </div>
-     
+       
       </div>
 
     </>
