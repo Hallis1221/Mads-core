@@ -107,6 +107,7 @@ export async function createAdData(
         input: {
           adID: adID,
           clicks: 0,
+          skips: 0,
           maxClicks: 0,
           views: 0,
           maxViews: 0,
@@ -137,6 +138,7 @@ export async function createContentData(
           contentID,
           clicks: 0,
           views: 0,
+          skips: 0,
           uploadDate: "null",
           password: password,
         },
@@ -163,7 +165,7 @@ export async function getContentClicks(
         password: password,
       }
     )
-  ).getContentData;
+  ).getContentData.clicks;
 }
 
 export async function updateContentClicks(
@@ -177,7 +179,6 @@ export async function updateContentClicks(
         mutation Mutation($contentID: String!, $input: ContentDataInput) {
           updateContentData(contentID: $contentID, input: $input) {
             contentID
-            clicks
           }
         }
       `,
