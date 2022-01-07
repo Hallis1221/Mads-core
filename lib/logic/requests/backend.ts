@@ -283,7 +283,7 @@ export async function updateAdViews(
         },
       }
     )
-  ).updateContentData.views;
+  ).updateAdData.views;
 }
 
 export async function findAd(

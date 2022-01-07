@@ -9,13 +9,12 @@ export default async function registerAdView(adID: string): Promise<void> {
   await updateAdViews(adID, views + 1, correctPassword).catch(async (e) => {
     // If the update fails, create a new adData with the adID and the password. It likely failed because the adData doesn't exist.
     console.log(
-  "Creating new ad data. Likely beacuse the ad data does not exist. ",
+  "Creating new ad data. Likely beacuse the ad data does not exist. Id: " + adID,
       e
     );
     // Create the adData.
     await createAdData(adID, correctPassword);
-    // Call the registerAdView function again. (To make sure the view is registered)
-    registerAdView(adID);
+    await updateAdViews(adID, views + 1, correctPassword);
     // Return.
     return;
   });
