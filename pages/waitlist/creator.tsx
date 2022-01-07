@@ -27,6 +27,7 @@ const CreatorWaitlist: NextPage = () => {
           initialValues={{ email: "", action: "register" }}
           validationSchema={EmailSchema}
           onSubmit={async (values) => {
+            toast.loading("Working...")
             if (values.action === "register")
               await registerForCreatorWaitlist(values.email, document.URL).then(
                 (res) => {
@@ -37,7 +38,9 @@ const CreatorWaitlist: NextPage = () => {
               await checkUserInfo(values.email).then((res) => {
                 setData(res);
               });
-          }}
+          toast.dismiss()
+            }}
+          
         >
           {(props) => {
             const {
