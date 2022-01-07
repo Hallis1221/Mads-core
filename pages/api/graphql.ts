@@ -8,9 +8,9 @@ import {
 
 import resolvers from "../../lib/graphql/resolvers";
 import { typeDefinitions } from "../../lib/graphql/typedefs";
-import { connectDB } from "../../lib/utils/connection";
+import { connectIfReady } from "../../lib/utils/connection";
 
-connectDB();
+connectIfReady();
 
 const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({
   workspaceName: "MADS api",
