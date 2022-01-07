@@ -21,6 +21,12 @@ const ContentDataSchema = new mongoose.Schema({
     required: false,
   },
 
+  // The number of times this content has been skipped
+  skips: {
+    type: Number,
+    required: false,
+  },
+
   // The upload date of the content. This is optional but can provide better analytics
   uploadDate: {
     type: String!,

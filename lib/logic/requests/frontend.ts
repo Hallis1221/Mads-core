@@ -96,6 +96,20 @@ export async function registerClick(adID: string, contentID: string) {
   );
 }
 
+export async function registerSkip(adID: string, contentID: string) {
+  return gqc.request(
+    gql`
+      mutation Mutation($adId: ID!, $contentId: ID!) {
+        registerSkips(adID: $adId, contentID: $contentId)
+      }
+    `,
+    {
+      adId: adID,
+      contentId: contentID,
+    }
+  );
+}
+
 export async function registerForCreatorWaitlist(email: string, URL: string) {
   return (
     await gqc.request(

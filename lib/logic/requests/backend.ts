@@ -90,6 +90,53 @@ export async function getAdClicks(
   ).getAdData.clicks;
 }
 
+export async function getAdSkips(
+  adID: string,
+  password: string
+): Promise<number> {
+  return (
+    await gqc.request(
+      gql`
+        query Query($adID: String!) {
+          getAdData(adID: $adID) {
+            skips
+          }
+        }
+      `,
+      {
+        adID: adID,
+        password: password,
+      }
+    )
+  ).getAdData.skips;
+}
+
+export async function updateAdSkips(
+  adID: string,
+  skips: number,
+  password: string
+): Promise<number> {
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation($adID: String!, $input: AdDataInput) {
+          updateAdData(adID: $adID, input: $input) {
+            adID
+            skips
+          }
+        }
+      `,
+      {
+        adID: adID,
+        input: {
+          skips: skips,
+          password: password,
+        },
+      }
+    )
+  ).updateAdData.skips;
+}
+
 export async function createAdData(
   adID: string,
   password: string
@@ -238,6 +285,53 @@ export async function updateContentViews(
       }
     )
   ).updateContentData.views;
+}
+
+export async function getContentSkips(
+  contentID: string,
+  password: string
+): Promise<number> {
+  return (
+    await gqc.request(
+      gql`
+        query Query($contentID: String!) {
+          getContentData(contentID: $contentID) {
+            skips
+          }
+        }
+      `,
+      {
+        contentID: contentID,
+        password: password,
+      }
+    )
+  ).getContentData.skips;
+}
+
+export async function updateContentSkips(
+  contentID: string,
+  skips: number,
+  password: string
+): Promise<number> {
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation($contentID: String!, $input: ContentDataInput) {
+          updateContentData(contentID: $contentID, input: $input) {
+            contentID
+            skips
+          }
+        }
+      `,
+      {
+        contentID: contentID,
+        input: {
+          skips: skips,
+          password: password,
+        },
+      }
+    )
+  ).updateContentData.skips;
 }
 
 export async function getAdViews(

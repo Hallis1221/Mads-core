@@ -1,5 +1,6 @@
 import { SetStateAction } from "react";
 import Countdown from "react-countdown";
+import { registerSkip } from "../../lib/logic/requests/frontend";
 
 export default function ReactiveCountdown({
   isDone,
@@ -21,7 +22,9 @@ export default function ReactiveCountdown({
       renderer={(props) => {
         if (isDone)
           return (
-            <a href={content.link} className="text-xl font-bold ">
+            <a href={content.link} onClick={()=>{
+              registerSkip(ad.id, content.id)
+            }} className="text-xl font-bold ">
               Skip
             </a>
           );
