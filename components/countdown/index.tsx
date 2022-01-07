@@ -14,7 +14,7 @@ export default function ReactiveCountdown({
 }) {
   return (
     <Countdown
-      date={Date.now() + 5000}
+      date={Date.now() + 15000}
       precision={1}
       intervalDelay={1000}
       className=""
