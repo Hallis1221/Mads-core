@@ -21,7 +21,7 @@ import {
 } from "./mutations/contentData";
 import findAd from "./queries/findAd";
 import { registerForCreatorWaitlist, getUserInfo } from "./mutations/waitlist";
-import { registerViews, registerClicks } from "./mutations/data";
+import { registerViews, registerClicks, registerSkips } from "./mutations/data";
 
 // This is a list of all the resolvers in our app, both queries and mutations.
 // It is more readable to have the actual resolvers in a seperate file but they are referenced here in order to have it nice and tidy for our api endpoint.
@@ -55,6 +55,7 @@ const resolvers = {
     updateContentData,
     registerViews,
     registerClicks,
+    registerSkips,
     registerForCreatorWaitlist,
   },
 };
