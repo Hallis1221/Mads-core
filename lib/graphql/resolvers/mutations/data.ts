@@ -1,6 +1,8 @@
 import registerAdClick from "../../../data/registerAdClick";
+import registerAdSkip from "../../../data/registerAdSkip";
 import registerAdView from "../../../data/registerAdView";
 import registerContentClick from "../../../data/registerContentClick";
+import registerContentSkip from "../../../data/registerContentSkip";
 import registerContentView from "../../../data/registerContentView";
 
 // This is the resolver for the registerViews mutation. It takes in both an adID and contentID and registers the adView and contentView for the adID and contentID.
@@ -22,5 +24,16 @@ export async function registerClicks(_: any, { adID, contentID }: any) {
   // Register the contentClick for the contentID.
   await registerContentClick(contentID);
   // Return true to indicate that the clicks were registered.
+  return true;
+}
+
+// This is the resolver for the registerSkips mutation. It takes in both an adID and contentID and registers the adSkip and contentSkip for the adID and contentID.
+// This is done to have a single resolver for updating both the adSkip and contentSkip.
+export async function registerSkips(_: any, { adID, contentID }: any) {
+  // Register the adSkip for the adID.
+  await registerAdSkip(adID);
+  // Register the contentSkip for the contentID.
+  await registerContentSkip(contentID);
+  // Return true to indicate that the skips were registered.
   return true;
 }
