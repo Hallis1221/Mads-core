@@ -18,6 +18,7 @@ type Query {
   type AdData {
     adID: String!
     clicks: Int!
+    skips: Int!
     maxClicks: Int!
     views: Int!
     maxViews: Int!
@@ -40,6 +41,7 @@ type Query {
   input AdDataCreateInput {
     adID: String!
     clicks: Int!
+    skips: Int!
     maxClicks: Int!
     views: Int!
     maxViews: Int!
@@ -49,6 +51,7 @@ type Query {
   }
   input AdDataInput {
     clicks: Int
+    skips: Int
     views: Int
     password: String
   }

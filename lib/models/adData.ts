@@ -28,8 +28,15 @@ const AdDataSchema = new mongoose.Schema({
     required: false,
   },
 
+
   // The max number of times this ad can be viewed / how many views have been paid for
   maxViews: {
+    type: Number,
+    required: false,
+  },
+
+  // The number of times this ad has been skipped
+  skips: {
     type: Number,
     required: false,
   },
