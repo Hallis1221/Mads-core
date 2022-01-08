@@ -17,12 +17,12 @@ export default function NewHome({}) {
             />
           
           </div>
-          <div className="pt-8 sm:pt-16 text-3xl sm:text-5xl lg:text-7xl xl:text-8xl 2xl:text-8xl font-extrabold">
+          <div className="pt-8 sm:pt-16 text-3xl sm:text-5xl lg:text-7xl xl:text-7xl font-extrabold">
             It´s time to ditch
             <br />
             AdFly and Linkvertise
           </div>
-          <div className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl pt-4 sm:pt-16 2xl:pt-24 w-11/12 lg:w-5/6 xl:w-4/6 2xl:w-6/12 font-semibold">
+          <div className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl pt-4 sm:pt-16 w-11/12 lg:w-5/6 xl:w-4/6 2xl:w-6/12 font-semibold">
             MarketAds is the brand new family-friendly way to help you monetize
             your Minecraft content. Coming 2022!
           </div>
