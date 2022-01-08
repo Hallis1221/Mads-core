@@ -1,7 +1,8 @@
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn, signOut, getProviders } from "next-auth/react";
+import SignInWithProvider from "../components/auth/signin";
 import NavBar from "../components/navbar";
 
-export default function Page() {
+export default function AccountPage({ providers }: any) {
   const { data: session } = useSession();
   if (session) {
     return (
@@ -17,10 +18,17 @@ export default function Page() {
   return (
     <>
       <NavBar />
-      <div className="w-screen h-screen flex flex-col justify-center items-center">
+      <div className="w-screen flex flex-col justify-center items-center">
         Not signed in <br />
-        <button onClick={() => signIn()}>Sign in</button>
+     <SignInWithProvider providers={providers}/>
       </div>
     </>
   );
 }
+
+export async function getServerSideProps(_: any) {
+    const providers = await getProviders()
+    return {
+      props: { providers },
+    }
+  }
