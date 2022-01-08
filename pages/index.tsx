@@ -29,9 +29,9 @@ export default function NewHome({}) {
           <div className="h-32">
           <div className="text-lg sm:text-xl 2xl:text-xl flex flex-1 flex-col sm:flex-row items-start pt-5 sm:pt-20 justify-between sm:justify-start h-full   ">
             <button className="text-white px-4 sm:px-4 h-12 sm:h-20 w-46 sm:w-64 rounded-xl sm:rounded-3xl font-semibold bg-blue-600 hover:bg-blue-700">
-              <Link href="/waitlist/creator">Join waitlist</Link>
+              <Link href="/waitlist/creator" passHref={true} prefetch={true}>Join waitlist</Link>
             </button>
-            <div className="pt-6 pl-2 sm:pl-12 2xl:pl-24 font-bold"><Link href="/about" passHref={false}>
+            <div className="pt-6 pl-2 sm:pl-12 2xl:pl-24 font-bold"><Link href="/about" passHref={true} prefetch={true}>
             Learn more →
             </Link></div>
           </div>
