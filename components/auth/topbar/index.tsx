@@ -21,7 +21,7 @@ const { data: session } = useSession()
   return (
     <div className="flex relative flex-wrap-reverse justify-end  px-4 md:px-8 lg:px-16 xl:px-8 py-8 z-20  bg-transparent">
       <div className="relative bg-transparent h-20 w-40 text-center flex flex-col justify-center">
-      <button onClick={() => signIn()}>Sign in</button>
+      <Link href="/account" passHref={true}> Sign in </Link>
       </div>
     </div>);
 }
