@@ -8,6 +8,7 @@ import {
   registerForCreatorWaitlist,
 } from "../../lib/logic/requests/frontend";
 import toast from "react-hot-toast";
+import NavBar from "../../components/navbar";
 
 // Waitlist page that has a form where users can enter their email address
 const CreatorWaitlist: NextPage = () => {
@@ -21,8 +22,8 @@ const CreatorWaitlist: NextPage = () => {
   // Inspired by the tailwind docs :D
   return (
     <>
-      <CornerLogo />
-      <div className="w-screen h-screen flex flex-col justify-center items-center">
+   <NavBar />
+      <div className="w-screen h-full flex flex-col justify-center items-center">
         <Formik
           initialValues={{ email: "", action: "register" }}
           validationSchema={EmailSchema}
