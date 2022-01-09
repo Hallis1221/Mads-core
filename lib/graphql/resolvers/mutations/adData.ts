@@ -30,6 +30,7 @@ export async function updateAdData(_: any, { adID, input }: any) {
   try {
     // Find the adData with the matching id and update it with the input.
     input["password"] = undefined;
+    input["adID"] = adID;
     let adData = await AdData.findOneAndUpdate(
       { adID: adID },
       { $set: input },
