@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import historyPlugin from "../plugins/history/mongoose-history.js";
+import historyPlugin from "../plugins/history/addata/mongoose-history.js";
 mongoose.Promise = global.Promise;
 
 const AdDataSchema = new mongoose.Schema({
@@ -32,12 +32,11 @@ const AdDataSchema = new mongoose.Schema({
 var options = {
   metadata: [
     {key: 'adID', value: 'adID'},
-    {key: 'clicks', value: 'clicks'},
-    {key: 'views', value: 'views'},
-    {key: 'skips', value: 'skips'},
-    {key: 'd', value: undefined},
+    // {key: 'd', value: undefined},
+    {key: 'o', value: undefined},
   ]
 };
+
 AdDataSchema.plugin(historyPlugin, options);
 
 const AdData = mongoose.models.AdData || mongoose.model("AdData", AdDataSchema);
