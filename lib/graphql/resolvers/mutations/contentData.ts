@@ -1,5 +1,5 @@
 import { authenticated } from "../../../auth";
-import ContentData from "../../../models/contentData";
+import ContentData from "../../../mongodb/models/contentData";
 
 // This is the resolver for the createContentData mutation. It takes in the input and creates a new contentData with the input as the data.
 export async function createContentData(_: any, { input }: any) {

@@ -1,5 +1,5 @@
 import { authenticated } from "../../../auth";
-import Content from "../../../models/content";
+import Content from "../../../mongodb/models/content";
 
 // This is the resolver for the getContent query. It takes in the id and returns the content with the matching id.
 export async function getContent(_: any, { id }: any) {

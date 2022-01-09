@@ -1,5 +1,5 @@
 import { authenticated } from "../../../auth";
-import Ad from "../../../models/ad";
+import Ad from "../../../mongodb/models/ad";
 import { getAds } from "../../../logic/requests/backend";
 
 export default async function findAd(_: any, { input }: any) {

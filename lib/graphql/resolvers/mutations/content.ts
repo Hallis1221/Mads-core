@@ -1,5 +1,5 @@
 import { authenticated } from "../../../auth";
-import Content from "../../../models/content";
+import Content from "../../../mongodb/models/content";
 
 // This is the resolver for the createContent mutation. It takes in the input and creates a new content with the input as the data.
 export async function createContent(_: any, { input }: any) {

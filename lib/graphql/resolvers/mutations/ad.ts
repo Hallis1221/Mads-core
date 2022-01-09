@@ -1,5 +1,5 @@
 import { authenticated } from "../../../auth";
-import Ad from "../../../models/ad";
+import Ad from "../../../mongodb/models/ad";
 
 // This is the resolver for the createAd mutation. It takes in the input and creates a new ad with the input as the data.
 export async function createAd(_: any, { input }: any) {

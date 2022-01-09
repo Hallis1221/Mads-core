@@ -1,5 +1,5 @@
 import { authenticated } from "../../../auth";
-import AdData from "../../../models/adData";
+import AdData from "../../../mongodb/models/adData";
 
 // This is the resolver for the getAdsData query. It takes in the input (for the password) and returns all addData.
 export async function getAdsData(_: any, { input }: any) {
