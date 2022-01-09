@@ -7,6 +7,7 @@ export async function createContent(_: any, { input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Create the content.
     const content = new Content(input);
     // Save the content.
@@ -26,6 +27,7 @@ export async function updateContent(_: any, { id, input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Find the content with the matching id and update it with the input.
     let content = await Content.findByIdAndUpdate(
       id,
@@ -49,6 +51,7 @@ export async function deleteContent(_: any, { id, input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Find the content with the matching id and delete it.
      await Content.findByIdAndDelete(id);
     // Return a success message.

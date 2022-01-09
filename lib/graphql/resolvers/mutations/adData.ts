@@ -7,6 +7,7 @@ export async function createAdData(_: any, { input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Create the adData.
     const adData = new AdData(input);
     // Save the adData.
@@ -28,6 +29,7 @@ export async function updateAdData(_: any, { adID, input }: any) {
 
   try {
     // Find the adData with the matching id and update it with the input.
+    input["password"] = undefined;
     let adData = await AdData.findOneAndUpdate(
       { adID: adID },
       { $set: input },
@@ -50,6 +52,7 @@ export async function deleteAdData(_: any, { adID, input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Find the adData with the matching id and delete it.
     await AdData.findOneAndDelete({ adID });
     // Return a success message.

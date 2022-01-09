@@ -6,6 +6,7 @@ export async function getAds(_: any, { input }: any) {
   // Check that the password is correct.
   if (!authenticated(input["password"])) return null;
   try {
+    input["password"] = undefined;
     // Find all ads.
     const ads = await Ad.find({});
     // Return all ads.

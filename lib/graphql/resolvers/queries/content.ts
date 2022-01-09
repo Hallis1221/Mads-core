@@ -26,6 +26,7 @@ export async function getContents(_: any, { input }: any) {
   // Check that the password is correct.
   if (!authenticated(input["password"])) return null;
   try {
+    input["password"] = undefined;
     // Find all contents.
     const contents = await Content.find({});
     // Return all contents.

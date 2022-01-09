@@ -7,6 +7,7 @@ export async function createContentData(_: any, { input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Create the contentData.
     const contentData = new ContentData(input);
     // Save the contentData.
@@ -27,6 +28,7 @@ export async function updateContentData(_: any, { contentID, input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Find the contentData with the matching id and update it with the input.
     let contentData =await ContentData.findOneAndUpdate(
       { contentID: contentID },
@@ -50,6 +52,7 @@ export async function deleteContentData(_: any, { contentID, input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Find the contentData with the matching id and delete it.
     await ContentData.findOneAndDelete({ contentID });
     // Return a success message.
