@@ -29,6 +29,7 @@ export async function updateContentData(_: any, { contentID, input }: any) {
 
   try {
     input["password"] = undefined;
+    input["contentID"] = contentID;
     // Find the contentData with the matching id and update it with the input.
     let contentData =await ContentData.findOneAndUpdate(
       { contentID: contentID },
