@@ -42,10 +42,12 @@ const AdSchema = new mongoose.Schema({
   // Tags are used to filter ads to be relevant to the content
   tags: {
     // The higher the number, the higher the priority. High priority tags are the most likely to be matched with a content.
-    type: [{
-      tag: String,
-      priority: Number,
-    }],
+    type: [
+      {
+        tag: String,
+        priority: Number,
+      },
+    ],
     required: true,
   },
 
@@ -56,6 +58,30 @@ const AdSchema = new mongoose.Schema({
       displayName: String,
     },
     required: true,
+  },
+
+  // The start date of the ad. The campaign start. This is optional but can provide better analytics
+  startDate: {
+    type: String,
+    required: false,
+  },
+
+  // The end date of the ad. The campaign end. This is optional
+  endDate: {
+    type: String!,
+    required: false,
+  },
+
+  // The max number of times the ad can be clicked / how many clicks have been paid for
+  maxClicks: {
+    type: Number,
+    required: false,
+  },
+
+  // The max number of times this ad can be viewed / how many views have been paid for
+  maxViews: {
+    type: Number,
+    required: false,
   },
 });
 

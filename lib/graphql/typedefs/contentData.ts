@@ -18,7 +18,6 @@ export const contentDataTypeDefs = gql`
     clicks: Int!
     views: Int!
     skips: Int!
-    uploadDate: String!
   }
 
   input ContentDataCreateInput {
@@ -26,7 +25,6 @@ export const contentDataTypeDefs = gql`
     clicks: Int!
     skips: Int!
     views: Int!
-    uploadDate: String!
     password: String
   }
 

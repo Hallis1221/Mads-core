@@ -1,5 +1,5 @@
 import { authenticated } from "../../../auth";
-import Content from "../../../models/content";
+import Content from "../../../mongodb/models/content";
 
 // This is the resolver for the getContent query. It takes in the id and returns the content with the matching id.
 export async function getContent(_: any, { id }: any) {
@@ -26,6 +26,7 @@ export async function getContents(_: any, { input }: any) {
   // Check that the password is correct.
   if (!authenticated(input["password"])) return null;
   try {
+    input["password"] = undefined;
     // Find all contents.
     const contents = await Content.find({});
     // Return all contents.

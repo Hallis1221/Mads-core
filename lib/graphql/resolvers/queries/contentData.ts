@@ -1,4 +1,4 @@
-import ContentData from "../../../models/contentData";
+import ContentData from "../../../mongodb/models/contentData";
 
 // This is the resolver for the getContentData query. It takes in the contentID and returns the contentData with the matching contentID.
 export async function getContentData(_: any, { contentID }: any) {

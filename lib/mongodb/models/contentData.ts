@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import historyPlugin from "../plugins/history/contentdata/mongoose-history.js";
 
 mongoose.Promise = global.Promise;
 
@@ -26,13 +27,17 @@ const ContentDataSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
-
-  // The upload date of the content. This is optional but can provide better analytics
-  uploadDate: {
-    type: String!,
-    required: false,
-  },
 });
+
+var options = {
+  metadata: [
+    {key: 'contentID', value: 'contentID'},
+    // {key: 'd', value: undefined},
+    {key: 'o', value: undefined},
+  ]
+};
+
+ContentDataSchema.plugin(historyPlugin, options);
 
 const ContentData =
   mongoose.models.ContentData ||

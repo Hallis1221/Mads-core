@@ -2,9 +2,7 @@ import { createAd, deleteAd, updateAd } from "./mutations/ad";
 import {
   createAdData,
   deleteAdData,
-  updateAdData,
-  updateAdDataLimits,
-} from "./mutations/adData";
+  updateAdData,} from "./mutations/adData";
 import { getAd, getAds } from "./queries/ad";
 import { getAdData, getAdsData } from "./queries/adData";
 import {
@@ -46,7 +44,6 @@ const resolvers = {
     createAdData,
     deleteAdData,
     updateAdData,
-    updateAdDataLimits,
     createContent,
     deleteContent,
     updateContent,

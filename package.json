@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "apollo-server-micro": "^3.5.0",
+    "async": "^3.2.2",
     "axios": "^0.24.0",
     "formik": "^2.2.9",
     "graphql": "^15.8.0",
