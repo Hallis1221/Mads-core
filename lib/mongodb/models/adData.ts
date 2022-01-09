@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
+let mongooseHistory = require("mongoose-history");
+
 mongoose.Promise = global.Promise;
 
 const AdDataSchema = new mongoose.Schema({
-    
   // The adID of the ad associated with the adData is used as the primary key
   adID: {
     type: String,
@@ -28,6 +29,18 @@ const AdDataSchema = new mongoose.Schema({
     required: false,
   },
 });
+
+
+var options = {
+  metadata: [
+    {key: 'adID', value: 'adID'},
+    {key: 'clicks', value: 'clicks'},
+    {key: 'views', value: 'views'},
+    {key: 'skips', value: 'skips'},
+    {key: 'd', value: undefined},
+  ]
+};
+AdDataSchema.plugin(mongooseHistory, options);
 
 const AdData = mongoose.models.AdData || mongoose.model("AdData", AdDataSchema);
 
