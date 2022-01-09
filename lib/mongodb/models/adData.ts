@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-
-let mongooseHistory = require("mongoose-history");
-
+import historyPlugin from "../plugins/history/mongoose-history.js";
 mongoose.Promise = global.Promise;
 
 const AdDataSchema = new mongoose.Schema({
@@ -40,7 +38,7 @@ var options = {
     {key: 'd', value: undefined},
   ]
 };
-AdDataSchema.plugin(mongooseHistory, options);
+AdDataSchema.plugin(historyPlugin, options);
 
 const AdData = mongoose.models.AdData || mongoose.model("AdData", AdDataSchema);
 
