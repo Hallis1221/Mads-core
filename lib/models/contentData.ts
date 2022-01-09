@@ -26,12 +26,6 @@ const ContentDataSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
-
-  // The upload date of the content. This is optional but can provide better analytics
-  uploadDate: {
-    type: String!,
-    required: false,
-  },
 });
 
 const ContentData =

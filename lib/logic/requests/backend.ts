@@ -155,11 +155,7 @@ export async function createAdData(
           adID: adID,
           clicks: 0,
           skips: 0,
-          maxClicks: 0,
-          views: 0,
-          maxViews: 0,
-          startDate: "null",
-          endDate: "null",
+          views: 0,    
           password: password,
         },
       }
@@ -186,7 +182,6 @@ export async function createContentData(
           clicks: 0,
           views: 0,
           skips: 0,
-          uploadDate: "null",
           password: password,
         },
       }

@@ -16,21 +16,8 @@ const AdDataSchema = new mongoose.Schema({
     required: false,
   },
 
-  // The max number of times the ad can be clicked / how many clicks have been paid for
-  maxClicks: {
-    type: Number,
-    required: false,
-  },
-
   // This number of times this ad has been viewed
   views: {
-    type: Number,
-    required: false,
-  },
-
-
-  // The max number of times this ad can be viewed / how many views have been paid for
-  maxViews: {
     type: Number,
     required: false,
   },
@@ -38,18 +25,6 @@ const AdDataSchema = new mongoose.Schema({
   // The number of times this ad has been skipped
   skips: {
     type: Number,
-    required: false,
-  },
-
-  // The start date of the ad. The campaign start. This is optional but can provide better analytics
-  startDate: {
-    type: String,
-    required: false,
-  },
-
-    // The end date of the ad. The campaign end. This is optional
-  endDate: {
-    type: String!,
     required: false,
   },
 });

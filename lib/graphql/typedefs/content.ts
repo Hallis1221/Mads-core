@@ -21,6 +21,7 @@ export const contentTypeDefs = gql`
     theme: String!
     title: String!
     link: String!
+    uploadDate: String!
     tags: [CTag]!
     owner: ContentOwner!
   }
@@ -29,6 +30,7 @@ export const contentTypeDefs = gql`
     theme: String!
     title: String!
     link: String!
+    uploadDate: String!
     owner: ContentOwnerInput!
     tags: [CTagInput]!
     password: String
