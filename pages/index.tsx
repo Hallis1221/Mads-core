@@ -22,7 +22,7 @@ export default function NewHome({}) {
             <br />
             AdFly and Linkvertise
           </div>
-          <div className="text-xl sm:text-2xl lg:text-3xl xl:text-2xl 2xl:text-5xl pt-4 sm:pt-16 xl:pt-16 2xl:pt-24 w-11/12 lg:w-5/6 xl:w-4/6 2xl:w-6/12 font-semibold">
+          <div className="text-xl sm:text-2xl lg:text-3xl xl:text-2xl 2xl:text-4xl pt-4 sm:pt-16 xl:pt-16 2xl:pt-16 w-11/12 lg:w-5/6 xl:w-4/6 2xl:w-6/12 font-semibold">
             MarketAds is the brand new family-friendly way to help you monetize
             your Minecraft content. Coming 2022!
           </div>
