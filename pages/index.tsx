@@ -3,6 +3,7 @@ import Link from "next/link";
 
 export default function NewHome({}) {
   return (
+    // TODO use next/image for the background image
     <main className="bg-cover bg-center bg-no-repeat w-screen h-screen bg-hero-image   ">
       <div className="w-12/12 via-white lg:w-full 2xl:w-11/12 lg:via-white 2xl:via-white from-white bg-gradient-to-r h-screen ">
         <div className="pl-8 sm:pl-16 2xl:pl-64 pt-16 font-poppins font-inter w-full">
