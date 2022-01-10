@@ -5,9 +5,8 @@ export default function NavBar({ }) {
   return (
     // CSS row
     <div className="flex flex-wrap-reverse justify-between bg-transparent">
-
-<CornerLogo />
-< TopAuth/>
+      <CornerLogo />
+      < TopAuth />
     </div>
 
   );
