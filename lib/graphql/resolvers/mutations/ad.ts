@@ -1,5 +1,5 @@
 import { authenticated } from "../../../auth";
-import Ad from "../../../models/ad";
+import Ad from "../../../mongodb/models/ad";
 
 // This is the resolver for the createAd mutation. It takes in the input and creates a new ad with the input as the data.
 export async function createAd(_: any, { input }: any) {
@@ -7,6 +7,7 @@ export async function createAd(_: any, { input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Create the ad.
     const ad = new Ad(input);
     // Save the ad.
@@ -26,6 +27,7 @@ export async function updateAd(_: any, { id, input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Find the ad with the matching id and update it with the input.
     let ad = await Ad.findByIdAndUpdate(id, { $set: input }, { new: true });
     // If the ad doesn't exist, throw an error.
@@ -45,6 +47,7 @@ export async function deleteAd(_: any, { id, input }: any) {
   if (!authenticated(input["password"])) return null;
 
   try {
+    input["password"] = undefined;
     // Find the ad with the matching id and delete it.
     await Ad.findByIdAndDelete(id);
     // Return a success message.

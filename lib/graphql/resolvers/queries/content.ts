@@ -1,5 +1,5 @@
 import { authenticated } from "../../../auth";
-import Content from "../../../models/content";
+import Content from "../../../mongodb/models/content";
 
 // TODO track which ads are being matched with which content
 
@@ -28,6 +28,7 @@ export async function getContents(_: any, { input }: any) {
   // Check that the password is correct.
   if (!authenticated(input["password"])) return null;
   try {
+    input["password"] = undefined;
     // Find all contents.
     const contents = await Content.find({});
     // Return all contents.

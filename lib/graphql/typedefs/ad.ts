@@ -23,6 +23,10 @@ export const adTypeDefs = gql`
     link: String!
     image: String
     video: String
+    maxClicks: Int!
+    maxViews: Int!
+    startDate: String!
+    endDate: String!
     tags: [Tag]!
     owner: AdOwner!
   }
@@ -36,6 +40,10 @@ export const adTypeDefs = gql`
     video: String
     owner: AdOwnerInput!
     password: String
+    maxClicks: Int!
+    maxViews: Int!
+    startDate: String!
+    endDate: String!
     tags: [TagInput]!
   }
 

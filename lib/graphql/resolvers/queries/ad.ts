@@ -1,11 +1,12 @@
 import { authenticated } from "../../../auth";
-import Ad from "../../../models/ad";
+import Ad from "../../../mongodb/models/ad";
 
 // This is the resolver for the getAds query. It takes in the input (for the password) and returns all ads.
 export async function getAds(_: any, { input }: any) {
   // Check that the password is correct.
   if (!authenticated(input["password"])) return null;
   try {
+    input["password"] = undefined;
     // Find all ads.
     const ads = await Ad.find({});
     // Return all ads.
