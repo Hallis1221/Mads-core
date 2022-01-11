@@ -20,6 +20,7 @@ import {
 import findAd from "./queries/findAd";
 import { registerForCreatorWaitlist, getUserInfo } from "./mutations/waitlist";
 import { registerViews, registerClicks, registerSkips } from "./mutations/data";
+import { checkAndDefaultUser, isCreator } from "./queries/user";
 
 // This is a list of all the resolvers in our app, both queries and mutations.
 // It is more readable to have the actual resolvers in a seperate file but they are referenced here in order to have it nice and tidy for our api endpoint.
@@ -34,6 +35,8 @@ const resolvers = {
     getContents,
     getContentData,
     getUserInfo,
+    checkAndDefaultUser,
+    isCreator,
   },
 
   // TODO implement authentication for Mutation endpoints

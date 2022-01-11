@@ -9,6 +9,7 @@ import {
 import resolvers from "../../lib/graphql/resolvers";
 import { typeDefinitions } from "../../lib/graphql/typedefs";
 import { connectIfReady } from "../../lib/utils/connection";
+import { getSession } from "next-auth/react";
 
 connectIfReady();
 
@@ -57,6 +58,16 @@ const origin = req.headers.origin;
     return false;
   }
  
+  
+  let user = await getSession({ req });
+  if (user) apolloServer.requestOptions.context = { req, res, user };
+
+  // To use the user object in a resolver, see this example:
+  /*
+    export default async function UseUser(_: any, {input}: any, {user}: any) {
+      console.log(user);
+    }
+  */
   
   await startServer;
   await apolloServer.createHandler({

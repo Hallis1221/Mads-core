@@ -13,7 +13,7 @@ export default function MainAd({ ad, content, setIsDone }: any): ReactElement {
   }
 
   // if the type is not set, return image if the image value is set
-  if (ad.image) return <ImageAd ad={ad} content={content} setIsDone={setIsDone} />;
+  if (ad?.image) return <ImageAd ad={ad} content={content} setIsDone={setIsDone} />;
   // if the type is not set, return video if the video value is set and the image value is not set
   if (ad.video) return <VideoAd ad={ad} content={content} setIsDone={setIsDone} />;
 

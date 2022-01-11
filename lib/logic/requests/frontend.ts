@@ -154,3 +154,31 @@ export async function checkUserInfo(email: string) {
     )
   ).getUserInfo;
 }
+
+export async function verifyUser(email: any) {
+  await gqc.request(
+    gql`
+      query Query($email: String) {
+        checkAndDefaultUser(email: $email)
+      }
+    `,
+    {
+      email: email,
+    }
+  );
+}
+
+export async function isCreator(email: string) {
+  return (
+    await gqc.request(
+      gql`
+        query Query($email: String!) {
+          isCreator(email: $email)
+        }
+      `,
+      {
+        email: email,
+      }
+    )
+  ).isCreator;
+}
