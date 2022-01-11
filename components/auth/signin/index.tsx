@@ -5,11 +5,19 @@ import {
   SignInOptions,
 } from "next-auth/react";
 import toast from "react-hot-toast";
+import * as Yup from "yup";
 
 export default function MagicEmailSignin() {
+
+  const EmailSchema = Yup.object().shape({
+    email: Yup.string()
+      .required("This field is mandatory")
+      .email("Enter a valid email"),
+  });
   return (
     <Formik
       initialValues={{ email: "", hasSubmitted: false }}
+      validationSchema={EmailSchema}
       onSubmit={async (values) => {
         toast.loading("Working...");
         console.log(1);

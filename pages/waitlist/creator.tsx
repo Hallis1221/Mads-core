@@ -1,13 +1,10 @@
 import { NextPage } from "next/types";
-import CornerLogo from "../../components/logo";
 import React from "react";
-import * as Yup from "yup";
-import { Formik, Form, Field, ErrorMessage } from "formik";
 import {
-  checkUserInfo,
   registerForCreatorWaitlist,
 } from "../../lib/logic/requests/frontend";
 import toast from "react-hot-toast";
+import * as Yup from "yup";
 import NavBar from "../../components/navbar";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -18,8 +15,11 @@ const CreatorWaitlist: NextPage = () => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const { data: session } = useSession();
 
-  // Inspired by the tailwind docs :D
-
+  const EmailSchema = Yup.object().shape({
+    email: Yup.string()
+      .required("This field is mandatory")
+      .email("Enter a valid email"),
+  });
   return (
     <>
       <NavBar />
