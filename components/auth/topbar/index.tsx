@@ -1,6 +1,7 @@
 import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
+import MD5 from "crypto-js/md5";
 
 export default function TopAuth() {
   const { data: session } = useSession();
@@ -11,7 +12,7 @@ export default function TopAuth() {
         <div className="sm:pl-5">
           <Link href="/account" passHref>
             <Image
-              src={session.user.image || ""}
+              src={session.user?.image || `https://www.gravatar.com/avatar/${MD5(session.user?.email).toString()}`}
               alt="User profile picture"
               height={60}
               width={60}
@@ -23,8 +24,8 @@ export default function TopAuth() {
     );
 
   return (
-    <div className="flex relative flex-wrap-reverse justify-end  px-4 md:px-8 lg:px-16 xl:px-8 py-8 z-20  bg-transparent">
-      <div className="relative bg-transparent h-20 w-40 text-center flex flex-col justify-center">
+    <div className="flex flex-1 flex-row sm:items-center justify-end pr-5 pt-2 w-auto">
+      <div className="mt-auto">
         <Link href="/account" passHref={true}>
           Sign in
         </Link>

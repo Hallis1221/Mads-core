@@ -11,6 +11,7 @@
     "@next-auth/mongodb-adapter": "^1.0.1",
     "apollo-server-micro": "^3.5.0",
     "axios": "^0.24.0",
+    "crypto-js": "^4.1.1",
     "formik": "^2.2.9",
     "graphql": "^15.8.0",
     "graphql-request": "^3.7.0",
