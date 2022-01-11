@@ -3,7 +3,10 @@ import GithubProvider from "next-auth/providers/github";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "../../../lib/utils/auth/authConnection";
-import { verifyRoles } from "../../../lib/logic/requests/frontend";
+import { verifyUser } from "../../../lib/logic/requests/frontend";
+
+// TODO user signup process and login with custom UI
+// TODO it also needs to generate/ask for a image
 
 export default NextAuth({
   secret: process.env.NA_SECRET,
@@ -28,7 +31,7 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      verifyRoles(user.email);
+      verifyUser(user.email);
       return true;
     },
 

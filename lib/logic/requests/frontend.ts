@@ -155,11 +155,11 @@ export async function checkUserInfo(email: string) {
   ).getUserInfo;
 }
 
-export async function verifyRoles(email: any) {
+export async function verifyUser(email: any) {
   await gqc.request(
     gql`
       query Query($email: String) {
-        checkAndDefaultRoles(email: $email)
+        checkAndDefaultUser(email: $email)
       }
     `,
     {

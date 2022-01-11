@@ -6,7 +6,7 @@ export default function ImageAd({ad , content}: any): ReactElement {
   // perhaps the image should be bigger for big screens
     return <div className="">
       <Image
-        src={ad.image}
+        src={ad?.image}
         alt="Deploy"
         priority={true}
         height={630 * 0.8}

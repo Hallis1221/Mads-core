@@ -1,6 +1,6 @@
 import User from "../../../models/user";
 
-export async function checkAndDefaultRoles(
+export async function checkAndDefaultUser(
   _: any,
   { email }: any,
   { req }: any
