@@ -1,16 +1,13 @@
-import { signIn } from "next-auth/react"
+import {
+  signIn,
+  SignInAuthorisationParams,
+  SignInOptions,
+} from "next-auth/react";
 
-export default function SignInWithProvider({ providers }: any) {
-    return (
-      <>
-        {Object.values(providers).map((provider: any) => (
-          <div key={provider.name}>
-            <button onClick={() => signIn(provider.id)}>
-              Sign in with {provider.name}
-            </button>
-          </div>
-        ))}
-      </>
-    )
-  }
-  
+export default function MagicEmailSignin({email}: {email: string}) {
+  return (
+    <button onClick={() => signIn("email", { email: "halvorviv@gmail.com" })}>
+      Sign in with email.
+    </button>
+  );
+}
