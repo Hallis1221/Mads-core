@@ -4,7 +4,6 @@ import {
   registerForCreatorWaitlist,
 } from "../../lib/logic/requests/frontend";
 import toast from "react-hot-toast";
-import * as Yup from "yup";
 import NavBar from "../../components/navbar";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -15,11 +14,6 @@ const CreatorWaitlist: NextPage = () => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const { data: session } = useSession();
 
-  const EmailSchema = Yup.object().shape({
-    email: Yup.string()
-      .required("This field is mandatory")
-      .email("Enter a valid email"),
-  });
   return (
     <>
       <NavBar />
