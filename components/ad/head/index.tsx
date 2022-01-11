@@ -1,5 +1,3 @@
-// TODO make metatags and head component
-
 import Head from "next/head"
 import { ReactElement } from "react";
 
