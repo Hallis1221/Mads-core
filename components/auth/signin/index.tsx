@@ -30,7 +30,7 @@ export default function MagicEmailSignin() {
           handleSubmit,
           handleReset,
         } = props;
-        if (values.hasSubmitted) return <div>Email sent</div>;
+        if (values.hasSubmitted) return <div>Email sent. Please check your inbox and click the link we sent you to login </div>;
         return (
           <form className="bg-white rounded" onSubmit={handleSubmit}>
             <div className="mb-4">
