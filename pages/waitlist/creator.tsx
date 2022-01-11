@@ -9,107 +9,75 @@ import {
 } from "../../lib/logic/requests/frontend";
 import toast from "react-hot-toast";
 import NavBar from "../../components/navbar";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 // Waitlist page that has a form where users can enter their email address
 const CreatorWaitlist: NextPage = () => {
   const [data, setData] = React.useState<any>(null);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { data: session } = useSession();
 
-  const EmailSchema = Yup.object().shape({
-    email: Yup.string()
-      .required("This field is mandatory")
-      .email("Enter a valid email"),
-  });
   // Inspired by the tailwind docs :D
+
   return (
     <>
-   <NavBar />
-      <div className="w-screen h-full flex flex-col justify-center items-center">
-        <Formik
-          initialValues={{ email: "", action: "register" }}
-          validationSchema={EmailSchema}
-          onSubmit={async (values) => {
-            toast.loading("Working...")
-            if (values.action === "register")
-              await registerForCreatorWaitlist(values.email, document.URL).then(
-                (res) => {
-                  setData(res);
-                }
-              );
-            else if (values.action === "check")
-              await checkUserInfo(values.email).then((res) => {
+      <NavBar />
+      <div className="w-screen h-full flex flex-col justify-center items-center pt-24">
+        <div className="flex justify-between ">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline left-0"
+            onClick={async () => {
+              setIsSubmitting(true);
+              if (session && session.user?.email) {
+                toast.loading("Checking your email...");
+                let res = await registerForCreatorWaitlist(
+                  session.user?.email,
+                  document.URL
+                );
                 setData(res);
-              });
-          toast.dismiss()
-            }}
-          
-        >
-          {(props) => {
-            const {
-              values,
-              touched,
-              errors,
-              dirty,
-              isSubmitting,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              handleReset,
-            } = props;
-            return (
-              <div className="w-12/12 h-2/12 lg:w-1/6 xl:w-1/6">
-                <form
-                  className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-                  onSubmit={handleSubmit}
-                >
-                  <div className="mb-4">
-                    <label
-                      className="block text-gray-700 text-sm font-bold mb-2"
-                      htmlFor="email"
-                    >
-                      Email
-                    </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full h-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="email"
-                      placeholder="Enter your email"
-                      type="text"
-                      value={values.email}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                  </div>
 
-                  {errors.email && touched.email && (
-                    <div className="input-feedback mb-5">{errors.email}</div>
-                  )}
-                  <div className="flex justify-between ">
-                    <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline left-0"
-                      onClick={() => {
-                        values.action = "register";
-                        handleSubmit();
-                      }}
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
-                      Waitlist me!
-                    </button>
-                    <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
-                      onClick={() => {
-                        values.action = "check";
-                        handleSubmit();
-                      }}
-                      type="button"
-                    >
-                      Check Status
-                    </button>
+                setIsSubmitting(false);
+                toast.dismiss();
+                toast.success("Successfully registered/checked!");
+              } else
+                toast.custom((t) => (
+                  <div
+                    className={`${
+                      t.visible ? "animate-enter" : "animate-leave"
+                    } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                  >
+                    <div className="flex-1 w-0 p-4">
+                      <div className="flex items-start">
+                        <div className="ml-3 flex-1">
+                
+                          <p className="mt-1 text-sm text-gray-500">
+                            You need to be signed in with a valid email to register for the waitlist.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <Link href="/account" passHref>
+                    <div className="flex border-l border-gray-200">
+                      <button
+                        onClick={() => toast.dismiss()}
+                        className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      >
+                        Register
+                      </button>
+                    </div>
+                    </Link>
                   </div>
-                </form>
-              </div>
-            );
-          }}
-        </Formik>
+                ));
+                setIsSubmitting(false);
+            }}
+            type="submit"
+            disabled={isSubmitting}
+          >
+            Waitlist me!
+          </button>
+        </div>
+
         {data !== null && (
           <div className="text-center">
             Refferal link (Jump up a spot for each refferal!):{" "}
