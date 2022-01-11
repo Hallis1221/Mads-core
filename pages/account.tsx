@@ -31,9 +31,9 @@ export default function AccountPage({ providers }: any) {
   return (
     <>
       <NavBar />
-      <div className="w-screen flex flex-col justify-center items-center">
+      <div className="w-screen flex flex-col justify-center items-center pt-24">
         Not signed in <br />
-     <MagicEmailSignin email="halvorviv@gmail.com"/>
+     <MagicEmailSignin />
       </div>
     </>
   );
