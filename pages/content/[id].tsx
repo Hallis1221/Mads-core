@@ -95,6 +95,7 @@ export async function getStaticProps({ params }: any) {
     ad = await findAd(tags, theme, id, correctPassword);
     console.log("Content with id of " + id + " matched ad with id of " + ad.id);
   } catch (error) {
+    console.log("Error getting content with id: " + id + " " + error);
     // if something went wrong, we return a 404 page. For example if the contentID or no ad was found
     return { notFound: true };
   }
