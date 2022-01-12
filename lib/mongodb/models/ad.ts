@@ -85,7 +85,7 @@ const AdSchema = new mongoose.Schema({
   },
 });
 
-const Ad = mongoose.models.Ad || mongoose.model("Ad", AdSchema);
+const AdDB = mongoose.models.Ad || mongoose.model("Ad", AdSchema);
 
 // EXPORTING OUR MODEL
-export default Ad;
+export default AdDB;
