@@ -155,7 +155,8 @@ export async function createAdData(
           adID: adID,
           clicks: 0,
           skips: 0,
-          views: 0,    
+          views: 0,
+          matches: [{}],
           password: password,
         },
       }
@@ -440,4 +441,25 @@ export async function getAds(password: string): Promise<Array<any>> {
       }
     )
   ).getAds;
+}
+
+export async function addAdMatch(adID: string, password: string, match: Math) {
+  return await gqc.request(
+    gql`
+      mutation Mutation($adId: String!, $input: AddAdDataMatchInput) {
+        addAdDataMatch(adID: $adId, input: $input) {
+          adID
+        }
+      }
+    `,
+    {
+      adId: "61d0d8f169b734d406750f77",
+      input: {
+        ends: "2023-01-12T21:30:00.000Z",
+        begins: "2023-01-12T20:00:10+0000",
+        contentID: "61d06ae27bbb85f3931bb1e4",
+        password: "h?LPhTi8ja8G!7Q@hGRsJx7444P6Sy?ob",
+      },
+    }
+  );
 }
