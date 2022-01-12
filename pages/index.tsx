@@ -4,15 +4,15 @@ import Link from "next/link";
 export default function NewHome({}) {
   return (
     // TODO use next/image for the background image
-    <main className=" w-screen h-screen ">
+    <main className=" w-screen h-screen relative ">
       <Image
         src="https://pixelpoly.co/assets/img/portfolio/ctf.png"
         layout="fill"
         alt="Background image"
-        className="-z-10"
+        className="object-center object-cover pointer-events-none"
         priority={true}
       />
-      <div className="w-12/12 via-white lg:w-full 2xl:w-11/12 lg:via-white 2xl:via-white from-white bg-gradient-to-r h-screen ">
+      <div className="w-12/12 via-white lg:w-full 2xl:w-11/12 lg:via-white 2xl:via-white from-white bg-gradient-to-r h-screen z-1 relative">
         <div className="pl-8 sm:pl-16 2xl:pl-64 pt-16 font-poppins font-inter w-full">
           <div className="pt-0 2xl:pt-16">
             <Image
