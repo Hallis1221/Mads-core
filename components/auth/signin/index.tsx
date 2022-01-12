@@ -1,8 +1,6 @@
 import { Formik } from "formik";
 import {
   signIn,
-  SignInAuthorisationParams,
-  SignInOptions,
 } from "next-auth/react";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
@@ -21,7 +19,7 @@ export default function MagicEmailSignin() {
       onSubmit={async (values) => {
         toast.loading("Working...");
         console.log(1);
-        await signIn("email", { email: values.email, redirect: false });
+        await signIn("email", { email: values.email, redirect: false , });
         values.hasSubmitted = true;
         toast.dismiss();
       }}
