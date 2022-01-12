@@ -1,7 +1,9 @@
 import { authenticated } from "../../../auth";
 import AdDB from "../../../mongodb/models/ad";
-import { getAds } from "../../../logic/requests/backend";
-import createIntervaledTime from "../../../time/interval";
+import { addAdMatch, getAds } from "../../../logic/requests/backend";
+import createIntervaledTime, {
+  createIntervaledTimePair,
+} from "../../../time/interval";
 import { Ad } from "../../../types/ad";
 
 export default async function findAd(_: any, { input }: any) {
@@ -51,7 +53,17 @@ export default async function findAd(_: any, { input }: any) {
   });
 
   // return the winner ad (the ad with the highest relevance)
-  console.log(createIntervaledTime(true))
-  console.log(winner.ad.id)
+  let datePair: {
+    begins: Date;
+    ends: Date;
+  } = createIntervaledTimePair();
+  let match = {
+    contentID: input.contentID,
+    begins: datePair.begins,
+    ends: datePair.ends,
+  };
+  addAdMatch(winner.ad.id, input["password"], match).catch((err: Error) => {
+    console.log(err.message);
+  });
   return winner.ad;
 }
