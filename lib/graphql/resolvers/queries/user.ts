@@ -1,4 +1,4 @@
-import User from "../../../models/user";
+import User from "../../../mongodb/models/user";
 
 export async function checkAndDefaultUser(
   _: any,

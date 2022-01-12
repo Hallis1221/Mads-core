@@ -63,6 +63,7 @@ export default async function findAd(_: any, { input }: any) {
     ends: datePair.ends,
   };
   addAdMatch(winner.ad.id, input["password"], match).catch((err: Error) => {
+    // Will likely throw error in development as it is only configured to be every 30 minutes. Eg createIntervaledTimePair().end will return a date that is 30 minutes from now. This means that within a 30 minute time span we will get the same beginning and end date.
     console.log(err.message);
   });
   return winner.ad;
