@@ -1,5 +1,6 @@
 import { createAd, deleteAd, updateAd } from "./mutations/ad";
 import {
+  addAdDataMatch,
   createAdData,
   deleteAdData,
   updateAdData,} from "./mutations/adData";
@@ -57,6 +58,7 @@ const resolvers = {
     registerClicks,
     registerSkips,
     registerForCreatorWaitlist,
+    addAdDataMatch, 
   },
 };
 

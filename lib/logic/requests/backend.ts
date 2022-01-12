@@ -2,6 +2,8 @@
 
 import { gql } from "graphql-request";
 import { gqc } from "../../graphql/client";
+import { Ad } from "../../types/ad";
+import { Match } from "../../types/match";
 
 export async function getContentIDS(
   password: string
@@ -155,7 +157,8 @@ export async function createAdData(
           adID: adID,
           clicks: 0,
           skips: 0,
-          views: 0,    
+          views: 0,
+          matches: [{}],
           password: password,
         },
       }
@@ -379,8 +382,9 @@ export async function updateAdViews(
 export async function findAd(
   tags: string[],
   theme: string,
+  contentID: string,
   password: string
-): Promise<string> {
+): Promise<Ad> {
   return (
     await gqc.request(
       gql`
@@ -403,6 +407,7 @@ export async function findAd(
           tags,
           theme,
           password,
+          contentID,
         },
       }
     )
@@ -440,4 +445,25 @@ export async function getAds(password: string): Promise<Array<any>> {
       }
     )
   ).getAds;
+}
+
+export async function addAdMatch(adID: String, password: String, match: Match) {
+  return await gqc.request(
+    gql`
+      mutation Mutation($adId: String!, $input: AddAdDataMatchInput) {
+        addAdDataMatch(adID: $adId, input: $input) {
+          adID
+        }
+      }
+    `,
+    {
+      adId:adID,
+      input: {
+        begins: match.begins,
+        ends: match.ends,
+        contentID: match.contentID,
+        password: password,
+      },
+    }
+  );
 }

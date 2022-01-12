@@ -1,5 +1,5 @@
 import { authenticated } from "../../../auth";
-import Ad from "../../../mongodb/models/ad";
+import AdDB from "../../../mongodb/models/ad";
 
 // This is the resolver for the getAds query. It takes in the input (for the password) and returns all ads.
 export async function getAds(_: any, { input }: any) {
@@ -8,7 +8,7 @@ export async function getAds(_: any, { input }: any) {
   try {
     input["password"] = undefined;
     // Find all ads.
-    const ads = await Ad.find({});
+    const ads = await AdDB.find({});
     // Return all ads.
     return ads;
   } catch (error) {
@@ -22,7 +22,7 @@ export async function getAds(_: any, { input }: any) {
 export async function getAd(_: any, { id }: any) {
   try {
     // Find the ad with the matching id.
-    const ad = await Ad.findById(id);
+    const ad = await AdDB.findById(id);
     // If the ad doesn't exist, throw an error.
     if (!ad) throw new Error("Ad not found");
     // Return the ad.

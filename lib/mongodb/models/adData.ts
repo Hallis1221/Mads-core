@@ -26,6 +26,17 @@ const AdDataSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
+
+  matches: {
+    type: [
+      {
+        // The contentID of the content that matched this ad
+        contentID: String,
+        begins: Date,
+        ends: Date,
+      }
+    ],
+  }
 });
 
 

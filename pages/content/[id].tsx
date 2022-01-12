@@ -23,6 +23,7 @@ import NotSeriousFooter from "../../components/footer";
 import Header from "../../components/ad/head";
 import TopAuth from "../../components/auth/topbar";
 import NavBar from "../../components/navbar";
+import { Ad } from "../../lib/types/ad";
 
 export default function AdPage(props: any): ReactElement {
   // get the ad and content from props, fetched by the server in getStaticProps
@@ -77,12 +78,10 @@ export async function getStaticProps({ params }: any) {
 
   // initilize the ad and content as null
   let content;
-  let ad;
+  let ad: Ad;
 
   try {
     // get the content from the database
-    console.log("Getting content with id: " + id);
-
     content = await getContentWithID(id);
     if (content === null) {
       console.log("Error getting content with id: " + id);
@@ -93,7 +92,8 @@ export async function getStaticProps({ params }: any) {
     let theme = content.theme;
 
     // find a relevant ad with similair tags and preferred theme
-    ad = await findAd(tags, theme, correctPassword);
+    ad = await findAd(tags, theme, id, correctPassword);
+    console.log("Content with id of " + id + " matched ad with id of " + ad.id);
   } catch (error) {
     // if something went wrong, we return a 404 page. For example if the contentID or no ad was found
     return { notFound: true };
