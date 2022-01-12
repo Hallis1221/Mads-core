@@ -106,7 +106,7 @@ export async function getStaticProps({ params }: any) {
       ad,
       content,
     },
-    revalidate: 7200, // one hour
+    revalidate: 3600, // half an hour, if this is to be updated so have the code that handles matching
   };
 }
 
