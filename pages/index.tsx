@@ -10,6 +10,7 @@ export default function NewHome({}) {
         layout="fill"
         alt="Background image"
         className="-z-10"
+        priority={true}
       />
       <div className="w-12/12 via-white lg:w-full 2xl:w-11/12 lg:via-white 2xl:via-white from-white bg-gradient-to-r h-screen ">
         <div className="pl-8 sm:pl-16 2xl:pl-64 pt-16 font-poppins font-inter w-full">
