@@ -72,6 +72,7 @@ export const adTypeDefs = gql`
   }
 
   input FindAdInput {
+    contentID: String!
     theme: String!
     tags: [String]!
     password: String!
