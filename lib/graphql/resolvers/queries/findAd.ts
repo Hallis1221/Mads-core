@@ -1,6 +1,7 @@
 import { authenticated } from "../../../auth";
 import Ad from "../../../mongodb/models/ad";
 import { getAds } from "../../../logic/requests/backend";
+import createIntervaledTime from "../../../time/interval";
 
 export default async function findAd(_: any, { input }: any) {
   // Check if the password is correct
@@ -49,5 +50,6 @@ export default async function findAd(_: any, { input }: any) {
   });
 
   // return the winner ad (the ad with the highest relevance)
+  console.log(createIntervaledTime())
   return winner.ad;
 }
