@@ -7,7 +7,7 @@ export default function TopAuth() {
   const { data: session } = useSession();
   if (session && session.user?.email)
     return (
-      <div className="flex flex-1 flex-row sm:items-center justify-end pr-2 pt-2 w-auto">
+      <div className="flex flex-1 flex-row sm:items-center justify-end pr-2 pt-2 w-auto z-10">
         <div className="hidden sm:inline-block">{session.user.email} </div>
         <div className="sm:pl-5">
           <Link href="/account" passHref>
