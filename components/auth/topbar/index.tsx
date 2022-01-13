@@ -2,6 +2,7 @@ import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import {md5} from 'pure-md5';
+import toast from "react-hot-toast";
 
 export default function TopAuth() {
   const { data: session } = useSession();
@@ -16,6 +17,7 @@ export default function TopAuth() {
               alt="User profile picture"
               height={60}
               width={60}
+              onClick={(e) => toast.dismiss()}
               className="rounded-full hover:cursor-pointer"
             />
           </Link>
