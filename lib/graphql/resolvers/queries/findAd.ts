@@ -62,7 +62,7 @@ export default async function findAd(_: any, { input }: any) {
          // replace the winner
          winner = { score: adrelevance, ad: ad };
      }else {
-       log.warn("Skipped ad: " + ad.title + " because it has reached its max views or clicks")
+       console.warn("Skipped ad: " + ad.title + " because it has reached its max views or clicks")
      }
   }
 
