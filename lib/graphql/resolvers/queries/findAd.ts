@@ -11,8 +11,6 @@ import createIntervaledTime, {
 } from "../../../time/interval";
 import { Ad } from "../../../types/ad";
 
-var log = require('fancy-log');
-
 export default async function findAd(_: any, { input }: any) {
   // Check if the password is correct
   if (!authenticated(input["password"])) return null;
