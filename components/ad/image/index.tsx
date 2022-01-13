@@ -9,8 +9,8 @@ export default function ImageAd({ad , content}: any): ReactElement {
         src={ad?.image}
         alt="Deploy"
         priority={true}
-        height={630 * 0.8}
-        width={1200 * 0.8}
+        height={630 *1.15}
+        width={1200 * 1.15}
         layout="intrinsic"
         className="h-full hover:cursor-pointer"
         onClick={async () => {
