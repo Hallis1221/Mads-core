@@ -426,6 +426,8 @@ export async function getAds(password: string): Promise<Array<any>> {
             link
             id
             image
+            maxClicks
+            maxViews
             video
             owner {
               uid

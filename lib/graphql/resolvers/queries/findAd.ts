@@ -1,10 +1,17 @@
 import { authenticated } from "../../../auth";
 import AdDB from "../../../mongodb/models/ad";
-import { addAdMatch, getAds } from "../../../logic/requests/backend";
+import {
+  addAdMatch,
+  getAdClicks,
+  getAds,
+  getAdViews,
+} from "../../../logic/requests/backend";
 import createIntervaledTime, {
   createIntervaledTimePair,
 } from "../../../time/interval";
 import { Ad } from "../../../types/ad";
+
+var log = require('fancy-log');
 
 export default async function findAd(_: any, { input }: any) {
   // Check if the password is correct
@@ -30,26 +37,39 @@ export default async function findAd(_: any, { input }: any) {
   // Sort the list of potential ads by their relevance, according to their tags and their tag priorities
   let winner: { score: number; ad: Ad } = { score: 0, ad: potentialAds[0] };
   // iterate through all the potential ads
-  potentialAds.forEach((ad: any) => {
-    // initialize a score for the current ad
-    let adrelevance = 0;
+  for (let ad of potentialAds) {
+     // initialize a score for the current ad
+     let adrelevance = 0;
 
-    // iterate through all the tags of the current ad
-    ad.tags.forEach((tag: any) => {
-      // if the tag is in the input tags, add its priority to the ad relevance
-      if (input.tags.includes(tag.tag)) {
-        // add the tag priority to the ad relevance
-        adrelevance += tag.priority;
-      }
-    });
+     // iterate through all the tags of the current ad
+     ad.tags.forEach((tag: any) => {
+       // if the tag is in the input tags, add its priority to the ad relevance
+       if (input.tags.includes(tag.tag)) {
+         // add the tag priority to the ad relevance
+         adrelevance += tag.priority;
+       }
+     });
+ 
+     // Create a random number between 0 and 5 and add it to the ad relevance. This will make the ad more random and ensure that the ad is not always the same on the same content.
+     // (Unless you have a very high priority tag, in which case it will be more likely to be the ad that is returned or you have a very specific theme, in which case it will be more likely to be the ad that is returned)
+     adrelevance += Math.floor(Math.random() * 5);
+     let adViews = await getAdViews(ad.id, input["password"]);
+     let adClicks = await getAdClicks(ad.id, input["password"]);
+ 
+    console.log("Iterating through ad: " + ad.title + " with relevance: " + adrelevance + " and views: " + adViews + " and clicks: " + adClicks + " and max views: " + ad.maxViews + " and max clicks: " + ad.maxClicks);
+     // Not add the ad if the ad has passed its max views or clicks
+     if (adViews < ad.maxViews && adClicks < ad.maxClicks) {
+       // if the ad relevance is greater than the current winner's relevance, replace the winner
+       if (adrelevance > winner.score)
+         // replace the winner
+         winner = { score: adrelevance, ad: ad };
+     }else {
+       log.warn("Skipped ad: " + ad.title + " because it has reached its max views or clicks")
+     }
+  }
 
-    // Create a random number between 0 and 5 and add it to the ad relevance. This will make the ad more random and ensure that the ad is not always the same on the same content.
-    // (Unless you have a very high priority tag, in which case it will be more likely to be the ad that is returned or you have a very specific theme, in which case it will be more likely to be the ad that is returned)
-    adrelevance += Math.floor(Math.random() * 5);
-    // if the ad relevance is greater than the current winner's relevance, replace the winner
-    if (adrelevance > winner.score)
-      // replace the winner
-      winner = { score: adrelevance, ad: ad };
+  potentialAds.forEach(async (ad: any) => {
+   
   });
 
   // return the winner ad (the ad with the highest relevance)

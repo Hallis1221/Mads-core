@@ -9,6 +9,14 @@ export async function getAds(_: any, { input }: any) {
     input["password"] = undefined;
     // Find all ads.
     const ads = await AdDB.find({});
+
+    // If maxClicks or maxViews is not set, set it to the default value.
+    ads.forEach((ad: any) => {
+      if (!ad.maxClicks) ad.maxClicks = 0;
+      if (!ad.maxViews) ad.maxViews = 0;
+    });
+
+    
     // Return all ads.
     return ads;
   } catch (error) {
