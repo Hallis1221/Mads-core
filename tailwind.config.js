@@ -8,10 +8,6 @@ module.exports = {
       numeric: ['ss02']
     },
     extend: {
-      backgroundImage: {
-        "hero-image":
-          ' url("https://pixelpoly.co/assets/img/portfolio/ctf.png")',
-      },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
     },
