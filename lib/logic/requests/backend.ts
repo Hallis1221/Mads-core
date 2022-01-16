@@ -306,6 +306,51 @@ export async function getContentSkips(
   ).getContentData.skips;
 }
 
+export async function getContentData(
+  contentID: string,
+  password: string
+): Promise<number> {
+  return (
+    await gqc.request(
+      gql`
+        query Query($contentID: String!) {
+          getContentData(contentID: $contentID) {
+            skips
+            clicks
+            views
+            contentID
+          }
+        }
+      `,
+      {
+        contentID: contentID,
+        password: password,
+      }
+    )
+  ).getContentData;
+}
+
+export async function getUserContentID(
+  userID: string,
+  password: string
+): Promise<string[]> {
+  return (
+    await gqc.request(
+      gql`
+        query GetUserContent($password: String!, $userId: ID!) {
+          getUserContent(password: $password, userID: $userId) {
+            id
+          }
+        }
+      `,
+      {
+        userId: userID,
+        password: password,
+      }
+    )
+  ).getUserContent;
+}
+
 export async function updateContentSkips(
   contentID: string,
   skips: number,
@@ -459,7 +504,7 @@ export async function addAdMatch(adID: String, password: String, match: Match) {
       }
     `,
     {
-      adId:adID,
+      adId: adID,
       input: {
         begins: match.begins,
         ends: match.ends,
