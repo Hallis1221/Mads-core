@@ -60,6 +60,7 @@ const origin = req.headers.origin;
  
   
   let user = await getSession({ req });
+  console.log("Passing user to apollo server: ", user);
   if (user) apolloServer.requestOptions.context = { req, res, user };
 
   // To use the user object in a resolver, see this example:
