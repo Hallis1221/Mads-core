@@ -337,15 +337,15 @@ export async function getUserContentID(
   return (
     await gqc.request(
       gql`
-        query GetUserContent($password: String!, $userId: ID!) {
-          getUserContent(password: $password, userID: $userId) {
+        query GetUserContent($password: String!, $userID: ID!) {
+          getUserContent(password: $password, userID: $userID) {
             id
           }
         }
       `,
       {
-        userId: userID,
         password: password,
+        userID: userID,
       }
     )
   ).getUserContent;
