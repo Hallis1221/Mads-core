@@ -22,7 +22,7 @@ import ReactiveAdInfo from "../../components/ad/info";
 import NotSeriousFooter from "../../components/footer";
 import Header from "../../components/ad/head";
 import TopAuth from "../../components/auth/topbar";
-import NavBar from "../../components/navbar";
+import NavBar from "../../components/navigation/navbar";
 import { Ad } from "../../lib/types/ad";
 
 export default function AdPage(props: any): ReactElement {
