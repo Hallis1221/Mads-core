@@ -7,6 +7,7 @@ import {
   getUserContentID,
 } from "../../../logic/requests/backend";
 import { isCreator } from "../../../logic/requests/frontend";
+import User from "../../../mongodb/models/user";
 
 export async function getUserContentPerformances(
   _: any,
@@ -19,7 +20,8 @@ export async function getUserContentPerformances(
     user
     //&& isCreator(user.email)
   ) {
-    return await getUserContentPerformancesByUserID(user.id);
+    let uid = (await User.findOne({ email: user.user.email }))._id;
+    return await getUserContentPerformancesByUserID(uid);
   } else {
     throw new Error("Unauthorized");
   }
@@ -32,7 +34,6 @@ export async function getUserContentPerformances(
       let data = await getContentData(contentID, password || correctPassword);
       contents.push(data);
     }
-    console.log(contents);
     return contents;
   }
 }
