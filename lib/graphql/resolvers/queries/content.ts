@@ -70,7 +70,6 @@ export async function getUserContent(
       return content.owner.uid === userId;
     });
     // Return all the contents linked to the user.
-    console.log(contents);
     return contents;
   } catch (error) {
     // In case of an error, log the error and return null.
