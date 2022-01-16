@@ -8,8 +8,8 @@ export const dataTypeDefs = gql`
   }
 
   type Query {
-    getUserContent(userID: ID!, password: String!): [Content!]
-    getUserContentPerformances(userID: ID!, password: String): [ContentData!]
+    getUserContent(userID: ID, password: String!): [Content!]
+    getUserContentPerformances(userID: ID, password: String): [ContentData!]
   }
   
   type ContentData {
