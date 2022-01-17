@@ -27,7 +27,7 @@ export async function getUserContentPerformances(
   async function getUserContentPerformancesByUserID(userID: string) {
       let contents = [];
     let contentIDs = await getUserContentID(userID, password || correctPassword);
-    for (var content of contentIDs) {
+    for (var content of contentIDs as Array<any>) {
     let contentID = content.id;
       let data = await getContentData(contentID, password || correctPassword);
       contents.push(data);
