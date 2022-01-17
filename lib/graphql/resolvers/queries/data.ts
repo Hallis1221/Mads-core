@@ -7,6 +7,7 @@ import {
   getUserContentID,
 } from "../../../logic/requests/backend";
 import { isCreator } from "../../../logic/requests/frontend";
+import ContentData from "../../../mongodb/models/contentData";
 import User from "../../../mongodb/models/user";
 
 export async function getUserContentPerformances(
@@ -36,4 +37,12 @@ export async function getUserContentPerformances(
     }
     return contents;
   }
+}
+
+export async function getContentHistory(
+  _: any,
+  { password, userID }: any,
+  { req, user }: any
+) {
+  ContentData.historyModel.find({});
 }

@@ -54,9 +54,9 @@ export default function Dashboard() {
             <div className="grow ml-16">
               <InfoCard
                 color={"#FF7976"}
-                title={""}
-                value={1}
-                icon={"activity"}
+                title={"Estimated revenue"}
+                value={"$"+(((stats.views ) * (1/1000))+ (stats.clicks*(25/1000)) + ((stats.skips)*(2/1000))).toFixed(5).replace("0.", "o.").split("0").join("").replace("o.", "0.")}
+                icon={"check-circle"}
                 starting
               />
 
@@ -98,7 +98,7 @@ function InfoCard({
   starting = false,
 }: {
   title: string;
-  value: number;
+  value: number | string;
   icon: Icons;
   color: string;
   starting?: boolean;
