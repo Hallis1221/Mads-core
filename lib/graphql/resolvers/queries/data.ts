@@ -28,10 +28,13 @@ export async function getUserContentPerformances(
   }
 
   async function getUserContentPerformancesByUserID(userID: string) {
-      let contents = [];
-    let contentIDs = await getUserContentID(userID, password || correctPassword);
+    let contents = [];
+    let contentIDs = await getUserContentID(
+      userID,
+      password || correctPassword
+    );
     for (var content of contentIDs as Array<any>) {
-    let contentID = content.id;
+      let contentID = content.id;
       let data = await getContentData(contentID, password || correctPassword);
       contents.push(data);
     }
@@ -41,8 +44,12 @@ export async function getUserContentPerformances(
 
 export async function getContentHistory(
   _: any,
-  { password, userID }: any,
+  { password, contentID }: any,
   { req, user }: any
 ) {
-  ContentData.historyModel.find({});
+  let cdref: any = ContentData;
+  let content = await cdref.historyModel().find({
+    contentID: contentID,
+  });
+  return content;
 }

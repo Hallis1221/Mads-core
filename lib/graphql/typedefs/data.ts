@@ -10,6 +10,7 @@ export const dataTypeDefs = gql`
   type Query {
     getUserContent(userID: ID, password: String!): [Content!]
     getUserContentPerformances(userID: ID, password: String): [ContentData!]
+    getContentHistory(contentID: ID): [ContentData!]
   }
   
   type ContentData {

@@ -30,7 +30,7 @@ export default function Dashboard() {
       );
 
         setStats({
-            clicks: totalClicks,
+            clicks: totalClicks,   
             views: totalViews,
             skips: totalSkips,
         })
@@ -103,6 +103,9 @@ function InfoCard({
   color: string;
   starting?: boolean;
 }): ReactElement {
+  if (value === 0){
+    value = "N/A"
+  }
   return (
     <div
       className={`h-32 w-72 ${
