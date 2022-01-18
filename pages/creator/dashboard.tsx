@@ -1,10 +1,11 @@
 import Icon, { Icons } from "awesome-react-icons";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Chart from "../../components/stats/charts";
 import { getCreatorPerformance } from "../../lib/logic/requests/frontend";
 import { useSession } from "next-auth/react";
 import MagicEmailSignin from "../../components/auth/signin";
+import { getContentDataHistory } from "../../lib/logic/requests/backend";
 
 // TODO move everything to mads core
 export default function Dashboard() {
@@ -13,36 +14,97 @@ export default function Dashboard() {
     views: 0,
     clicks: 0,
     skips: 0,
+    chartData: [
+      {
+        now: {
+          views: 0,
+          clicks: 0,
+          skips: 0,
+        },
+        last: {
+          views: 0,
+          clicks: 0,
+          skips: 0,
+        },
+      },
+    ],
   });
 
   useEffect(() => {
-      if (session)
-    getCreatorPerformance().then((res) => {
-      let totalClicks = 0;
-      let totalViews = 0;
-      let totalSkips = 0;
-      res.getUserContentPerformances.forEach(
-        (performance: { clicks: number; views: number; skips: number }) => {
-          totalClicks += performance.clicks;
-          totalViews += performance.views;
-          totalSkips += performance.skips;
+    if (session)
+      getCreatorPerformance().then(async (res) => {
+        let dailyHistory = new Map<
+          String,
+          {
+            views: number;
+            clicks: number;
+            skips: number;
+          }
+        >();
+
+        let totalClicks = 0;
+        let totalViews = 0;
+        let totalSkips = 0;
+        // iterate through the data and sum up the values using a for loop
+        let data = res.getUserContentPerformances;
+        for (let i = 0; i < data.length; i++) {
+          let content: {
+            views: number | undefined;
+            clicks: number | undefined;
+            skips: number | undefined;
+            contentID: string;
+          } = data[i];
+
+          let history = await getContentDataHistory(content.contentID, null);
+
+          history.forEach((element: any) => {
+            let content = element.d;
+            let date = new Date(element.t);
+
+            let dailyData = dailyHistory.get(
+              `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
+            );
+
+            if (dailyData) {
+              // Content includes the total clicks, views, and skips. Not the daily ones.
+              dailyData.views = content.views;
+              dailyData.clicks =  content.clicks;
+              dailyData.skips = content.skips;
+            } else {
+              dailyHistory.set(
+                `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
+                {
+                  views: content.views,
+                  clicks: content.clicks,
+                  skips: content.skips,
+                }
+              );
+            }
+          });
+
+          totalClicks += content.clicks || 0;
+          totalViews += content.views || 0;
+          totalSkips += content.skips || 0;
         }
-      );
+
+        let chartData = createChartData(dailyHistory);
 
         setStats({
-            clicks: totalClicks,   
-            views: totalViews,
-            skips: totalSkips,
-        })
-    });
+          clicks: totalClicks,
+          views: totalViews,
+          skips: totalSkips,
+          chartData: chartData,
+        });
+      });
   }, [session]);
+
   if (!session)
-  return (
-    <div className="w-screen flex flex-col justify-center items-center">
+    return (
+      <div className="w-screen flex flex-col justify-center items-center">
         Not signed in <br />
         <MagicEmailSignin />
-    </div>
-  )
+      </div>
+    );
   return (
     <>
       <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
@@ -50,12 +112,25 @@ export default function Dashboard() {
         <div className="px-16 ">
           <DashboardTopRow />
           <div className="flex flex-row justify-start ">
-            <DashboardMainCol views={stats.views} clicks={stats.clicks} skips={stats.skips} />
+            <DashboardMainCol
+              views={stats.views}
+              clicks={stats.clicks}
+              skips={stats.skips}
+              chartData={stats.chartData}
+            />
             <div className="grow ml-16">
               <InfoCard
                 color={"#FF7976"}
                 title={"Estimated revenue"}
-                value={"$"+(((stats.views ) * (1/1000))+ (stats.clicks*(25/1000)) + ((stats.skips)*(2/1000))).toFixed(5).replace("0.", "o.").split("0").join("").replace("o.", "0.")}
+                value={
+                  "$" +
+                  (
+                    stats.views * (1 / 1000) +
+                    stats.clicks * (25 / 1000) 
+                  )
+                    .toFixed(3)
+           
+                }
                 icon={"check-circle"}
                 starting
               />
@@ -103,8 +178,8 @@ function InfoCard({
   color: string;
   starting?: boolean;
 }): ReactElement {
-  if (value === 0){
-    value = "N/A"
+  if (value === 0) {
+    value = "N/A";
   }
   return (
     <div
@@ -130,7 +205,7 @@ function InfoCard({
   );
 }
 
-function ChartCard(): ReactElement {
+function ChartCard({ chartData }: { chartData: Array<any> }): ReactElement {
   return (
     <div className="flex w-full h-fit flex-1 flex-row justify-start pt-10">
       <div className="grow h-full w-10 bg-white rounded-3xl pt-6 px-7">
@@ -156,7 +231,7 @@ function ChartCard(): ReactElement {
             </div>
           </div>
           <div className="mt-5 grow w-full h-96">
-            <Chart />
+            <Chart chartData={chartData} />
           </div>
         </div>
       </div>
@@ -172,7 +247,17 @@ function NewsCard(): ReactElement {
   );
 }
 
-function DashboardMainCol({views, clicks, skips}: {views: number, clicks: number, skips:number}): ReactElement {
+function DashboardMainCol({
+  views,
+  clicks,
+  skips,
+  chartData,
+}: {
+  views: number;
+  clicks: number;
+  skips: number;
+  chartData: Array<any>;
+}): ReactElement {
   return (
     <div className="w-3/4 flex h-full flex-col justify-start items-center">
       <div className="w-full flex flex-row justify-start">
@@ -197,7 +282,7 @@ function DashboardMainCol({views, clicks, skips}: {views: number, clicks: number
           icon={"bell-off"}
         />
       </div>
-      <ChartCard />
+      <ChartCard chartData={chartData} />
     </div>
   );
 }
@@ -212,4 +297,29 @@ function DashboardTopRow(): ReactElement {
       <DashboardTitle />
     </div>
   );
+}
+
+function createChartData(dailyHistory: Map<String, { views: number; clicks: number; skips: number; }>): Array<any> {
+  let chartData = [];
+  // make sure we limit ourselves to the last 30 days
+  let iteratedThrough = 0;
+  for (let [key, value] of Array.from(dailyHistory)) {
+    if (iteratedThrough > 30) break;
+    chartData.push({
+      now: {
+        views: value.views,
+        clicks: value.clicks,
+        skips: value.skips,
+        date: `${key.split("-")[0]}th`,
+      },
+      last: {
+        views: 0,
+        clicks: 0,
+        skips: 0,
+      },
+    });
+
+    iteratedThrough++;
+  }
+  return chartData;
 }

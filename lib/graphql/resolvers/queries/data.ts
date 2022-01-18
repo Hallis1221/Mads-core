@@ -49,10 +49,10 @@ export async function getContentMonthHistory(
   { req, user }: any
 ) {
   if (
-    !(
+    (
       (password && authenticated(password) && contentID) ||
       (user && user.uid && (await getOwner(contentID)).uid === user.uid)
-    )
+    ) === false
   )
     throw new Error("Unauthorized");
 

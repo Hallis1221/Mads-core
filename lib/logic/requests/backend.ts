@@ -345,15 +345,16 @@ export async function getContentDataHistory(
               views
               skips
             }
+            t
           }
         }
       `,
       {
-        contentID: contentID,
+        contentId: contentID,
         password: password,
       }
     )
-  ).getContentDataHistory;
+  ).getContentMonthHistory;
 }
 
 export async function getUserContentID(

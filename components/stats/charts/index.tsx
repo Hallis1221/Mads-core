@@ -12,26 +12,82 @@ import { format } from "date-fns";
 
 function createMockData(days: number) {
   let data = [];
+  let multiplier = 1000;
   for (let i = 0; i < days; i++) {
     data.push({
       now: {
         date: format(new Date(new Date(2019, 0, i + 1).getTime()), "dd") + "th",
-        views: Math.round(Math.random() * 1000 + i * 75),
-        clicks: Math.round(Math.random() * 1000 + i * 10),
-        skips: Math.round(Math.random() * 1000 + i * 10),
+        views: Math.round(Math.random() * multiplier + i * 75),
+        clicks: Math.round(Math.random() * multiplier + i * 10),
+        skips: Math.round(Math.random() * multiplier + i * 10),
       },
       last: {
-        views: Math.round(Math.random() * 1000 + i * 75),
-        clicks: Math.round(Math.random() * 1000 + i * 10),
-        skips: Math.round(Math.random() * 1000 + i * 10),
+        views: Math.round(Math.random() * multiplier + i * 75),
+        clicks: Math.round(Math.random() * multiplier + i * 10),
+        skips: Math.round(Math.random() * multiplier + i * 10),
       },
     });
   }
   return data;
 }
 
-export default function Chart() {
-  let data = createMockData(30);
+export default function Chart({ chartData }: { chartData: Array<any> }) {
+  let data = chartData;
+
+  // ensure data has at least 30 days. if a data does not have any data, default data on that day to 0
+  if (data.length < 30) {
+    let missingDays: Array<any> = [];
+    for (let i = 1; i < 31; i++) {
+      missingDays.push(`${i}th`);
+    }
+    // For each entry to data
+    for (let i = 0; i < data.length; i++) {
+      // check if the date is in missingDays
+      if (missingDays.includes(data[i].now.date)) {
+        // if it is, remove it from missingDays
+        missingDays.splice(missingDays.indexOf(data[i].now.date), 1);
+      }
+    }
+    // For each missing day
+    for (let i = 0; i < missingDays.length; i++) {
+      let date = missingDays[i];
+
+      // Ensure right format
+      if (date.split("th")[0] < 10) date = `0${date}`;
+
+      // add a new entry to data
+      data.push({
+        now: {
+          date: missingDays[i],
+          views: 0,
+          clicks: 0,
+          skips: 0,
+        },
+        last: {
+          views: 0,
+          clicks: 0,
+          skips: 0,
+        },
+      });
+    }
+  }
+
+  // Sort data by date
+  data.sort((a, b) => {
+    function formatify(str: string) {
+      try {
+      return parseInt(str.replace("th", ""));
+        
+      } catch (error) {
+        console.error(error, str);
+        return 0
+      }
+    }
+
+    if (formatify(a.now.date) < formatify(b.now.date)) return -1;
+    if (formatify(a.now.date) > formatify(b.now.date)) return 1;
+    return 0;
+  });
 
   let highestValue = 0;
   data.forEach((d) => {
@@ -43,10 +99,25 @@ export default function Chart() {
     if (d.last.skips > highestValue) highestValue = d.last.skips;
   });
 
-  highestValue = Math.floor(highestValue / 1000) + 1;
+  let tickStep: number;
+  if (highestValue > 10000) 
+    tickStep = 10000;
+  else if (highestValue > 1000)
+    tickStep = 1000;
+  else if (highestValue > 100)
+    tickStep = 100;
+  else if (highestValue > 10)
+    tickStep = 10;
+  else if (highestValue > 1)
+    tickStep = 1;
+  else
+    tickStep = 0.1;
+
+  highestValue = Math.floor(highestValue / tickStep) + 1;
+
   let verticalTicks = Array(highestValue)
     .fill(0)
-    .map((_, i) => (i + 1) * 1000);
+    .map((_, i) => (i + 1) * tickStep);
   let hortizontalTicks = Array(30)
     .fill(0)
     .map((_, i) => {
