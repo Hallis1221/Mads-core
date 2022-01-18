@@ -1,5 +1,5 @@
-import TopAuth from "../auth/topbar";
-import CornerLogo from "../logo";
+import TopAuth from "../../auth/topbar";
+import CornerLogo from "../../logo";
 
 export default function NavBar({ }) {
   return (

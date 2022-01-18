@@ -40,7 +40,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-const allowedOrigins = ["https://studio.apollographql.com", "http://localhost:3000", "https://www.marketads.me"];
+const allowedOrigins = ["https://studio.apollographql.com", "http://localhost:3000", "https://www.marketads.me", "https://creator.marketads.me"];
 const origin = req.headers.origin;
 
   if (origin && allowedOrigins.includes(origin)) 
@@ -60,7 +60,7 @@ const origin = req.headers.origin;
  
   
   let user = await getSession({ req });
-  console.log("Passing user to apollo server: ", user);
+  // console.log("Passing user to apollo server: ", user);
   if (user) apolloServer.requestOptions.context = { req, res, user };
 
   // To use the user object in a resolver, see this example:

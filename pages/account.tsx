@@ -2,7 +2,7 @@ import { useSession , signOut, getProviders } from "next-auth/react";
 import { useEffect, useState } from "react";
 import MagicEmailSignin from "../components/auth/signin";
 import SignInWithProvider from "../components/auth/signin";
-import NavBar from "../components/navbar";
+import NavBar from "../components/navigation/navbar";
 import {isCreator} from "../lib/logic/requests/frontend"
 
 export default function AccountPage({ providers }: any) {

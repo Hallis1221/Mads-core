@@ -330,6 +330,33 @@ export async function getContentData(
   ).getContentData;
 }
 
+export async function getContentDataHistory(
+  contentID: string,
+  password: string | null | undefined
+) {
+  return (
+    await gqc.request(
+      gql`
+        query GetContentHistory($contentId: ID, $password: String) {
+          getContentMonthHistory(contentID: $contentId, password: $password) {
+            d {
+              contentID
+              clicks
+              views
+              skips
+            }
+            t
+          }
+        }
+      `,
+      {
+        contentId: contentID,
+        password: password,
+      }
+    )
+  ).getContentMonthHistory;
+}
+
 export async function getUserContentID(
   userID: string,
   password: string
@@ -337,15 +364,15 @@ export async function getUserContentID(
   return (
     await gqc.request(
       gql`
-        query GetUserContent($password: String!, $userId: ID!) {
-          getUserContent(password: $password, userID: $userId) {
+        query GetUserContent($password: String!, $userID: ID!) {
+          getUserContent(password: $password, userID: $userID) {
             id
           }
         }
       `,
       {
-        userId: userID,
         password: password,
+        userID: userID,
       }
     )
   ).getUserContent;

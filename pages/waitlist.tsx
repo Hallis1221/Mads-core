@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { NextPage } from "next/types";
-import CornerLogo from "../../components/logo";
-import NavBar from "../../components/navbar";
+import CornerLogo from "../components/logo";
+import NavBar from "../components/navigation/navbar";
 
 const Waitlist: NextPage = () => {
   // https://getwaitlist.com
