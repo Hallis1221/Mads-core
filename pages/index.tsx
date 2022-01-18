@@ -34,7 +34,7 @@ export default function NewHome({}) {
           </div>
           <div className="h-32">
             <div className="text-lg sm:text-xl 2xl:text-xl flex flex-1 flex-col sm:flex-row items-start pt-5 sm:pt-20 xl:pt-10 justify-between sm:justify-start h-full   ">
-              <Link href="/waitlist/creator" passHref={true}>
+              <Link href="/creator" passHref={true}>
                 <button className="text-white px-4 sm:px-4 h-12 sm:h-20 w-46 sm:w-64 rounded-xl sm:rounded-3xl font-semibold bg-blue-600 hover:bg-blue-700">
                   Join waitlist
                 </button>
