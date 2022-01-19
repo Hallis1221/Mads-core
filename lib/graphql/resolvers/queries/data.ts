@@ -49,10 +49,9 @@ export async function getContentMonthHistory(
   { req, user }: any
 ) {
   if (
-    (
-      (password && authenticated(password) && contentID) ||
-      (user && user.uid && (await getOwner(contentID)).uid === user.uid)
-    ) === false
+    ((password && authenticated(password) && contentID) ||
+      (user && user.uid && (await getOwner(contentID)).uid === user.uid)) ===
+    false
   )
     throw new Error("Unauthorized");
 
@@ -82,10 +81,9 @@ export async function getComperableContentHistory(
   { req, user }: any
 ) {
   if (
-    !(
-      (password && authenticated(password) && contentID) ||
-      (user && user.uid && (await getOwner(contentID)).uid === user.uid)
-    )
+    ((password && authenticated(password) && contentID) ||
+      (user && user.uid && (await getOwner(contentID)).uid === user.uid)) ===
+    false
   )
     throw new Error("Unauthorized");
 

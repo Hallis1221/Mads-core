@@ -43,10 +43,9 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
     // For each entry to data
     for (let i = 0; i < data.length; i++) {
       // check if the date is in missingDays
-      if (missingDays.includes(data[i].now.date)) {
+      if (missingDays.includes(data[i].now.date))
         // if it is, remove it from missingDays
         missingDays.splice(missingDays.indexOf(data[i].now.date), 1);
-      }
     }
     // For each missing day
     for (let i = 0; i < missingDays.length; i++) {
@@ -76,11 +75,10 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
   data.sort((a, b) => {
     function formatify(str: string) {
       try {
-      return parseInt(str.replace("th", ""));
-        
+        return parseInt(str.replace("th", ""));
       } catch (error) {
         console.error(error, str);
-        return 0
+        return 0;
       }
     }
 
@@ -88,6 +86,17 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
     if (formatify(a.now.date) > formatify(b.now.date)) return 1;
     return 0;
   });
+
+  // Set each data entry to itself minus the previous entry
+  for (let i = 1; i <= data.length - 1; i++) {
+    let now = data[i].now;
+    let last = data[i - 1].now;
+
+    if (now.views > last.views) data[i].now.views = now.views - last.views;
+
+    // Ensure no negative values
+    if (parseInt(data[i].now.views) < 0) data[i].now.views = 0;
+  }
 
   let highestValue = 0;
   data.forEach((d) => {
@@ -100,18 +109,12 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
   });
 
   let tickStep: number;
-  if (highestValue > 10000) 
-    tickStep = 10000;
-  else if (highestValue > 1000)
-    tickStep = 1000;
-  else if (highestValue > 100)
-    tickStep = 100;
-  else if (highestValue > 10)
-    tickStep = 10;
-  else if (highestValue > 1)
-    tickStep = 1;
-  else
-    tickStep = 0.1;
+  if (highestValue > 10000) tickStep = 10000;
+  else if (highestValue > 1000) tickStep = 1000;
+  else if (highestValue > 100) tickStep = 100;
+  else if (highestValue > 10) tickStep = 10;
+  else if (highestValue > 1) tickStep = 1;
+  else tickStep = 0.1;
 
   highestValue = Math.floor(highestValue / tickStep) + 1;
 

@@ -5,7 +5,10 @@ import Chart from "../../components/stats/charts";
 import { getCreatorPerformance } from "../../lib/logic/requests/frontend";
 import { useSession } from "next-auth/react";
 import MagicEmailSignin from "../../components/auth/signin";
-import { getContentDataHistory } from "../../lib/logic/requests/backend";
+import {
+  getContentDataHistory,
+  getOldContentDataHistory,
+} from "../../lib/logic/requests/backend";
 
 // TODO move everything to mads core
 export default function Dashboard() {
@@ -42,9 +45,19 @@ export default function Dashboard() {
           }
         >();
 
+        let oldDailyHistory = new Map<
+          String,
+          {
+            views: number;
+            clicks: number;
+            skips: number;
+          }
+        >();
+
         let totalClicks = 0;
         let totalViews = 0;
         let totalSkips = 0;
+
         // iterate through the data and sum up the values using a for loop
         let data = res.getUserContentPerformances;
         for (let i = 0; i < data.length; i++) {
@@ -56,6 +69,10 @@ export default function Dashboard() {
           } = data[i];
 
           let history = await getContentDataHistory(content.contentID, null);
+          let oldHistory = await getOldContentDataHistory(
+            content.contentID,
+            null
+          );
 
           history.forEach((element: any) => {
             let content = element.d;
@@ -67,9 +84,12 @@ export default function Dashboard() {
 
             if (dailyData) {
               // Content includes the total clicks, views, and skips. Not the daily ones.
-              dailyData.views = content.views;
-              dailyData.clicks =  content.clicks;
-              dailyData.skips = content.skips;
+              if (dailyData.views < content.views)
+                dailyData.views = content.views;
+              if (dailyData.clicks < content.clicks)
+                dailyData.clicks = content.clicks;
+              if (dailyData.skips < content.skips)
+                dailyData.skips = content.skips;
             } else {
               dailyHistory.set(
                 `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
@@ -85,9 +105,34 @@ export default function Dashboard() {
           totalClicks += content.clicks || 0;
           totalViews += content.views || 0;
           totalSkips += content.skips || 0;
+
+          oldHistory.forEach((element: any) => {
+            let content = element.d;
+            let date = new Date(element.t);
+
+            let dailyData = oldDailyHistory.get(
+              `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
+            );
+
+            if (dailyData) {
+              // Content includes the total clicks, views, and skips. Not the daily ones.
+              dailyData.views = content.views;
+              dailyData.clicks = content.clicks;
+              dailyData.skips = content.skips;
+            } else {
+              oldDailyHistory.set(
+                `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
+                {
+                  views: content.views,
+                  clicks: content.clicks,
+                  skips: content.skips,
+                }
+              );
+            }
+          });
         }
 
-        let chartData = createChartData(dailyHistory);
+        let chartData = createChartData(dailyHistory, oldDailyHistory);
 
         setStats({
           clicks: totalClicks,
@@ -126,10 +171,8 @@ export default function Dashboard() {
                   "$" +
                   (
                     stats.views * (1 / 1000) +
-                    stats.clicks * (25 / 1000) 
-                  )
-                    .toFixed(3)
-           
+                    stats.clicks * (25 / 1000)
+                  ).toFixed(3)
                 }
                 icon={"check-circle"}
                 starting
@@ -299,7 +342,10 @@ function DashboardTopRow(): ReactElement {
   );
 }
 
-function createChartData(dailyHistory: Map<String, { views: number; clicks: number; skips: number; }>): Array<any> {
+function createChartData(
+  dailyHistory: Map<String, { views: number; clicks: number; skips: number }>,
+  oldDailyHistory: Map<String, { views: number; clicks: number; skips: number }>  
+): Array<any> {
   let chartData = [];
   // make sure we limit ourselves to the last 30 days
   let iteratedThrough = 0;
@@ -313,9 +359,9 @@ function createChartData(dailyHistory: Map<String, { views: number; clicks: numb
         date: `${key.split("-")[0]}th`,
       },
       last: {
-        views: 0,
-        clicks: 0,
-        skips: 0,
+        views: oldDailyHistory.get(key)?.views || 0,
+        clicks: oldDailyHistory.get(key)?.clicks || 0,
+        skips: oldDailyHistory.get(key)?.skips || 0,
       },
     });
 

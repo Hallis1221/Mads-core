@@ -357,6 +357,35 @@ export async function getContentDataHistory(
   ).getContentMonthHistory;
 }
 
+export async function getOldContentDataHistory(
+  contentID: string,
+  password: string | null | undefined
+) {
+  return (
+    await gqc.request(
+      gql`
+        query GetComperableContentHistory($contentId: ID, $password: String) {
+          getComperableContentHistory(
+            contentID: $contentId
+            password: $password
+          ) {
+            d {
+              contentID
+              clicks
+              views
+              skips
+            }
+          }
+        }
+      `,
+      {
+        contentId: contentID,
+        password: password,
+      }
+    )
+  ).getComperableContentHistory;
+}
+
 export async function getUserContentID(
   userID: string,
   password: string
