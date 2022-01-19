@@ -39,6 +39,7 @@ export default function Dashboard() {
         let dailyHistory = new Map<
           String,
           {
+            id: string | undefined;
             views: number;
             clicks: number;
             skips: number;
@@ -75,7 +76,7 @@ export default function Dashboard() {
           );
 
           history.forEach((element: any) => {
-            let content = element.d;
+            let hiscontent = element.d;
             let date = new Date(element.t);
 
             let dailyData = dailyHistory.get(
@@ -84,19 +85,29 @@ export default function Dashboard() {
 
             if (dailyData) {
               // Content includes the total clicks, views, and skips. Not the daily ones.
-              if (dailyData.views < content.views)
-                dailyData.views = content.views;
-              if (dailyData.clicks < content.clicks)
-                dailyData.clicks = content.clicks;
-              if (dailyData.skips < content.skips)
-                dailyData.skips = content.skips;
+              if (dailyData.id !== content.contentID) {
+                dailyData.views += hiscontent.views;
+                dailyData.clicks += hiscontent.clicks;
+                dailyData.skips += hiscontent.skips;
+              } else {
+                dailyData.views = hiscontent.views;
+                dailyData.clicks = hiscontent.clicks;
+                dailyData.skips = hiscontent.skips;
+              }
+
+              dailyData.id = hiscontent.contentID;
+              dailyHistory.set(
+                `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
+                dailyData
+              );
             } else {
               dailyHistory.set(
                 `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
                 {
-                  views: content.views,
-                  clicks: content.clicks,
-                  skips: content.skips,
+                  id: hiscontent.contentID,
+                  views: hiscontent.views,
+                  clicks: hiscontent.clicks,
+                  skips: hiscontent.skips,
                 }
               );
             }
@@ -344,7 +355,7 @@ function DashboardTopRow(): ReactElement {
 
 function createChartData(
   dailyHistory: Map<String, { views: number; clicks: number; skips: number }>,
-  oldDailyHistory: Map<String, { views: number; clicks: number; skips: number }>  
+  oldDailyHistory: Map<String, { views: number; clicks: number; skips: number }>
 ): Array<any> {
   let chartData = [];
   // make sure we limit ourselves to the last 30 days
