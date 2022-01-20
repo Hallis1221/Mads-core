@@ -34,124 +34,152 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    if (session)
-      getCreatorPerformance().then(async (res) => {
-        let dailyHistory = new Map<
-          String,
-          {
-            id: string | undefined;
-            views: number;
-            clicks: number;
-            skips: number;
-          }
-        >();
+    if (!session) return;
 
-        let oldDailyHistory = new Map<
-          String,
-          {
-            views: number;
-            clicks: number;
-            skips: number;
-          }
-        >();
+    getCreatorPerformance().then((res) => {
+      let creatorPerformance = res.getUserContentPerformances;
+      if (!creatorPerformance) return;
 
-        let totalClicks = 0;
-        let totalViews = 0;
-        let totalSkips = 0;
+      let monthlyPerformance: Map<string, any> = new Map<string, any>();
 
-        // iterate through the data and sum up the values using a for loop
-        let data = res.getUserContentPerformances;
-        for (let i = 0; i < data.length; i++) {
-          let content: {
-            views: number | undefined;
-            clicks: number | undefined;
-            skips: number | undefined;
-            contentID: string;
-          } = data[i];
+      creatorPerformance.forEach(
+        (content: {
+          views: number;
+          clicks: number;
+          skips: number;
+          contentID: string;
+        }) => {
+          getContentDataHistory(content.contentID, undefined).then(
+            (contentDataHistory) => {
+              if (!contentDataHistory) return;
 
-          let history = await getContentDataHistory(content.contentID, null);
-          let oldHistory = await getOldContentDataHistory(
-            content.contentID,
-            null
+              let dailyContentPerformances: Map<string, any> = new Map<
+                string,
+                any
+              >();
+
+              contentDataHistory.forEach(
+                (data: {
+                  d: {
+                    contentID: string;
+                    clicks: number;
+                    views: number;
+                    skips: number;
+                  };
+                  t: string;
+                }) => {
+                  if (data.d.contentID === content.contentID) {
+                    // Create time key with format YYYY-MM-DD
+                    let timeKey = data.t.substring(0, 10);
+
+                    // Ensure we are setting data that is higher than the previous entry (so we do not overwrite new data with old data)
+                    let views = data.d.views;
+                    let clicks = data.d.clicks;
+                    let skips = data.d.skips;
+
+                    if (dailyContentPerformances.has(timeKey)) {
+                      if (dailyContentPerformances.get(timeKey).views > views)
+                        views = dailyContentPerformances.get(timeKey).views;
+                      if (dailyContentPerformances.get(timeKey).clicks > clicks)
+                        clicks = dailyContentPerformances.get(timeKey).clicks;
+                      if (dailyContentPerformances.get(timeKey).skips > skips)
+                        skips = dailyContentPerformances.get(timeKey).skips;
+                    }
+
+                    dailyContentPerformances.set(timeKey, {
+                      views,
+                      clicks,
+                      skips,
+                    });
+                  }
+                }
+              );
+
+              // Ensure dailyContentPerformances is accounted for the fact that each day has the total and not just the total for the day by subtracting the last day's data from the current day's data, if there is data for the previous day
+              let accountedDailyContentPerformances: Map<string, any> =
+                dailyContentPerformances;
+
+              accountedDailyContentPerformances.forEach((value, key) => {
+                let day: string | number = parseInt(key.split("-")[2]) - 1;
+                let month: string | number = parseInt(key.split("-")[1]);
+                let year = parseInt(key.split("-")[0]);
+
+                // Ensure day and month always have 2 digits
+                if (day < 10) day = "0" + day;
+                if (month < 10) month = "0" + month;
+
+                let previousDayData = accountedDailyContentPerformances.get(
+                  `${year}-${month}-${day}`
+                );
+
+                if (!previousDayData) return;
+                // Ensure the data we are subtracting is not undefined nor higher than the current day's data
+                if (value.views < previousDayData.views)
+                  value.views += previousDayData.views;
+
+                if (value.clicks < previousDayData.clicks)
+                  value.clicks += previousDayData.clicks;
+
+                if (value.skips < previousDayData.skips)
+                  value.skips += previousDayData.skips;
+
+                accountedDailyContentPerformances.set(key, {
+                  views: value.views - previousDayData.views,
+                  clicks: value.clicks - previousDayData.clicks,
+                  skips: value.skips - previousDayData.skips,
+                });
+              });
+
+              // Merge accountedDailyContentPerformances with monthlyPerformance
+              accountedDailyContentPerformances.forEach((value, key) => {
+                if (monthlyPerformance.has(key)) {
+                  monthlyPerformance.set(key, {
+                    views: monthlyPerformance.get(key).views + value.views,
+                    clicks: monthlyPerformance.get(key).clicks + value.clicks,
+                    skips: monthlyPerformance.get(key).skips + value.skips,
+                  });
+                } else {
+                  monthlyPerformance.set(key, {
+                    views: value.views,
+                    clicks: value.clicks,
+                    skips: value.skips,
+                  });
+                }
+              });
+
+              // Add up all the monthly data to get the total views, clicks, and skips
+              let totalViews = 0;
+              let totalClicks = 0;
+              let totalSkips = 0;
+
+              monthlyPerformance.forEach((value) => {
+                totalViews += value.views;
+                totalClicks += value.clicks;
+                totalSkips += value.skips;
+              });
+
+              let lastMontlyPerformance: Map<string, any> = new Map<
+                string,
+                any
+              >();
+
+              let chartData = createChartData(
+                monthlyPerformance,
+                lastMontlyPerformance
+              );
+
+              // setStats
+              setStats({
+                views: totalViews,
+                clicks: totalClicks,
+                skips: totalSkips,
+                chartData,
+              });
+            }
           );
-
-          history.forEach((element: any) => {
-            let hiscontent = element.d;
-            let date = new Date(element.t);
-
-            let dailyData = dailyHistory.get(
-              `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
-            );
-
-            if (dailyData) {
-              // Content includes the total clicks, views, and skips. Not the daily ones.
-              if (dailyData.id !== content.contentID) {
-                dailyData.views += hiscontent.views;
-                dailyData.clicks += hiscontent.clicks;
-                dailyData.skips += hiscontent.skips;
-              } else {
-                dailyData.views = hiscontent.views;
-                dailyData.clicks = hiscontent.clicks;
-                dailyData.skips = hiscontent.skips;
-              }
-
-              dailyData.id = hiscontent.contentID;
-              dailyHistory.set(
-                `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
-                dailyData
-              );
-            } else {
-              dailyHistory.set(
-                `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
-                {
-                  id: hiscontent.contentID,
-                  views: hiscontent.views,
-                  clicks: hiscontent.clicks,
-                  skips: hiscontent.skips,
-                }
-              );
-            }
-          });
-
-          totalClicks += content.clicks || 0;
-          totalViews += content.views || 0;
-          totalSkips += content.skips || 0;
-
-          oldHistory.forEach((element: any) => {
-            let content = element.d;
-            let date = new Date(element.t);
-
-            let dailyData = oldDailyHistory.get(
-              `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
-            );
-
-            if (dailyData) {
-              // Content includes the total clicks, views, and skips. Not the daily ones.
-              dailyData.views = content.views;
-              dailyData.clicks = content.clicks;
-              dailyData.skips = content.skips;
-            } else {
-              oldDailyHistory.set(
-                `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
-                {
-                  views: content.views,
-                  clicks: content.clicks,
-                  skips: content.skips,
-                }
-              );
-            }
-          });
         }
-
-        let chartData = createChartData(dailyHistory, oldDailyHistory);
-
-        setStats({
-          clicks: totalClicks,
-          views: totalViews,
-          skips: totalSkips,
-          chartData: chartData,
-        });
-      });
+      );
+    });
   }, [session]);
 
   if (!session)
@@ -357,26 +385,44 @@ function createChartData(
   dailyHistory: Map<String, { views: number; clicks: number; skips: number }>,
   oldDailyHistory: Map<String, { views: number; clicks: number; skips: number }>
 ): Array<any> {
-  let chartData = [];
-  // make sure we limit ourselves to the last 30 days
-  let iteratedThrough = 0;
-  for (let [key, value] of Array.from(dailyHistory)) {
-    if (iteratedThrough > 30) break;
-    chartData.push({
-      now: {
-        views: value.views,
-        clicks: value.clicks,
-        skips: value.skips,
-        date: `${key.split("-")[0]}th`,
-      },
-      last: {
-        views: oldDailyHistory.get(key)?.views || 0,
-        clicks: oldDailyHistory.get(key)?.clicks || 0,
-        skips: oldDailyHistory.get(key)?.skips || 0,
-      },
-    });
+  let cd: any = [];
 
-    iteratedThrough++;
+  for (let key of Array.from(dailyHistory.keys())) {
+    let last = oldDailyHistory.get(key as string);
+    let now = dailyHistory.get(key as string);
+
+    let map: {
+      now: { views: number; clicks: number; skips: number; date: String };
+      last: { views: number; clicks: number; skips: number };
+    } = {
+      now: {
+        views: 0,
+        clicks: 0,
+        skips: 0,
+        date: key.split("-")[2].toString() + "th",
+      },
+      last: { views: 0, clicks: 0, skips: 0 },
+    };
+
+    if (now) {
+      map.now = {
+        views: now.views,
+        clicks: now.clicks,
+        skips: now.skips,
+        date: key.split("-")[2].toString() + "th",
+      };
+    }
+
+    if (last) {
+      map.last = {
+        views: last.views,
+        clicks: last.clicks,
+        skips: last.skips,
+      };
+    }
+
+    cd.push(map);
   }
-  return chartData;
+
+  return cd;
 }
