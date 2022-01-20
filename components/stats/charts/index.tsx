@@ -46,6 +46,7 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
       if (missingDays.includes(data[i].now.date))
         // if it is, remove it from missingDays
         missingDays.splice(missingDays.indexOf(data[i].now.date), 1);
+
     }
     // For each missing day
     for (let i = 0; i < missingDays.length; i++) {
@@ -57,7 +58,7 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
       // add a new entry to data
       data.push({
         now: {
-          date: missingDays[i],
+          date: date,
           views: 0,
           clicks: 0,
           skips: 0,
@@ -86,17 +87,6 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
     if (formatify(a.now.date) > formatify(b.now.date)) return 1;
     return 0;
   });
-
-  // Set each data entry to itself minus the previous entry
-  for (let i = 1; i <= data.length - 1; i++) {
-    let now = data[i].now;
-    let last = data[i - 1].now;
-
-    if (now.views > last.views) data[i].now.views = now.views - last.views;
-
-    // Ensure no negative values
-    if (parseInt(data[i].now.views) < 0) data[i].now.views = 0;
-  }
 
   let highestValue = 0;
   data.forEach((d) => {
