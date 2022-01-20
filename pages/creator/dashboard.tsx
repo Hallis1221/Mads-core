@@ -56,7 +56,7 @@ export default function Dashboard() {
                 contentDataHistory,
                 content,
                 monthlyPerformance
-              )
+              );
 
               // Add up all the monthly data to get the total views, clicks, and skips
               let totalViews = 0;
@@ -91,20 +91,32 @@ export default function Dashboard() {
                 oldMonthlyPerformance
               );
 
+              // Add up all the monthly data to get the total views, clicks, and skips
+              let totalViews = 0;
+              let totalClicks = 0;
+              let totalSkips = 0;
+
+              monthlyPerformance.forEach((value) => {
+                totalViews += value.views;
+                totalClicks += value.clicks;
+                totalSkips += value.skips;
+              });
+
               let chartData = createChartData(
                 monthlyPerformance,
                 oldMonthlyPerformance
               );
-              
+
+              // setStats
               setStats({
-                views: stats.views,
-                clicks: stats.clicks,
-                skips: stats.skips,
+                views: totalViews,
+                clicks: totalClicks,
+                skips: totalSkips,
                 chartData,
               });
             }
           );
-          }
+        }
       );
     });
   }, [session]);
