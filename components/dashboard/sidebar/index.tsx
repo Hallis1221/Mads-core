@@ -1,3 +1,4 @@
+import Icon from "awesome-react-icons";
 import Image from "next/image";
 
 export default function SideBar() {
