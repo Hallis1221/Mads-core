@@ -35,6 +35,8 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
   let data = chartData;
   let length = data.length;
 
+  if (length <= 1)length= 31; 
+
   // ensure data has at least 30 days. if a data does not have any data, default data on that day to 0
   if (data.length < length && data.length !== length) {
     let missingDays: Array<any> = [];
