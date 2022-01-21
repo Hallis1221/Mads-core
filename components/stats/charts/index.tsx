@@ -33,11 +33,12 @@ function createMockData(days: number) {
 
 export default function Chart({ chartData }: { chartData: Array<any> }) {
   let data = chartData;
+  let length = data.length;
 
   // ensure data has at least 30 days. if a data does not have any data, default data on that day to 0
-  if (data.length < 30) {
+  if (data.length < length && data.length !== length) {
     let missingDays: Array<any> = [];
-    for (let i = 1; i < 31; i++) {
+    for (let i = 1; i < length; i++) {
       missingDays.push(`${i}th`);
     }
     // For each entry to data
@@ -46,7 +47,6 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
       if (missingDays.includes(data[i].now.date))
         // if it is, remove it from missingDays
         missingDays.splice(missingDays.indexOf(data[i].now.date), 1);
-
     }
     // For each missing day
     for (let i = 0; i < missingDays.length; i++) {
