@@ -36,7 +36,6 @@ export default function getAllContent(
               content,
               monthlyPerformance
             );
-
             // Add up all the monthly data to get the total views, clicks, and skips
             let totalViews = 0;
             let totalClicks = 0;
