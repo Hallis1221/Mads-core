@@ -1,11 +1,10 @@
 import { useSession , signOut, getProviders } from "next-auth/react";
 import { useEffect, useState } from "react";
 import MagicEmailSignin from "../components/auth/signin";
-import SignInWithProvider from "../components/auth/signin";
 import NavBar from "../components/navigation/navbar";
 import {isCreator} from "../lib/logic/requests/frontend"
 
-export default function AccountPage({ providers }: any) {
+export default function AccountPage({ }: any) {
   const { data: session } = useSession();
   const [creator, setCreator] = useState(false);
 
@@ -20,7 +19,7 @@ export default function AccountPage({ providers }: any) {
     return (
       <>
         <NavBar />
-        <div className="w-screen h-full flex flex-col justify-center items-center">
+        <div className="w-screen h-full flex flex-col justify-center items-center mt-64">
           Signed in as {session.user?.email} <br />
           {creator ? "Creator" : "Not Creator"}
           <button onClick={() => signOut()}>Sign out</button>
@@ -38,10 +37,3 @@ export default function AccountPage({ providers }: any) {
     </>
   );
 }
-
-export async function getServerSideProps(_: any) {
-    const providers = await getProviders()
-    return {
-      props: { providers },
-    }
-  }
