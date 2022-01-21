@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import Chart from "../../../stats/charts";
+import ReactLoading from "react-loading";
 
 export default function ChartCard({
   chartData,
@@ -33,7 +34,19 @@ export default function ChartCard({
             </div>
           </div>
           <div className="mt-5 grow w-full h-96">
-            <Chart chartData={chartData} />
+            {chartData.length !== 0 ? (
+              <Chart chartData={chartData} />
+            ) : (
+              <div className="w-full flex flex-row items-end justify-center">
+                <ReactLoading
+                  type={"bubbles"}
+                  color={"#3751FF"}
+                  delay={5}
+                  height={"20%"}
+                  width={"20%"}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

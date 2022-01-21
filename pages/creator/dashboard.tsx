@@ -1,27 +1,21 @@
 import { useEffect, useState } from "react";
-import { getCreatorPerformance } from "../../lib/logic/requests/frontend";
 import { useSession } from "next-auth/react";
 import MagicEmailSignin from "../../components/auth/signin";
-import {
-  getContentDataHistory,
-  getOldContentDataHistory,
-} from "../../lib/logic/requests/backend";
 import DashboardMainCol from "../../components/dashboard";
 import InfoCard from "../../components/dashboard/cards/infocard";
 import NewsCard from "../../components/dashboard/chart/sidecard";
 import SideBar from "../../components/dashboard/sidebar";
-import DashboardTopRow from "../../components/dashboard/toprow";
-import createChartData from "../../lib/logic/dashboard/createChartData";
+import DashboardTopRow from "../../components/dashboard/toprow";import ReactLoading from 'react-loading';
 import getAllContent from "../../lib/logic/dashboard/getData/getAllContent";
 
 // TODO move everything to mads core
 export default function Dashboard() {
   const { data: session } = useSession();
-  const [lastUpdated , setLastUpdated] = useState("Fetching...");
+  const [lastUpdated, setLastUpdated] = useState("Fetching...");
   const [stats, setStats] = useState({
-    views: 0,
-    clicks: 0,
-    skips: 0,
+    views: "N/A" || 0,
+    clicks: "N/A" || 0,
+    skips: "N/A" || 0,
     chartData: [
       {
         now: {
@@ -41,7 +35,6 @@ export default function Dashboard() {
   useEffect(() => {
     if (!session) return;
     getAllContent(setLastUpdated, setStats);
-
   }, [session]);
 
   if (!session)
@@ -66,15 +59,19 @@ export default function Dashboard() {
               lastUpdated={lastUpdated}
             />
             <div className="grow ml-16">
+
               <InfoCard
                 color={"#FF7976"}
                 title={"Estimated revenue"}
                 value={
-                  "$" +
-                  (
-                    stats.views * (1 / 1000) +
-                    stats.clicks * (25 / 1000)
-                  ).toFixed(3)
+                  typeof stats.views === "string" ||
+                  typeof stats.clicks === "string"
+                    ? "N/A"
+                    : "$" +
+                      (
+                        stats.views * (1 / 1000) +
+                        stats.clicks * (25 / 1000)
+                      ).toFixed(3)
                 }
                 icon={"check-circle"}
                 starting

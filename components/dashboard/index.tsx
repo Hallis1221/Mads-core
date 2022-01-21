@@ -9,9 +9,9 @@ export default function DashboardMainCol({
   chartData,
   lastUpdated,
 }: {
-  views: number;
-  clicks: number;
-  skips: number;
+  views: number | string;
+  clicks: number | string;
+  skips: number | string;
   chartData: Array<any>;
   lastUpdated: string;
 }): ReactElement {

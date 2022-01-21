@@ -18,6 +18,7 @@ export default function InfoCard({
       value = "N/A";
     }
     return (
+
       <div
         className={`h-32 w-72 ${
           starting ? "ml-0" : "ml-16"
@@ -34,9 +35,12 @@ export default function InfoCard({
           </div>
           <div className="flex flex-col justify-center items-center pr-6">
             <div className="text-[#9FA2B4] text-center">{title}</div>
-            <div className="text-4xl text-center font-bold">{value}</div>
+            <div className="text-4xl text-center font-bold">{
+              value === "N/A" ? "..." : value
+            }</div>
           </div>
         </div>
       </div>
+
     );
   }
