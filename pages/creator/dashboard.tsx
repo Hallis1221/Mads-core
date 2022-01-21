@@ -13,6 +13,7 @@ import {
 // TODO move everything to mads core
 export default function Dashboard() {
   const { data: session } = useSession();
+  const [lastUpdated , setLastUpdated] = useState("Fetching...");
   const [stats, setStats] = useState({
     views: 0,
     clicks: 0,
@@ -74,6 +75,9 @@ export default function Dashboard() {
                 oldMonthlyPerformance
               );
 
+              let lastUpdated = new Date().toLocaleString();
+              setLastUpdated(lastUpdated);
+                
               // setStats
               setStats({
                 views: totalViews,
@@ -140,6 +144,7 @@ export default function Dashboard() {
               clicks={stats.clicks}
               skips={stats.skips}
               chartData={stats.chartData}
+              lastUpdated={lastUpdated}
             />
             <div className="grow ml-16">
               <InfoCard
@@ -226,7 +231,7 @@ function InfoCard({
   );
 }
 
-function ChartCard({ chartData }: { chartData: Array<any> }): ReactElement {
+function ChartCard({ chartData, lastupdated }: { chartData: Array<any>, lastupdated: string }): ReactElement {
   return (
     <div className="flex w-full h-fit flex-1 flex-row justify-start pt-10">
       <div className="grow h-full w-10 bg-white rounded-3xl pt-6 px-7">
@@ -234,7 +239,7 @@ function ChartCard({ chartData }: { chartData: Array<any> }): ReactElement {
           <div className="text-xl text-center font-bold  ">Monthly views</div>
           <div className="flex flex-row justify-between w-full ">
             <div className="text-[#9FA2B4] text-center">
-              Last updated January 15th 2022, 22:46
+              Last updated {lastupdated}
             </div>
             <div className="flex flex-row items-center">
               <div className="flex flex-row items-center">
@@ -273,11 +278,13 @@ function DashboardMainCol({
   clicks,
   skips,
   chartData,
+  lastUpdated,
 }: {
   views: number;
   clicks: number;
   skips: number;
   chartData: Array<any>;
+  lastUpdated: string;
 }): ReactElement {
   return (
     <div className="w-3/4 flex h-full flex-col justify-start items-center">
@@ -303,7 +310,7 @@ function DashboardMainCol({
           icon={"bell-off"}
         />
       </div>
-      <ChartCard chartData={chartData} />
+      <ChartCard chartData={chartData} lastupdated={lastUpdated} />
     </div>
   );
 }
@@ -372,7 +379,7 @@ function getHistory(
     t: string;
   }[],
   content: { contentID: string },
-  performance
+  performance: any
 ) {
   if (!history) return;
 
