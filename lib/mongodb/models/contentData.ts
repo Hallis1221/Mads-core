@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import historyPlugin from "../plugins/history/contentdata/mongoose-history.js";
 
 mongoose.Promise = global.Promise;
 
@@ -26,38 +27,17 @@ const ContentDataSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
-
-  // The history of the contentData
-  history: {
-    type: [
-      {
-        // The date the data is from
-        date: {
-          type: Date,
-          required: true,
-        },
-        // The number of times the content had been clicked
-        clicks: {
-          type: Number,
-          required: false,
-        },
-
-        // The number of times this content had been viewed
-        views: {
-          type: Number,
-          required: false,
-        },
-
-        // The number of times this content had been skipped
-        skips: {
-          type: Number,
-          required: false,
-        },
-      },
-    ],
-    required: false,
-  },
 });
+
+var options = {
+  metadata: [
+    {key: 'contentID', value: 'contentID'},
+    // {key: 'd', value: undefined},
+    {key: 'o', value: undefined},
+  ]
+};
+
+ContentDataSchema.plugin(historyPlugin, options);
 
 const ContentData =
   mongoose.models.ContentData ||
