@@ -9,44 +9,43 @@ import {
 import Loading from "react-loading";
 import { getContentWithID } from "../../../../lib/logic/requests/frontend";
 
-export default function ContentsCard({
-  contentIDS,
-}: {
-  contentIDS: string[];
-}): ReactElement {
+export default function ContentsCard({ stats }: { stats: any }): ReactElement {
   let [contents, setContents] = useState([
     {
-      theme: "",
-      tags: [
-        {
-          tag: "",
-          priority: 0,
-        }
-      ],
-      title: "",
-      link: "",
+      views: 0,
+      clicks: 0,
+      skips: 0,
+      contentID: "",
       id: "",
+      title: "",
+      tags: [{ tag: "", priority: 0 }],
     },
   ]);
 
   useEffect(() => {
-    let doneContents: string[] = [];
-    let contents: any[] = [];
-    contentIDS.map(async (contentID: string) => {
-      if (!contentID || contentID == "" || doneContents.includes(contentID))
-        return;
-      await getContentWithID(contentID)
-        .catch((err) => {
-          console.log("Error getting content");
-        })
-        .then((content) => {
-          contents.push(content);
-          if (contents.length >= contentIDS.length) setContents(contents);
+    let doneContents: any[] = [];
+    let ids = stats.map((content: { contentID: any }) => content.contentID);
+
+    ids.forEach((id: string) => {
+      if (id != "")
+        getContentWithID(id).then((content: any) => {
+          let contentStats = stats.find(
+            (content: { contentID: any }) => content.contentID == id
+          );
+
+          content = {
+            ...content,
+            views: contentStats.views,
+            clicks: contentStats.clicks,
+            skips: contentStats.skips,
+          };
+          if (doneContents.includes(content)) return;
+          doneContents.push(content);
+          if (doneContents.length >= stats.length) setContents(doneContents);
         });
     });
-  }, [contentIDS]);
+  }, [stats]);
 
-  console.log(contents);
   if (!contents) return <Loading />;
   return (
     <div className="flex h-full w-full flex-1 flex-row justify-start pt-10 font-mulish ">
@@ -64,14 +63,23 @@ export default function ContentsCard({
                   >
                     {content.title}
                   </div>
-                  <div className="text-sm font-semibold text-right text-[#3751FF] cursor-pointer hover:text-blue-800"> 
-                    Read more 
-                    </div>
+                  <div className="text-sm font-semibold text-right text-[#3751FF] cursor-pointer hover:text-blue-800">
+                    Read more
+                  </div>
                 </div>
-                <div className="text-sm font-light text-left text-[#9FA2B4] text-opacity-50 italic pt-2 pb-5"> 
-                    Read more about your {content.tags[0].tag} content with theme of {content.theme}
-                    
-                    </div>
+                <div className="text-sm font-light text-left text-[#9FA2B4] text-opacity-50 italic pt-2 pb-5">
+                  Your {content.tags[0].tag} content has been viewed{" "}
+                  {content.views} and clicked {content.clicks} times. That is a
+                  click through rate of {(content.clicks / content.views) *100}%. {
+                    ((content.clicks / content.views) > 0.5)
+                      ? "Amazing!!!!"
+                      : ((content.clicks / content.views) > 0.2)
+                      ? "Good job!"
+                      : ((content.clicks / content.views) > 0.1)
+                      ? "Not bad!"
+                      : "You will get there!"
+                  }
+                </div>
                 <div className="relative w-full h-[2px] rounded-full bg-gray-200 " />
               </div>
             );

@@ -51,6 +51,14 @@ export default function Dashboard() {
 
   let contentIDS = contents.map((content) => content.contentID)
     .filter((contentID) => contentID != "");
+    let contentStats = contents.map((content) => {
+      return {
+       contentID: content.contentID,
+       views: content.views,
+       clicks: content.clicks,
+       skips: content.skips,
+      }
+    })
   return (
     <>
       <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
@@ -83,7 +91,7 @@ export default function Dashboard() {
                 starting
               />
 
-              <ContentsCard contentIDS={contentIDS} />
+              <ContentsCard stats={contentStats} />
             </div>
           </div>
         </div>
