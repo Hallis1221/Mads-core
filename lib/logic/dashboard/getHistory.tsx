@@ -8,7 +8,6 @@ export default function getHistory(
 ) {
   if (!history) return;
 
-  let viewsSubtractions = 0;
   let dailyContentPerformances: Map<string, any> = new Map<string, any>();
 
   history.forEach(
@@ -76,9 +75,8 @@ export default function getHistory(
     if (value.skips < previousDayData.skips)
       value.skips += previousDayData.skips;
 
-    viewsSubtractions += previousDayData.views;
     accountedDailyContentPerformances.set(key, {
-      views: value.views - viewsSubtractions,
+      views: value.views - previousDayData.views,
       clicks: value.clicks - previousDayData.clicks,
       skips: value.skips - previousDayData.skips,
     });
@@ -101,6 +99,5 @@ export default function getHistory(
     }
   });
 
-  console.log(performance);
   return performance;
 }
