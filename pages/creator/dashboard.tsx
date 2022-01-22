@@ -3,15 +3,19 @@ import { useSession } from "next-auth/react";
 import MagicEmailSignin from "../../components/auth/signin";
 import DashboardMainCol from "../../components/dashboard";
 import InfoCard from "../../components/dashboard/cards/infocard";
-import NewsCard from "../../components/dashboard/chart/sidecard";
 import SideBar from "../../components/dashboard/sidebar";
-import DashboardTopRow from "../../components/dashboard/toprow";import ReactLoading from 'react-loading';
+import DashboardTopRow from "../../components/dashboard/toprow";
+import ReactLoading from "react-loading";
 import getAllContent from "../../lib/logic/dashboard/getData/getAllContent";
+import ContentsCard from "../../components/dashboard/chart/sidecard";
 
 // TODO move everything to mads core
 export default function Dashboard() {
   const { data: session } = useSession();
   const [lastUpdated, setLastUpdated] = useState("Fetching...");
+  const [contents, setContents] = useState([
+    { views: 0, clicks: 0, skips: 0, contentID: "" },
+  ]);
   const [stats, setStats] = useState({
     views: "N/A" || 0,
     clicks: "N/A" || 0,
@@ -34,7 +38,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!session) return;
-    getAllContent(setLastUpdated, setStats);
+    getAllContent(setLastUpdated, setStats, setContents);
   }, [session]);
 
   if (!session)
@@ -44,6 +48,9 @@ export default function Dashboard() {
         <MagicEmailSignin />
       </div>
     );
+
+  let contentIDS = contents.map((content) => content.contentID)
+    .filter((contentID) => contentID != "");
   return (
     <>
       <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
@@ -59,7 +66,6 @@ export default function Dashboard() {
               lastUpdated={lastUpdated}
             />
             <div className="grow ml-16">
-
               <InfoCard
                 color={"#FF7976"}
                 title={"Estimated revenue"}
@@ -77,7 +83,7 @@ export default function Dashboard() {
                 starting
               />
 
-              <NewsCard />
+              <ContentsCard contentIDS={contentIDS} />
             </div>
           </div>
         </div>
