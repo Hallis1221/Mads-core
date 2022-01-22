@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import historyPlugin from "../plugins/history/contentdata/mongoose-history.js";
 
 mongoose.Promise = global.Promise;
 
@@ -28,16 +27,6 @@ const ContentDataSchema = new mongoose.Schema({
     required: false,
   },
 });
-
-var options = {
-  metadata: [
-    {key: 'contentID', value: 'contentID'},
-    // {key: 'd', value: undefined},
-    {key: 'o', value: undefined},
-  ]
-};
-
-ContentDataSchema.plugin(historyPlugin, options);
 
 const ContentData =
   mongoose.models.ContentData ||
