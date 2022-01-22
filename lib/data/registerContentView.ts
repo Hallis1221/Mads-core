@@ -30,7 +30,7 @@ export default async function registerContentView(contentID: string): Promise<vo
     if (history[i]
     ) {
       let date = new Date(history[i].date);
-      let today = Date.now();
+      let today = new Date(Date.now());
       today.setHours(0, 0, 0, 0);
       date.setHours(0, 0, 0, 0);
       console.log(date, today);
@@ -42,7 +42,7 @@ export default async function registerContentView(contentID: string): Promise<vo
   // If history is empty, create a new entry for the date.
   if (history.length === 0 || !found) {
     console.log("Creating new entry for date: " + new Date().toDateString());
-    let date = new Date.now();
+    let date = new Date(Date.now());
     date.setHours(0, 0, 0, 0);
 
     history.push({
