@@ -53,7 +53,7 @@ export const adDataTypeDefs = gql`
     clicks: Int!
     skips: Int!
     views: Int!
-    matches: [MatchInput]!
+    matches: [MatchInput]
     password: String
   }
 

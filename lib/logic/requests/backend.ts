@@ -158,7 +158,6 @@ export async function createAdData(
           clicks: 0,
           skips: 0,
           views: 0,
-          matches: [{}],
           password: password,
         },
       }
