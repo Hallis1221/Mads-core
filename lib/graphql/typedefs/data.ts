@@ -23,17 +23,12 @@ export const dataTypeDefs = gql`
     skips: Int!
   }
 
-  type HistoryContentD {
+  type HistoryData {
+    date: Date!
     contentID: String!
     clicks: Int
     views: Int
     skips: Int
-  }
-
-  type HistoryData {
-    t: Date!
-    contentID: String!
-    d: HistoryContentD!
   }
 
   type Content {

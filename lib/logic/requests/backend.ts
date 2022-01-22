@@ -339,13 +339,11 @@ export async function getContentDataHistory(
       gql`
         query GetContentHistory($contentId: ID, $password: String) {
           getContentMonthHistory(contentID: $contentId, password: $password) {
-            d {
-              contentID
-              clicks
-              views
-              skips
-            }
-            t
+            contentID
+            clicks
+            views
+            skips
+            date
           }
         }
       `,
@@ -369,12 +367,10 @@ export async function getOldContentDataHistory(
             contentID: $contentId
             password: $password
           ) {
-            d {
-              contentID
-              clicks
-              views
-              skips
-            }
+            contentID
+            clicks
+            views
+            skips
           }
         }
       `,
