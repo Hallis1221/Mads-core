@@ -2,10 +2,16 @@ import mongoose from "mongoose";
 
 mongoose.Promise = global.Promise;
 
-const ContentDataSchema = new mongoose.Schema({
+const ContentDataHistorySchema = new mongoose.Schema({
   // The contentID of the content associated with the contentData is used as the primary key
   contentID: {
     type: String,
+    required: true,
+  },
+
+  // The date for this history entry
+  date: {
+    type: Date,
     required: true,
   },
 
@@ -28,9 +34,9 @@ const ContentDataSchema = new mongoose.Schema({
   },
 });
 
-const ContentData =
-  mongoose.models.ContentData ||
-  mongoose.model("ContentData", ContentDataSchema);
+const ContentDataHistory =
+  mongoose.models.ContentDataHistory ||
+  mongoose.model("ContentDataHistory", ContentDataHistorySchema);
 
 // EXPORTING OUR MODEL
-export default ContentData;
+export default ContentDataHistory;

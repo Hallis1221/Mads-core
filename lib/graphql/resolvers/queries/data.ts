@@ -9,6 +9,7 @@ import {
 } from "../../../logic/requests/backend";
 import { isCreator } from "../../../logic/requests/frontend";
 import ContentData from "../../../mongodb/models/contentData";
+import ContentDataHistory from "../../../mongodb/models/contentDataHistory";
 import User from "../../../mongodb/models/user";
 
 export async function getUserContentPerformances(
@@ -55,7 +56,6 @@ export async function getContentMonthHistory(
   )
     throw new Error("Unauthorized");
 
-  let cdref: any = ContentData;
 
   // After date, 30 days from the current date
   let beforeDate = new Date();
@@ -63,14 +63,15 @@ export async function getContentMonthHistory(
 
   // Before date, current date
   let afterDate = new Date();
-
-  let content = await cdref.historyModel().find({
+    
+  let content = await ContentDataHistory.find({
     contentID: contentID,
-    t: {
+    date: {
       $gte: beforeDate,
-      $lt: afterDate,
+      $lte: afterDate,
     },
   });
+
   return content;
 }
 
@@ -87,8 +88,6 @@ export async function getComperableContentHistory(
   )
     throw new Error("Unauthorized");
 
-  let cdref: any = ContentData;
-
   // After date, 30 days from the current date
   let beforeDate = new Date();
   beforeDate.setDate(beforeDate.getDate() - 60);
@@ -97,12 +96,13 @@ export async function getComperableContentHistory(
   let afterDate = new Date();
   afterDate.setDate(afterDate.getDate() - 30);
 
-  let content = await cdref.historyModel().find({
+  let content = await ContentDataHistory.find({
     contentID: contentID,
-    t: {
+    date: {
       $gte: beforeDate,
       $lt: afterDate,
     },
   });
+
   return content;
 }
