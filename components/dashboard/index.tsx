@@ -12,7 +12,7 @@ export default function DashboardMainCol({
   views: number | string;
   clicks: number | string;
   skips: number | string;
-  chartData: Array<any>;
+  chartData: Array<any> | undefined;
   lastUpdated: string;
 }): ReactElement {
   return (
@@ -39,7 +39,11 @@ export default function DashboardMainCol({
           icon={"bell-off"}
         />
       </div>
-      <ChartCard chartData={chartData} lastupdated={lastUpdated} />
+      {chartData ? (
+        <ChartCard chartData={chartData} lastupdated={lastUpdated} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
