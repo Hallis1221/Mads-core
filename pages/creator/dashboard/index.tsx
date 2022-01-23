@@ -8,6 +8,7 @@ import DashboardTopRow from "../../../components/dashboard/toprow";
 import ReactLoading from "react-loading";
 import getAllContent from "../../../lib/logic/dashboard/getData/getAllContent";
 import ContentsCard from "../../../components/dashboard/chart/sidecard";
+import toast from "react-hot-toast";
 
 // TODO move everything to mads core
 export default function Dashboard() {
@@ -49,16 +50,35 @@ export default function Dashboard() {
       </div>
     );
 
-  let contentIDS = contents.map((content) => content.contentID)
+  let contentIDS = contents
+    .map((content) => content.contentID)
     .filter((contentID) => contentID != "");
-    let contentStats = contents.map((content) => {
-      return {
-       contentID: content.contentID,
-       views: content.views,
-       clicks: content.clicks,
-       skips: content.skips,
+  let contentStats = contents.map((content) => {
+    return {
+      contentID: content.contentID,
+      views: content.views,
+      clicks: content.clicks,
+      skips: content.skips,
+    };
+  });
+
+  if (
+    stats &&
+    typeof stats.views == "number" &&
+    typeof stats.clicks == "number" &&
+    (parseInt(stats.clicks) / parseInt(stats.views)) * 100 > 75 &&
+    contentIDS.length > 0 &&
+    parseInt(stats.views) >= 10
+  ) {
+    toast.dismiss();
+    toast(
+      "You have a click through rate above 75%. Your account may be flagged for suspicious activity.",
+      {
+        icon: "⚠️",
+        duration: 10000,
       }
-    })
+    );
+  }
   return (
     <>
       <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
