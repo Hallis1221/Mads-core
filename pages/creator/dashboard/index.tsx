@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import MagicEmailSignin from "../../components/auth/signin";
-import DashboardMainCol from "../../components/dashboard";
-import InfoCard from "../../components/dashboard/cards/infocard";
-import SideBar from "../../components/dashboard/sidebar";
-import DashboardTopRow from "../../components/dashboard/toprow";
+import MagicEmailSignin from "../../../components/auth/signin";
+import DashboardMainCol from "../../../components/dashboard";
+import InfoCard from "../../../components/dashboard/cards/infocard";
+import SideBar from "../../../components/dashboard/sidebar";
+import DashboardTopRow from "../../../components/dashboard/toprow";
 import ReactLoading from "react-loading";
-import getAllContent from "../../lib/logic/dashboard/getData/getAllContent";
-import ContentsCard from "../../components/dashboard/chart/sidecard";
+import getAllContent from "../../../lib/logic/dashboard/getData/getAllContent";
+import ContentsCard from "../../../components/dashboard/chart/sidecard";
 
 // TODO move everything to mads core
 export default function Dashboard() {
