@@ -45,7 +45,7 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
           if (doneContents.length >= stats.length) setContents(doneContents);
         });
     });
-  }, [stats]);
+  }, [contents.length, stats]);
 
   if (!contents) return <Loading />;
   return (
