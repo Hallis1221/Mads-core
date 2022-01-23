@@ -68,7 +68,7 @@ export default function Dashboard() {
     typeof stats.clicks == "number" &&
     (parseInt(stats.clicks) / parseInt(stats.views)) * 100 > 75 &&
     contentIDS.length > 0 &&
-    parseInt(stats.views) >= 10
+    parseInt(stats.views) >= 50
   ) {
     toast.dismiss();
     toast(

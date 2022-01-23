@@ -1,5 +1,6 @@
 import Icon from "awesome-react-icons";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function SideBar() {
   return (
@@ -7,16 +8,13 @@ export default function SideBar() {
       <div className="flex flex-col pt-7">
         <Image src="/mads.svg" height={50} width={50} alt="Mads logo" />
       </div>
-      <div className="flex flex-col pl-10 pt-16 ">
-        <div className="flex flex-row items-center">
-          <Icon
-            name="briefcase"
-            className="text-[#D9DAE1]"
-            size={30}
-            strokeWidth={2.25}
-          />
-          <div className="pl-7 text-xl">Overview</div>
-        </div>
+      <div className="flex flex-col  px-3 pt-16  ">
+        <Link href={"/creator/dashboard"} passHref>
+          <div className="flex flex-row items-center py-3 px-9 text-[#fffff] rounded-xl hover:bg-slate-200 hover:text-white hover:cursor-pointer">
+            <Icon name="briefcase" className="" size={30} strokeWidth={2.25} />
+            <div className="pl-7 text-xl font-bold">Overview</div>
+          </div>
+        </Link>
       </div>
     </div>
   );
