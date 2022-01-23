@@ -308,7 +308,7 @@ export async function getContentSkips(
 export async function getContentData(
   contentID: string,
   password: string
-): Promise<number> {
+): Promise<any> {
   return (
     await gqc.request(
       gql`
