@@ -8,6 +8,7 @@ import {
 } from "react";
 import Loading from "react-loading";
 import { getContentWithID } from "../../../../lib/logic/requests/frontend";
+import Link from "next/link";
 
 export default function ContentsCard({ stats }: { stats: any }): ReactElement {
   let [contents, setContents] = useState([
@@ -25,7 +26,7 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
   useEffect(() => {
     let doneContents: any[] = [];
     let ids = stats.map((content: { contentID: any }) => content.contentID);
-
+    if (contents.length === ids.length) return;
     ids.forEach((id: string) => {
       if (id != "")
         getContentWithID(id).then((content: any) => {
@@ -63,9 +64,11 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
                   >
                     {content.title}
                   </div>
+                  <Link href={`dashboard/content/${content.id}`} passHref>
                   <div className="text-sm font-semibold text-right text-[#3751FF] cursor-pointer hover:text-blue-800">
                     Read more
                   </div>
+                  </Link>
                 </div>
                 <div className="text-sm font-light text-left text-[#9FA2B4] text-opacity-50 italic pt-2 pb-5">
                   Your {content.tags[0].tag} content has been viewed{" "}
