@@ -40,9 +40,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+console.log(req.socket.remoteAddress)
+console.log(req.headers['x-forwarded-for'])
+
 const allowedOrigins = ["https://studio.apollographql.com", "http://localhost:3000", "https://www.marketads.me", "https://creator.marketads.me"];
 const origin = req.headers.origin;
-
+  
   if (origin && allowedOrigins.includes(origin)) 
     res.setHeader("Access-Control-Allow-Origin", origin);
     else 
