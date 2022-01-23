@@ -30,7 +30,7 @@ export async function registerViews(
   // Register the adView for the adID.
   await registerAdView(args.adID);
   // Register the contentView for the contentID.
-  await registerContentView(args.contentID, parent, args, context, info);
+  await registerContentView(args.contentID);
   // Return true to indicate that the views were registered.
   return true;
 }
