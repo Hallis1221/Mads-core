@@ -30,8 +30,6 @@ export default function AdPage(props: any): ReactElement {
   const ad = props.ad;
   const content = props.content;
 
-  pingContentData(content.id);
-
   // useState for isDone. This is used to indicate state on wheter or not the ad or countdown is done
   const [isDone, setIsDone] = useState(false);
 
