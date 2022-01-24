@@ -42,7 +42,6 @@ export default async function handler(
 ) {
 console.log(req.socket.remoteAddress)
 console.log(req.headers['x-forwarded-for'])
-console.log(req.headers)
 
 const allowedOrigins = ["https://studio.apollographql.com", "http://localhost:3000", "https://www.marketads.me", "https://creator.marketads.me"];
 const origin = req.headers.origin;
