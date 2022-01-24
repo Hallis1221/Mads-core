@@ -7,7 +7,7 @@ import SideBar from "../../../components/dashboard/sidebar";
 import DashboardTopRow from "../../../components/dashboard/toprow";
 import ReactLoading from "react-loading";
 import getAllContent from "../../../lib/logic/dashboard/getData/getAllContent";
-import ContentsCard from "../../../components/dashboard/chart/sidecard";
+import ContentsCard from "../../../components/dashboard/chart/sidecard/contents";
 import toast from "react-hot-toast";
 
 // TODO move everything to mads core
