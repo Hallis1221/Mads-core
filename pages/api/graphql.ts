@@ -41,8 +41,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
 console.log(req.socket.remoteAddress)
-console.log("Catch? ", req.headers["user-agent"] !== "node-fetch/1.0 (+https://github.com/bitinn/node-fetch)")
-if (req.headers["user-agent"] !== "node-fetch/1.0 (+https://github.com/bitinn/node-fetch)")
+console.log(req.headers['x-forwarded-for'])
 console.log(req.headers)
 
 const allowedOrigins = ["https://studio.apollographql.com", "http://localhost:3000", "https://www.marketads.me", "https://creator.marketads.me"];
