@@ -14,7 +14,8 @@ export default async function registerContentView(
   let views = await getContentViews(contentID, correctPassword);
   let now = new Date(Date.now());
   let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  date.setHours(0, 0, 0, 0);
+  date.setHours(1, 0, 0, 0);
+  
   // Try to update the views.
   let updated = await ContentDataHistory.updateOne(
     {
@@ -33,6 +34,8 @@ export default async function registerContentView(
       contentID: contentID,
       date: date,
       views: 1,
+    }).then(() => {
+      console.log("Created new content data history entry.");
     });
 
   // update views by 1

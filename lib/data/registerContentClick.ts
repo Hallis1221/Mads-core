@@ -14,7 +14,7 @@ export default async function registerContentClick(
   let clicks: number = await getContentClicks(contentID, correctPassword);
   let now = new Date(Date.now());
   let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  date.setHours(0, 0, 0, 0);
+  date.setHours(1, 0, 0, 0);
   // Try to update the clicks history.
   let updated = await ContentDataHistory.updateOne(
     {

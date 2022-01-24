@@ -20,7 +20,7 @@ export default async function registerContentSkip(
     now.getMonth(),
     now.getDate()
   );
-  date.setHours(0, 0, 0, 0);
+  date.setHours(1, 0, 0, 0);
   // Try to update the skips.
   let updated = await ContentDataHistory.updateOne(
     {
