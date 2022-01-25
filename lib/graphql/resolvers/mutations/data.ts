@@ -17,7 +17,7 @@ export async function registerViews(
 ) {
   const rateLimiter = getGraphQLRateLimiter({
     identifyContext: (context) => {
-      if (context.user.user.email) return context.user.user.email;
+      if (context.user && context.user.user.email) return context.user.user.email;
       else if (context.req.headers["x-forwarded-for"])
         return context.req.headers["x-forwarded-for"];
       else if (context.req.headers["x-real-ip"])
