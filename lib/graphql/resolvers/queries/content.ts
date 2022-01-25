@@ -17,10 +17,8 @@ export async function getContent(_: any, { id }: any) {
 
     // Return the content.
     return content;
-  } catch (error) {
-    // In case of an error, log the error and return null.
-    console.error(error);
-    return null;
+  } catch (error: any) {
+    throw new Error(error);
   }
 }
 
