@@ -30,6 +30,8 @@ export async function registerViews(
     },
   });
 
+  // !! Not sure if this is working.
+
   let error = await rateLimiter(
     { parent, args, context, info },
     { max: 3, window: "10000", message: "Too many requests" }
