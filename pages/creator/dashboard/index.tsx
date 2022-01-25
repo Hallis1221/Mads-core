@@ -39,6 +39,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!session) return;
+    if (!session.user) return;
     getAllContent(setLastUpdated, setStats, setContents);
   }, [session]);
 
