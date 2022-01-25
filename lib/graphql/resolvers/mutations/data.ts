@@ -4,7 +4,8 @@ import registerAdView from "../../../data/registerAdView";
 import registerContentClick from "../../../data/registerContentClick";
 import registerContentSkip from "../../../data/registerContentSkip";
 import registerContentView from "../../../data/registerContentView";
-import {getGraphQLRateLimiter} from "graphql-rate-limit";
+import { getGraphQLRateLimiter } from "graphql-rate-limit";
+import { ApolloError } from "apollo-server-core";
 
 // This is the resolver for the registerViews mutation. It takes in both an adID and contentID and registers the adView and contentView for the adID and contentID.
 // This is done to have a single resolver for updating both the adView and contentView.
@@ -15,18 +16,26 @@ export async function registerViews(
   info: any
 ) {
   const rateLimiter = getGraphQLRateLimiter({
-    identifyContext: (ctx) => {
-      let headers = ctx.req.socket._httpMessage.req.rawHeaders;
-      console.log(headers[headers.length - 1]);
-      return headers[headers.length - 1];
+    identifyContext: (context) => {
+      if (context.user.user.email) return context.user.user.email;
+      else if (context.req.headers["x-forwarded-for"])
+        return context.req.headers["x-forwarded-for"];
+      else if (context.req.headers["x-real-ip"])
+        return context.req.headers["x-real-ip"];
+      else if (context.req.headers.cookie) return context.req.headers.cookie;
+      else if (context.req.ip) return context.req.ip;
+
+      console.error("Failed to identify user at rate limiter. Using cookie");
+      return context.req.headers.cookie;
     },
   });
 
-  const errorMessage = await rateLimiter(
+  let error = await rateLimiter(
     { parent, args, context, info },
-    { max: 5, window: '10s' }
+    { max: 3, window: "60s" }
   );
-  if (errorMessage) throw new Error(errorMessage);
+
+  if (error) throw new Error(error);
   // Register the adView for the adID.
   await registerAdView(args.adID);
   // Register the contentView for the contentID.
