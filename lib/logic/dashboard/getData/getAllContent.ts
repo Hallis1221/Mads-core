@@ -14,7 +14,7 @@ export default function getAllContent(
     skips: any;
     chartData: any[];
   }) => void,
-  setContents: (arg0: any) => void,
+  setContents: (arg0: any) => void
 ) {
   getCreatorPerformance().then((res) => {
     let creatorPerformance = res.getUserContentPerformances;
@@ -22,7 +22,12 @@ export default function getAllContent(
 
     let monthlyPerformance: Map<string, any> = new Map<string, any>();
     let oldMonthlyPerformance: Map<string, any> = new Map<string, any>();
-    let contents: { views: number; clicks: number; skips: number; contentID: string; }[] = [];
+    let contents: {
+      views: number;
+      clicks: number;
+      skips: number;
+      contentID: string;
+    }[] = [];
 
     creatorPerformance.forEach(
       (content: {
@@ -68,6 +73,7 @@ export default function getAllContent(
             });
           }
         );
+        /*
         getOldContentDataHistory(content.contentID, undefined).then(
           (contentDataHistory) => {
             oldMonthlyPerformance = getHistory(
@@ -100,7 +106,7 @@ export default function getAllContent(
               chartData,
             });
           }
-        );
+        );*/
       }
     );
   });
