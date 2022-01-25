@@ -12,7 +12,7 @@ export async function getContentData(
   if (!user)
   user = null;
   if (!(await permittedToGetContent(password, user, contentID)))
-    throw new Error(`Unauthorized ${input.password}, ${user}, ${contentID}`);
+    throw new Error(`Unauthorized ${password}, ${user}, ${contentID}`);
     
   try {
     // Find the contentData with the matching contentID.
