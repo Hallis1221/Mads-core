@@ -96,12 +96,12 @@ export default function Page() {
             <div className="text-3xl  font-semibold pt-7 tracking-no">
               {content.title}
             </div>
-            <div className="text-3xl  font-bold tracking-no">
+            <div className="text-3xl  font-bold tracking-no flex flex-row pt-0" >
               {" "}
               {content.tags.map((tag) => {
                 return (
                   <div
-                    className="text-sm text-white font-bold pt-0 tracking-no rounded-full  bg-red-500"
+                    className="text-sm text-white font-bold pt-0 h-fit ml-2 tracking-no rounded-full  bg-red-500"
                     key={tag.tag}
                   >
                     <div className="p-2">{tag.tag}</div>
