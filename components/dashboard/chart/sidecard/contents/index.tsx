@@ -42,6 +42,12 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
           };
           if (doneContents.includes(content)) return;
           doneContents.push(content);
+          doneContents.sort((a: {views: number}, b: {views: number}) => {
+            if (a.views > b.views) return -1;
+            if (a.views < b.views) return 1;
+            return 0;
+          });
+
           if (doneContents.length >= stats.length) setContents(doneContents);
         });
     });
