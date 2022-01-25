@@ -12,7 +12,7 @@ export default async function registerAdView(adID: string): Promise<void> {
   let views = await getAdViews(adID, correctPassword);
   let now = new Date(Date.now());
   let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  date.setHours(0, 0, 0, 0);
+  date.setHours(1, 0, 0, 0);
   // Try to update the views history.
   let updated = await AdDataHistory.updateOne(
     {

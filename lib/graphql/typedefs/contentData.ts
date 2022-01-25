@@ -4,7 +4,7 @@ import { gql } from "apollo-server-micro";
 
 export const contentDataTypeDefs = gql`
   type Query {
-    getContentData(contentID: String!): ContentData!
+    getContentData(contentID: String!, password: String): ContentData!
   }
 
   type Mutation {

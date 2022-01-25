@@ -141,7 +141,7 @@ export async function getStaticPaths() {
   try {
     // go trough each contentID and ensure the contentData exists, if not create it
     for (const id in contentids) {
-      await pingContentData(contentids[id].id).catch(async (e) => {
+      await pingContentData(contentids[id].id, correctPassword).catch(async (e) => {
         console.log(
           "Contentdata not found for id: " + contentids[id].id,
           ". Creating... (",

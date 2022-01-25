@@ -244,8 +244,8 @@ export async function getContentViews(
   return (
     await gqc.request(
       gql`
-        query Query($contentID: String!) {
-          getContentData(contentID: $contentID) {
+        query Query($contentID: String!, $password: String!) {
+          getContentData(contentID: $contentID, password: $password) {
             views
           }
         }
@@ -291,8 +291,8 @@ export async function getContentSkips(
   return (
     await gqc.request(
       gql`
-        query Query($contentID: String!) {
-          getContentData(contentID: $contentID) {
+        query Query($contentID: String! $password: String!) {
+          getContentData(contentID: $contentID, password: $password) {
             skips
           }
         }
@@ -312,8 +312,8 @@ export async function getContentData(
   return (
     await gqc.request(
       gql`
-        query Query($contentID: String!) {
-          getContentData(contentID: $contentID) {
+        query Query($contentID: String!, $password: String!) {
+          getContentData(contentID: $contentID, password: $password) {
             skips
             clicks
             views

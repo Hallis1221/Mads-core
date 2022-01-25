@@ -1,3 +1,4 @@
+import Icon from "awesome-react-icons";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,7 +8,8 @@ import MagicEmailSignin from "../../../../components/auth/signin";
 import DashboardMainCol from "../../../../components/dashboard";
 import InfoCard from "../../../../components/dashboard/cards/infocard";
 import ChartCard from "../../../../components/dashboard/chart/chartcard";
-import ContentsCard from "../../../../components/dashboard/chart/sidecard";
+import ChangeLogCard from "../../../../components/dashboard/chart/sidecard/changelog";
+import ContentsCard from "../../../../components/dashboard/chart/sidecard/contents";
 import SideBar from "../../../../components/dashboard/sidebar";
 import DashboardTopRow from "../../../../components/dashboard/toprow";
 import getOwner from "../../../../lib/data/owns";
@@ -89,64 +91,73 @@ export default function Page() {
     <main>
       <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
         <SideBar />
-
-        <div className="flex flex-col">
-          <div className="px-16 ">
-            <div className="flex flex-row font-poppins h-36 pt-3 ">
-              <div className="text-3xl  font-semibold pt-7 tracking-no">
-                {content.title}
-              </div>
-              <div className="text-3xl  font-bold tracking-no">
-                {" "}
-                {content.tags.map((tag) => {
-                  return (
-                    <div
-                      className="text-sm text-white font-bold pt-0 tracking-no rounded-full  bg-red-500"
-                      key={tag.tag}
-                    >
-                      <div className="p-2">{tag.tag}</div>
-                    </div>
-                  );
-                })}
-              </div>
+        <div className="px-16 ">
+          <div className="flex flex-row font-poppins h-36 pt-3 ">
+            <div className="text-3xl  font-semibold pt-7 tracking-no">
+              {content.title}
+            </div>
+            <div className="text-3xl  font-bold tracking-no">
+              {" "}
+              {content.tags.map((tag) => {
+                return (
+                  <div
+                    className="text-sm text-white font-bold pt-0 tracking-no rounded-full  bg-red-500"
+                    key={tag.tag}
+                  >
+                    <div className="p-2">{tag.tag}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
-          <div className="px-16 ">
-            <div className="w-full flex flex-row font-poppins h-fit pt-3 ">
-              <div className="p-7 tracking-no bg-[#fafafa] rounded-md flex flex-col text-center items-center">
+          <div className="flex flex-row justify-start ">
+            <DashboardMainCol
+              views={stats.views}
+              clicks={stats.clicks}
+              skips={stats.skips}
+              chartData={stats.chartData}
+              lastUpdated={lastUpdated}
+            />
+            <div className="grow ml-16">
+              <InfoCard
+                color={"#FF7976"}
+                title={"Estimated revenue"}
+                value={
+                  typeof stats.views === "string" ||
+                  typeof stats.clicks === "string"
+                    ? "N/A"
+                    : "$" +
+                      (
+                        stats.views * (1 / 1000) +
+                        stats.clicks * (25 / 1000)
+                      ).toFixed(3)
+                }
+                icon={"check-circle"}
+                starting
+              />
+
+              <div className={`h-32 w-72 mt-10 ml-0 rounded-3xl bg-white`}>
+                <div className="h-full flex flex-row justify-evenly items-center">
                 <Link href={`/content/${content.id}`} replace={false} passHref>
-                <a target="_blank">
-                  <div className="text-2xl font-semibold text-right text-[#3751FF] cursor-pointer hover:text-blue-800">
-                    View live
-                  </div>
+                  <a target="_blank">
+                    <div className="text-2xl font-semibold text-right text-[#3751FF] cursor-pointer hover:text-blue-800">
+                      View live
+                    </div>
                   </a>
                 </Link>
-                <div className="flex flex-row">
-                  <div className="text-xl font-bold pr-2">Ad space: </div>
-                  <div className="text-xl font-medium">{content.theme}</div>
-                </div>
-                <div className="flex flex-row">
-                  <div className="text-xl font-bold pr-2">Content id: </div>
-                  <div className="text-xl font-medium">{content.id}</div>
-                </div>
-                <div className="flex flex-row">
-                  <div className="text-xl font-bold pr-2">Last updated: </div>
-                  <div className="text-xl font-medium">{lastUpdated}</div>
-                </div>
-                <div className="flex flex-row">
-                  <div className="text-xl font-bold pr-2">Clicks: </div>
-                  <div className="text-xl font-medium">{stats.clicks}</div>
-                </div>
-                <div className="flex flex-row">
-                  <div className="text-xl font-bold pr-2">Skips: </div>
-                  <div className="text-xl font-medium">{stats.skips}</div>
-                </div>
-                <div className="flex flex-row">
-                  <div className="text-xl font-bold pr-2">Views: </div>
-                  <div className="text-xl font-medium">{stats.views}</div>
+              
                 </div>
               </div>
-              <div className="text-xl  font-bold tracking-no"></div>
+
+              <ChangeLogCard
+                changes={[
+                  {
+                    title: "Content created",
+                    description: "The content was created",
+                    date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1),
+                  },
+                ]}
+              />
             </div>
           </div>
         </div>

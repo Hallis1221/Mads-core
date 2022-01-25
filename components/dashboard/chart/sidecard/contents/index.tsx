@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import Loading from "react-loading";
-import { getContentWithID } from "../../../../lib/logic/requests/frontend";
+import { getContentWithID } from "../../../../../lib/logic/requests/frontend";
 import Link from "next/link";
 
 export default function ContentsCard({ stats }: { stats: any }): ReactElement {
