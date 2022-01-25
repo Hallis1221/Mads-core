@@ -32,7 +32,7 @@ export async function registerViews(
 
   let error = await rateLimiter(
     { parent, args, context, info },
-    { max: 3, window: "60s" }
+    { max: 3, window: "10000" }
   );
 
   if (error) throw new Error(error);
