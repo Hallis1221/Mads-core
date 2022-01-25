@@ -17,15 +17,13 @@ export async function permittedToGetContent(
   user: any,
   contentID: string
 ) {
-  if (user) {
-    let owner = await getOwner(contentID);
-    let userUID = (await User.findOne({ email: user.user.email }))._id;
-    return (
-      user &&
-      (await isCreator(user.user.email)) &&
-      userUID.toString() === owner.uid
-    );
-  }
+  if (password && authenticated(password)) return true;
 
-  return password && authenticated(password);
+  let owner = await getOwner(contentID);
+  let userUID = (await User.findOne({ email: user.user.email }))._id;
+  return (
+    user &&
+    (await isCreator(user.user.email)) &&
+    userUID.toString() === owner.uid
+  );
 }
