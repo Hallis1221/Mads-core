@@ -18,7 +18,7 @@ export async function permittedToGetContent(
   contentID: string
 ) {
   if (password && authenticated(password)) return true;
-
+  if (!user.user) console.log(user);
   let owner = await getOwner(contentID);
   let userUID = (await User.findOne({ email: user.user.email }))._id;
   return (
