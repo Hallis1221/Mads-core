@@ -53,9 +53,24 @@ export async function pingContentData(contentID: string, password: string) {
 }
 
 export async function getCreatorPerformance(
-  userID: string ,
-  password: string | undefined
+  userID: string | undefined = undefined,
+  password: string | undefined = undefined
 ) {
+  if (!userID || !password) {
+    console.log("Getting creator performance without userID or password");
+    return await gqc.request(
+      gql`
+        query GetUserContentPerformances($userId: ID, $password: String) {
+          getUserContentPerformances(userID: $userId, password: $password) {
+            contentID
+            clicks
+            views
+            skips
+          }
+        }
+      `
+    );
+  }
   return await gqc.request(
     gql`
       query GetUserContentPerformances($userId: ID, $password: String) {
