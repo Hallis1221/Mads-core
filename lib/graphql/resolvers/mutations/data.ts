@@ -17,7 +17,8 @@ export async function registerViews(
 ) {
   const rateLimiter = getGraphQLRateLimiter({
     identifyContext: (context) => {
-      if (context.user && context.user.user.email)
+      try {
+        if (context.user && context.user.user.email)
         return context.user.user.email;
       else if (context.req.headers["x-forwarded-for"])
         return context.req.headers["x-forwarded-for"];
@@ -28,8 +29,13 @@ export async function registerViews(
 
       console.error("Failed to identify user at rate limiter. Using cookie");
       return context.req.headers.cookie;
+      } catch (error) {
+        console.error(error, context);
+        return "";
+      }
+     
     },
-    
+    enableBatchRequestCache: true,
   });
 
   // !! Not sure if this is working.
