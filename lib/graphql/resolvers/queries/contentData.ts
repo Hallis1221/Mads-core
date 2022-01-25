@@ -1,17 +1,19 @@
-import { authenticated } from "../../../auth";
+import { authenticated, permittedToGetContent } from "../../../auth";
 import getOwner from "../../../data/owns";
 import ContentData from "../../../mongodb/models/contentData";
 
 // This is the resolver for the getContentData query. It takes in the contentID and returns the contentData with the matching contentID.
-export async function getContentData(_: any, { contentID, password }: any, { user }: any) {
-  // Check that the user is authenticated. 
-  // TODO
-  if (
-    ((password && authenticated(password) && contentID) ||
-      (user && user.uid && (await getOwner(contentID)).uid === user.uid)) ===
-    false
-  )
-    throw new Error("Unauthorized");
+export async function getContentData(
+  _: any,
+  { contentID, password, input}: any,
+  { user }: any
+) {
+  // Check that the user is authenticated.
+  if (!user)
+  user = null;
+  if (!(await permittedToGetContent(password, user, contentID)))
+    throw new Error(`Unauthorized ${input.password}, ${user}, ${contentID}`);
+    
   try {
     // Find the contentData with the matching contentID.
     const contentData = await ContentData.findOne({ contentID });
