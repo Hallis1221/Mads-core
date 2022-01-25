@@ -31,7 +31,7 @@ export async function registerViews(
       return context.req.headers.cookie;
       } catch (error) {
         console.error(error, context);
-        return "";
+        throw error;
       }
      
     },
