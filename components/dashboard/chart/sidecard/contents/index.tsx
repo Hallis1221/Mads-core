@@ -53,7 +53,7 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
     });
   }, [contents.length, stats]);
 
-  if (!contents) return <Loading />;
+  if (!contents || contents.length <= 0 || (contents.length === 1 && contents[0].contentID === "")) return <Loading />;
   return (
     <div className="flex h-full w-full flex-1 flex-row justify-start pt-10 font-mulish ">
       <div className="grow h-fit max-h-[478px] w-10 bg-white rounded-3xl text-center font-semibold text-2xl pt-3 overflow-scroll no-scrollbar">

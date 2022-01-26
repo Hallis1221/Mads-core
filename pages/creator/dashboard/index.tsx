@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 export default function Dashboard() {
   const { data: session } = useSession();
   const [lastUpdated, setLastUpdated] = useState("Fetching...");
+  const [isLoaded, setIsLoaded] = useState(false);
   const [contents, setContents] = useState([
     { views: 0, clicks: 0, skips: 0, contentID: "" },
   ]);
@@ -38,12 +39,14 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    if (!session) return;
-    if (!session.user) return;
+    if (!session?.user) return;
     getAllContent(setLastUpdated, setStats, setContents);
-  }, [session]);
+    setIsLoaded(true);
+  }, [session?.user]);
 
-  if (!session)
+  if (!isLoaded) return <ReactLoading type="spin" color="#fff" />;
+
+  if (!session?.user)
     return (
       <div className="w-screen flex flex-col justify-center items-center">
         Not signed in <br />
