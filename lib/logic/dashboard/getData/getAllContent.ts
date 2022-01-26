@@ -45,9 +45,10 @@ export default function getAllContent(
               monthlyPerformance
             );
             // Add up all the monthly data to get the total views, clicks, and skips
-            let totalViews = 0;
-            let totalClicks = 0;
-            let totalSkips = 0;
+            // Start at one to account for data innaccuracy
+            let totalViews = 1;
+            let totalClicks = 1;
+            let totalSkips = 1;
 
             monthlyPerformance.forEach((value) => {
               totalViews += value.views;
