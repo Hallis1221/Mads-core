@@ -108,7 +108,7 @@ export async function getStaticProps({ params }: any) {
       ad,
       content,
     },
-    revalidate: 3600, // half an hour, if this is to be updated so have the code that handles matching
+    revalidate: 1800, // half an hour, if this is to be updated so have the code that handles matching
   };
 }
 
@@ -141,7 +141,7 @@ export async function getStaticPaths() {
   try {
     // go trough each contentID and ensure the contentData exists, if not create it
     for (const id in contentids) {
-      await pingContentData(contentids[id].id).catch(async (e) => {
+      await pingContentData(contentids[id].id, correctPassword).catch(async (e) => {
         console.log(
           "Contentdata not found for id: " + contentids[id].id,
           ". Creating... (",
@@ -172,6 +172,7 @@ export async function getStaticPaths() {
   // We'll pre-render only these paths at build time.
   // { fallback: blocking } will server-render pages
   // on-demand if the path doesn't exist.
+  console.log(paths)
   return {
     paths,
     fallback: "blocking",

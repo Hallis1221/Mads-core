@@ -34,9 +34,7 @@ export default function ChartCard({
             </div>
           </div>
           <div className="mt-5 grow w-full h-96">
-            {chartData.length !== 0 ? (
-              <Chart chartData={chartData} />
-            ) : (
+            {(chartData.length <= 0 || !chartData) ? (
               <div className="w-full flex flex-row items-end justify-center">
                 <ReactLoading
                   type={"bubbles"}
@@ -46,6 +44,10 @@ export default function ChartCard({
                   width={"20%"}
                 />
               </div>
+            ) : 
+              
+            (
+              <Chart chartData={chartData} />
             )}
           </div>
         </div>

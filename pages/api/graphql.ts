@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { ApolloServer } from "apollo-server-micro";
-import type { NextApiRequest, NextApiResponse } from "next";
 import {
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageLocalDefault,
@@ -10,9 +9,11 @@ import resolvers from "../../lib/graphql/resolvers";
 import { typeDefinitions } from "../../lib/graphql/typedefs";
 import { connectIfReady } from "../../lib/utils/connection";
 import { getSession } from "next-auth/react";
+import {createRateLimitDirective} from "graphql-rate-limit"
+import { NextApiRequest, NextApiResponse } from "next/types";
 
 connectIfReady();
-
+const rateLimitDirective = createRateLimitDirective({ identifyContext: (ctx) => ctx.id });
 const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({
   workspaceName: "MADS api",
   settings: {

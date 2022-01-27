@@ -34,18 +34,19 @@ export async function getContentWithID(id: string) {
   ).getContent;
 }
 
-export async function pingContentData(contentID: string) {
+export async function pingContentData(contentID: string, password: string) {
   return (
     await gqc.request(
       gql`
-        query GetContentData($contentId: String!) {
-          getContentData(contentID: $contentId) {
+        query GetContentData($contentId: String!, $password: String!) {
+          getContentData(contentID: $contentId, password: $password) {
             contentID
           }
         }
       `,
       {
         contentId: contentID,
+        password: password,
       }
     )
   ).getContentData;
