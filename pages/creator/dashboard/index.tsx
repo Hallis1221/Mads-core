@@ -40,6 +40,7 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
+    console.log("Fetching data...");
     if (!session?.user) return;
     getAllContent(setLastUpdated, setStats, setContents).then(() => {
     });
@@ -72,14 +73,6 @@ export default function Dashboard() {
   let contentIDS = contents
     .map((content) => content.contentID)
     .filter((contentID) => contentID != "");
-  let contentStats = contents.map((content) => {
-    return {
-      contentID: content.contentID,
-      views: content.views,
-      clicks: content.clicks,
-      skips: content.skips,
-    };
-  });
 
   if (
     stats &&
@@ -98,6 +91,15 @@ export default function Dashboard() {
       }
     );
   }
+  console.log("Rerendering dashboard");
+  let contentStats = contents.map((content) => {
+    return {
+      contentID: content.contentID,
+      views: content.views,
+      clicks: content.clicks,
+      skips: content.skips,
+    };
+  });
   return (
     <>
       <Head>

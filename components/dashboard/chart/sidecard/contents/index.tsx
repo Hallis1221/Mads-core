@@ -10,7 +10,11 @@ import Loading from "react-loading";
 import { getContentWithID } from "../../../../../lib/logic/requests/frontend";
 import Link from "next/link";
 
-export default function ContentsCard({ stats }: { stats: any }): ReactElement {
+export default function ContentsCard({
+  stats,
+}: {
+  stats: any;
+}): ReactElement {
   let [contents, setContents] = useState([
     {
       views: 0,
@@ -23,36 +27,8 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
     },
   ]);
 
-  useEffect(() => {
-    let doneContents: any[] = [];
-    let ids = stats.map((content: { contentID: any }) => content.contentID);
-    if (contents.length === ids.length) return;
-    ids.forEach((id: string) => {
-      if (id !== "" && id !== undefined) {
-        console.log("Getting content with id: " + id);
-        getContentWithID(id).then((content: any) => {
-          let contentStats = stats.find(
-            (content: { contentID: any }) => content.contentID == id
-          );
+  getContent(stats, contents, setContents);
 
-          content = {
-            ...content,
-            views: contentStats.views,
-            clicks: contentStats.clicks,
-            skips: contentStats.skips,
-          };
-          if (doneContents.includes(content)) return;
-          doneContents.push(content);
-          doneContents.sort((a: { views: number }, b: { views: number }) => {
-            if (a.views > b.views) return -1;
-            if (a.views < b.views) return 1;
-            return 0;
-          });
-
-          if (doneContents.length >= stats.length) setContents(doneContents);
-        });}
-    });
-  }, [contents.length, stats]);
 
   if (
     !contents ||
@@ -87,8 +63,10 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
                   {content.views} times and clicked {content.clicks} times. That
                   is a click through rate of{" "}
                   {
-                  // Multiplied to ten thousand to make Math.round() not shave off the two digits after the decimal. Then divide by one hundred thousand to get the actual percentage.
-                  Math.round((content.clicks / content.views) * 10000) / 100}%.{" "}
+                    // Multiplied to ten thousand to make Math.round() not shave off the two digits after the decimal. Then divide by one hundred thousand to get the actual percentage.
+                    Math.round((content.clicks / content.views) * 10000) / 100
+                  }
+                  %.{" "}
                   {content.clicks / content.views > 0.5
                     ? "Amazing!!!!"
                     : content.clicks / content.views > 0.2
@@ -105,4 +83,47 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
       </div>
     </div>
   );
+}
+
+
+async function getContent (stats: { contentID: any; }[], contents: string | any[], setContents: (arg0: any[]) => void) {
+  let order = 0;
+
+  let doneContents: any[] = [];
+  let ids = stats.map((content: { contentID: any }) => content.contentID);
+  console.log(ids);
+  if (contents.length < ids.length)
+    for (let i = 0; i < ids.length; i++) {
+      let id = ids[i];
+      if (id !== "" && id !== undefined) {
+        console.log("[", order, "] ", "Getting content with id: " + id);
+        order++;
+        let content = await getContentWithID(id);
+        console.log("[", order, "] ", "Got content with id: " + id);
+        order++;
+
+        let contentStats: any = stats.find(
+          (content: { contentID: any }) => content.contentID == id
+        );
+
+        content = {
+          ...content,
+          views: contentStats.views,
+          clicks: contentStats.clicks,
+          skips: contentStats.skips,
+        };
+
+        if (!doneContents.includes(content)) {
+          doneContents.push(content);
+
+          doneContents.sort((a: { views: number }, b: { views: number }) => {
+            if (a.views > b.views) return -1;
+            if (a.views < b.views) return 1;
+            return 0;
+          });
+
+          if (doneContents.length >= stats.length) setContents(doneContents);
+        }
+      }
+    }
 }

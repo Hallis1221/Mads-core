@@ -16,12 +16,24 @@ export default async function getAllContent(
   }) => void,
   setContents: (arg0: any) => void
 ) {
-  await getCreatorPerformance().then((res) => {
+  await getCreatorPerformance().then(async (res) => {
     let creatorPerformance = res.getUserContentPerformances;
-    if (!creatorPerformance) return;
+    if (!creatorPerformance) {
+      console.log("Returning as creatorPerformance is undefined");
+      return;
+    }
 
     let monthlyPerformance: Map<string, any> = new Map<string, any>();
     let oldMonthlyPerformance: Map<string, any> = new Map<string, any>();
+
+    let lastUpdated = "";
+    let stats = {
+      views: 0,
+      clicks: 0,
+      skips: 0,
+      chartData: Array<any>(),
+    };
+
     let contents: {
       views: number;
       clicks: number;
@@ -29,103 +41,85 @@ export default async function getAllContent(
       contentID: string;
     }[] = [];
 
-    creatorPerformance.forEach(
-      (content: {
-        views: number;
-        clicks: number;
-        skips: number;
-        contentID: string;
-      }) => {
-        setStats({
-          views: content.views,
-          clicks: content.clicks,
-          skips: content.skips,
-          chartData: [],
-        })
-        contents.push(content);
-        getContentDataHistory(content.contentID, undefined).then(
-          (contentDataHistory) => {
-            monthlyPerformance = getHistory(
-              contentDataHistory,
-              content,
-              monthlyPerformance
-            );
-            // Add up all the monthly data to get the total views, clicks, and skips
-            // Start at one for each content to account for data innaccuracy.
-            // TODO fix data innaccuracy in the backend
-            let totalViews = contents.length;
-            let totalClicks = contents.length;
-            let totalSkips = contents.length;
+    for (let i = 0; i < creatorPerformance.length; i++) {
+      let content = creatorPerformance[i];
+      contents.push(content);
+      console.log(content.contentID);
 
-            monthlyPerformance.forEach((value) => {
-              totalViews += value.views;
-              totalClicks += value.clicks;
-              totalSkips += value.skips;
-              setStats({
-                views: totalViews,
-                clicks: totalClicks,
-                skips: totalSkips,
-                chartData: createChartData(
-                  monthlyPerformance,
-                  oldMonthlyPerformance
-                ),
-              });
-            });
+      let contentDataHistory = await getContentDataHistory(
+        content.contentID,
+        undefined
+      );
 
-            let chartData = createChartData(
-              monthlyPerformance,
-              oldMonthlyPerformance
-            );
+      monthlyPerformance = await getHistory(
+        contentDataHistory,
+        content,
+        monthlyPerformance
+      );
 
-            let lastUpdated = new Date().toLocaleString();
-            setLastUpdated(lastUpdated);
+      let totalViews = 0;
+      let totalClicks = 0;
+      let totalSkips = 0;
 
-            setContents(contents);
-            // setStats
-            setStats({
-              views: totalViews,
-              clicks: totalClicks,
-              skips: totalSkips,
-              chartData,
-            });
-          }
-        );
-        /*
-        getOldContentDataHistory(content.contentID, undefined).then(
-          (contentDataHistory) => {
-            oldMonthlyPerformance = getHistory(
-              contentDataHistory,
-              content,
-              oldMonthlyPerformance
-            );
+      monthlyPerformance.forEach((value) => {
+        totalViews += value.views;
+        totalClicks += value.clicks;
+        totalSkips += value.skips;
+      });
 
-            // Add up all the monthly data to get the total views, clicks, and skips
-            let totalViews = 0;
-            let totalClicks = 0;
-            let totalSkips = 0;
+      let chartData = createChartData(
+        monthlyPerformance,
+        oldMonthlyPerformance
+      );
 
-            monthlyPerformance.forEach((value) => {
-              totalViews += value.views;
-              totalClicks += value.clicks;
-              totalSkips += value.skips;
-            });
+      lastUpdated = new Date().toLocaleString();
 
-            let chartData = createChartData(
-              monthlyPerformance,
-              oldMonthlyPerformance
-            );
+      setContents(contents);
+      // setStats
+      stats = {
+        views: totalViews,
+        clicks: totalClicks,
+        skips: totalSkips,
+        chartData,
+      };
 
-            // setStats
-            setStats({
-              views: totalViews,
-              clicks: totalClicks,
-              skips: totalSkips,
-              chartData,
-            });
-          }
-        );*/
-      }
-    );
+      /*
+      getOldContentDataHistory(content.contentID, undefined).then(
+        (contentDataHistory) => {
+          oldMonthlyPerformance = getHistory(
+            contentDataHistory,
+            content,
+            oldMonthlyPerformance
+          );
+
+          // Add up all the monthly data to get the total views, clicks, and skips
+          let totalViews = 0;
+          let totalClicks = 0;
+          let totalSkips = 0;
+
+          monthlyPerformance.forEach((value) => {
+            totalViews += value.views;
+            totalClicks += value.clicks;
+            totalSkips += value.skips;
+          });
+
+          let chartData = createChartData(
+            monthlyPerformance,
+            oldMonthlyPerformance
+          );
+
+          // setStats
+          setStats({
+            views: totalViews,
+            clicks: totalClicks,
+            skips: totalSkips,
+            chartData,
+          });
+        }
+      );*/
+    }
+    console.log("Got all content");
+    setLastUpdated(lastUpdated);
+    setStats(stats);
   });
-  console.log("getAllContent");
 }
