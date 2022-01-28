@@ -15,10 +15,10 @@ import Head from "next/head";
 export default function Dashboard() {
   const { data: session } = useSession();
   const [lastUpdated, setLastUpdated] = useState("Fetching...");
-  const [isLoaded, setIsLoaded] = useState(true);
   const [contents, setContents] = useState([
     { views: 0, clicks: 0, skips: 0, contentID: "" },
   ]);
+
   const [stats, setStats] = useState({
     views: "N/A" || 0,
     clicks: "N/A" || 0,
@@ -41,30 +41,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     console.log("Fetching data...");
+    toast.dismiss()
+    toast.loading("Started fetching data... This could take up to 30 seconds.", );
     if (session && session.user)
       getAllContent(setLastUpdated, setStats, setContents);
   }, [session]);
-
-  if (!isLoaded)
-    return (
-      <>
-        <div className="">
-          <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
-            <SideBar />
-            <div className="px-16 h-full w-full flex flex-col justify-center ">
-              <div className="flex flex-row w-full justify-center">
-                <ReactLoading
-                  type="spin"
-                  color="black"
-                  height={250}
-                  width={250}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </>
-    );
 
   if (!session?.user)
     return (
@@ -96,6 +77,7 @@ export default function Dashboard() {
     );
   }
   console.log("Rerendering dashboard");
+  if(stats.chartData && stats) toast.dismiss()
   return (
     <>
       <Head>
