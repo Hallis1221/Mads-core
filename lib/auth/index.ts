@@ -27,3 +27,16 @@ export async function permittedToGetContent(
     userUID.toString() === owner.uid
   );
 }
+
+export async function permittedToWriteContent(
+  password: string,
+  user: any,
+) {
+  if (password && authenticated(password)) return true;
+  if (!user.user) console.log(user);
+  let userUID = (await User.findOne({ email: user.user.email }))._id;
+  return (
+    user &&
+    (await isCreator(user.user.email))
+  );
+}
