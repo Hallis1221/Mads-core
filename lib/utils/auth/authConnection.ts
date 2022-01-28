@@ -10,6 +10,7 @@ const uri = process.env.MONGO_DATABASE_URL
 const options = {
   useUnifiedTopology: true,
   useNewUrlParser: true,
+  poolSize: 2,
 }
 
 let client
@@ -24,7 +25,9 @@ if (process.env.NODE_ENV === "development") {
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
   if (!global._mongoClientPromise) {
     client = new MongoClient(uri , options as any)
-    global._mongoClientPromise = client.connect()
+    global._mongoClientPromise = client.connect(
+     
+    )
   }
   clientPromise = global._mongoClientPromise
 } else {
