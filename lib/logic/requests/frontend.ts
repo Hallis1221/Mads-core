@@ -220,3 +220,26 @@ export async function isCreator(email: string) {
     )
   ).isCreator;
 }
+
+export async function createUserContent(
+  title: string,
+  link: string,
+  tags: string[]
+) {
+  return await gqc.request(
+    gql`
+      mutation Mutation($input: UserContentInput) {
+        userCreateContent(input: $input,) {
+          content
+        }
+      }
+    `,
+    {
+      input: {
+        title: title,
+        link: link,
+        tags: tags,
+      },
+    }
+  );
+}
