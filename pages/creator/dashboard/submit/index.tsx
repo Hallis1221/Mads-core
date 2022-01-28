@@ -14,10 +14,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 export default function SubmissionPage({}) {
   // Get authentication session
   const { data: session } = useSession();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!session?.user) return <div>Not signed in</div>;
-  //  console.log(createUserContent("test", "test", ["tags"]));
   return (
     <>
       <Head>
@@ -66,6 +64,7 @@ function ContentSubmissionForm({}): React.ReactElement {
     link: Yup.string()
       .url("Link is not valid a valid URL")
       .required("Link is required"),
+    tags: Yup.string().required("Tags are required"),
   });
 
   const initialValues = {
@@ -128,12 +127,16 @@ function ContentSubmissionForm({}): React.ReactElement {
           <ErrorMessage name="link" component="div" />
           <div className="text-xl  font-bold tracking-no">Tags</div>
           <div className="flex flex-row">
-            <Field
+         <div className="flex flex-col">
+         <Field
               className="w-full h-12 p-2 border-2 border-gray-400 rounded-lg"
               type="text"
               name="tags"
               placeholder="Tags"
             />
+          <ErrorMessage name="tags" component="div" />
+         </div>
+
             <div className="w-full h-12 p-2 border-2 border-gray-400 rounded-lg">
               <button
                 className="w-full h-12 p-2 border-2 border-gray-400 rounded-lg"
