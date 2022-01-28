@@ -42,7 +42,7 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
           };
           if (doneContents.includes(content)) return;
           doneContents.push(content);
-          doneContents.sort((a: {views: number}, b: {views: number}) => {
+          doneContents.sort((a: { views: number }, b: { views: number }) => {
             if (a.views > b.views) return -1;
             if (a.views < b.views) return 1;
             return 0;
@@ -53,7 +53,12 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
     });
   }, [contents.length, stats]);
 
-  if (!contents || contents.length <= 0 || (contents.length === 1 && contents[0].contentID === "")) return <Loading />;
+  if (
+    !contents ||
+    contents.length <= 0 ||
+    (contents.length === 1 && contents[0].contentID === "")
+  )
+    return <Loading />;
   return (
     <div className="flex h-full w-full flex-1 flex-row justify-start pt-10 font-mulish ">
       <div className="grow h-fit max-h-[478px] w-10 bg-white rounded-3xl text-center font-semibold text-2xl pt-3 overflow-scroll no-scrollbar">
@@ -71,23 +76,25 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
                     {content.title}
                   </div>
                   <Link href={`dashboard/content/${content.id}`} passHref>
-                  <div className="text-sm font-semibold text-right text-[#3751FF] cursor-pointer hover:text-blue-800">
-                    Read more
-                  </div>
+                    <div className="text-sm font-semibold text-right text-[#3751FF] cursor-pointer hover:text-blue-800">
+                      Read more
+                    </div>
                   </Link>
                 </div>
                 <div className="text-sm font-light text-left text-[#9FA2B4] text-opacity-50 italic pt-2 pb-5">
                   Your {content.tags[0].tag} content has been viewed{" "}
-                  {content.views} and clicked {content.clicks} times. That is a
-                  click through rate of {(content.clicks / content.views) *100}%. {
-                    ((content.clicks / content.views) > 0.5)
-                      ? "Amazing!!!!"
-                      : ((content.clicks / content.views) > 0.2)
-                      ? "Good job!"
-                      : ((content.clicks / content.views) > 0.1)
-                      ? "Not bad!"
-                      : "You will get there!"
-                  }
+                  {content.views} times and clicked {content.clicks} times. That
+                  is a click through rate of{" "}
+                  {
+                  // Multiplied to ten thousand to make Math.round() not shave off the two digits after the decimal. Then divide by one hundred thousand to get the actual percentage.
+                  Math.round((content.clicks / content.views) * 10000) / 100}%.{" "}
+                  {content.clicks / content.views > 0.5
+                    ? "Amazing!!!!"
+                    : content.clicks / content.views > 0.2
+                    ? "Good job!"
+                    : content.clicks / content.views > 0.1
+                    ? "Not bad!"
+                    : "You will get there!"}
                 </div>
                 <div className="relative w-full h-[2px] rounded-full bg-gray-200 " />
               </div>
