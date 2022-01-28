@@ -34,18 +34,19 @@ export default async function findAd(_: any, { input }: any) {
   if (1 > potentialAds.length) return potentialAds[0];
   // Sort the list of potential ads by their relevance, according to their tags and their tag priorities
   let winner: { score: number; ad: Ad } = { score: 0, ad: potentialAds[0] };
+
   // iterate through all the potential ads
   for (let ad of potentialAds) {
      // initialize a score for the current ad
      let adrelevance = 0;
-
+    let lowerCaseInputTags = input.tags.map((tag: any) => tag.toLowerCase());
      // iterate through all the tags of the current ad
      ad.tags.forEach((tag: any) => {
        // if the tag is in the input tags, add its priority to the ad relevance
-       if (input.tags.includes(tag.tag)) {
+       if (lowerCaseInputTags.includes(tag.tag.toLowerCase())) 
          // add the tag priority to the ad relevance
          adrelevance += tag.priority;
-       }
+       
      });
  
      // Create a random number between 0 and 5 and add it to the ad relevance. This will make the ad more random and ensure that the ad is not always the same on the same content.
