@@ -12,7 +12,7 @@ export async function getContent(_: any, { id }: any) {
     // If the content doesn't exist, throw an error.
     if (!content) {
       console.log("content not found with id: " + id);
-      return null;
+      throw new Error("Content not found");
     }
 
     // Return the content.
@@ -25,18 +25,14 @@ export async function getContent(_: any, { id }: any) {
 // This is the resolver for the getContents query. It takes in the input (for the password) and returns all contents.
 export async function getContents(_: any, { input }: any) {
   // Check that the password is correct.
-  if (!authenticated(input["password"])) return null;
-  try {
+  if (!authenticated(input["password"]))   throw new Error("Unauthorized");
+
     input["password"] = undefined;
     // Find all contents.
     const contents = await Content.find({});
     // Return all contents.
     return contents;
-  } catch (error) {
-    // In case of an error, log the error and return null.
-    console.error(error);
-    return null;
-  }
+
 }
 
 // This is the resolver for the getUserContent query. It takes in the user or userID and returns all the contents linked to the user.
@@ -46,11 +42,12 @@ export async function getUserContent(
   { req, user }: any
 ) {
   // Check that the user is authenticated.
-  if ((!authenticated(password) || !userID) && !user) return null;
-  try {
+  if ((!authenticated(password) || !userID) && !user)   throw new Error("Unauthorized");
+
+
     password = undefined;
     // Find the user.
-    let userId = userID || user.id;
+    userId = userID || user.id;
     if (!userId) throw new Error("User not found");
     // TODO get user and check if they are a creator
     const creator = await User.find({ _id: userId }).catch((err) => {
@@ -69,9 +66,5 @@ export async function getUserContent(
     });
     // Return all the contents linked to the user.
     return contents;
-  } catch (error) {
-    // In case of an error, log the error and return null.
-    console.error(error);
-    return null;
-  }
+
 }

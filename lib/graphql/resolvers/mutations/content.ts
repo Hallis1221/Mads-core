@@ -7,9 +7,8 @@ import User from "../../../mongodb/models/user";
 // This is the resolver for the createContent mutation. It takes in the input and creates a new content with the input as the data.
 export async function createContent(_: any, { input }: any) {
   // Check that the password is correct.
-  if (!authenticated(input["password"])) return null;
+  if (!authenticated(input["password"]))   throw new Error("Unauthorized");
 
-  try {
     input["password"] = undefined;
     // Create the content.
     const content = new Content(input);
@@ -17,11 +16,7 @@ export async function createContent(_: any, { input }: any) {
     const newContent = await content.save();
     // Return the content.
     return newContent;
-  } catch (error) {
-    // In case of an error, log the error and return null.
-    console.error(error);
-    return null;
-  }
+
 }
 
 // This is the resovler for the createUserContent mutation. It takes in fewer inputs than the createContent mutation, but allows for a user to be passed instead of a password.
@@ -95,9 +90,8 @@ export async function userCreateContent(
 // This is the resolver for the updateContent mutation. It takes in the id and the input and updates the content with the matching id with the input as the data.
 export async function updateContent(_: any, { id, input }: any) {
   // Check that the password is correct.
-  if (!authenticated(input["password"])) return null;
+  if (!authenticated(input["password"]))   throw new Error("Unauthorized");
 
-  try {
     input["password"] = undefined;
     // Find the content with the matching id and update it with the input.
     let content = await Content.findByIdAndUpdate(
@@ -109,17 +103,13 @@ export async function updateContent(_: any, { id, input }: any) {
     if (!content) throw new Error("Content not found");
     // Return the content.
     return content;
-  } catch (error) {
-    // In case of an error, log the error and return null.
-    console.error(error);
-    return null;
-  }
+
 }
 
 // This is the resolver for the deleteContent mutation. It takes in the id and the input (for the password) and deletes the content with the matching id.
 export async function deleteContent(_: any, { id, input }: any) {
   // Check that the password is correct.
-  if (!authenticated(input["password"])) return null;
+  if (!authenticated(input["password"]))   throw new Error("Unauthorized");
 
   try {
     input["password"] = undefined;

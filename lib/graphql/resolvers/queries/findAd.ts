@@ -13,7 +13,7 @@ import { Ad } from "../../../types/ad";
 
 export default async function findAd(_: any, { input }: any) {
   // Check if the password is correct
-  if (!authenticated(input["password"])) return null;
+  if (!authenticated(input["password"]))   throw new Error("Unauthorized");
 
   // Get all ads
   const allAds: Array<any> = await getAds(input["password"]);
