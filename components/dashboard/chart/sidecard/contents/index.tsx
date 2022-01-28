@@ -25,7 +25,9 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
     },
   ]);
 
-  console.log("Getting contents...");
+  useEffect(() => {
+    hasRendered = false;
+  }, []);
   getContent(stats, contents, setContents);
 
   if (
