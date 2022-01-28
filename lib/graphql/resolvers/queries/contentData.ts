@@ -1,19 +1,19 @@
 import { authenticated, permittedToGetContent } from "../../../auth";
 import getOwner from "../../../data/owns";
+import { cleanDB } from "../../../logic/clean/cleanOldContentData";
 import ContentData from "../../../mongodb/models/contentData";
 
 // This is the resolver for the getContentData query. It takes in the contentID and returns the contentData with the matching contentID.
 export async function getContentData(
   _: any,
-  { contentID, password, input}: any,
+  { contentID, password, input }: any,
   { user }: any
 ) {
   // Check that the user is authenticated.
-  if (!user)
-  user = null;
+  if (!user) user = null;
   if (!(await permittedToGetContent(password, user, contentID)))
     throw new Error(`Unauthorized ${password}, ${user}, ${contentID}`);
-    
+  // cleanDB()
   try {
     // Find the contentData with the matching contentID.
     const contentData = await ContentData.findOne({ contentID });
