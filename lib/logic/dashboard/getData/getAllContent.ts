@@ -5,6 +5,7 @@ import {
 import { getCreatorPerformance } from "../../requests/frontend";
 import getHistory from "../getHistory";
 import createChartData from "../createChartData";
+import toast from "react-hot-toast";
 
 export default async function getAllContent(
   setLastUpdated: (arg0: string) => void,
@@ -121,5 +122,8 @@ export default async function getAllContent(
     console.log("Got all content");
     setLastUpdated(lastUpdated);
     setStats(stats);
+  }).catch((err) => {
+    toast.error("Error getting creator performance, try to refresh the page");
+    console.log(err);
   });
 }
