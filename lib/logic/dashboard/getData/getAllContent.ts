@@ -57,9 +57,9 @@ export default async function getAllContent(
         monthlyPerformance
       );
 
-      let totalViews = 0;
-      let totalClicks = 0;
-      let totalSkips = 0;
+      let totalViews = contents.length;
+      let totalClicks = contents.length;
+      let totalSkips = contents.length;
 
       monthlyPerformance.forEach((value) => {
         totalViews += value.views;

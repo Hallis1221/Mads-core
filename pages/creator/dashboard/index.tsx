@@ -41,10 +41,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     console.log("Fetching data...");
-    if (!session?.user) return;
-    getAllContent(setLastUpdated, setStats, setContents).then(() => {
-    });
-  }, [session?.user]);
+    if (session && session.user) 
+    getAllContent(setLastUpdated, setStats, setContents);
+  }, [session]);
 
   if (!isLoaded)
     return (
