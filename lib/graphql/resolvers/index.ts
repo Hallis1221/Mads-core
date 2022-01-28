@@ -10,6 +10,7 @@ import {
   createContent,
   deleteContent,
   updateContent,
+  userCreateContent,
 } from "./mutations/content";
 import { getContent, getContents, getUserContent } from "./queries/content";
 import { getContentData } from "./queries/contentData";
@@ -57,6 +58,7 @@ const resolvers = {
     deleteContent,
     updateContent,
     createContentData,
+    userCreateContent,
     deleteContentData,
     updateContentData,
     registerViews,
