@@ -1,4 +1,4 @@
-import { authenticated, permittedToGetContent } from "../../../auth";
+import { permittedToGetContent } from "../../../auth";
 import getOwner from "../../../data/owns";
 import { cleanDB } from "../../../logic/clean/cleanOldContentData";
 import ContentData from "../../../mongodb/models/contentData";
@@ -6,7 +6,7 @@ import ContentData from "../../../mongodb/models/contentData";
 // This is the resolver for the getContentData query. It takes in the contentID and returns the contentData with the matching contentID.
 export async function getContentData(
   _: any,
-  { contentID, password, input }: any,
+  { contentID, password }: any,
   { user }: any
 ) {
   // Check that the user is authenticated.

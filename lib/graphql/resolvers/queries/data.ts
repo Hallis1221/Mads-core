@@ -6,7 +6,6 @@ import {
   correctPassword,
   permittedToGetContent,
 } from "../../../auth";
-import getOwner from "../../../data/owns";
 import {
   getContentData,
   getUserContentID,

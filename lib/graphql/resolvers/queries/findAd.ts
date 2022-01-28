@@ -6,7 +6,7 @@ import {
   getAds,
   getAdViews,
 } from "../../../logic/requests/backend";
-import createIntervaledTime, {
+import  {
   createIntervaledTimePair,
 } from "../../../time/interval";
 import { Ad } from "../../../types/ad";
