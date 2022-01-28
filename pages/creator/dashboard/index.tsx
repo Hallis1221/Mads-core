@@ -77,7 +77,7 @@ export default function Dashboard() {
     );
   }
   console.log("Rerendering dashboard");
-  if(stats.chartData && stats && stats.views != "N/A" && ) toast.dismiss()
+  if(stats.chartData && stats && stats.views != "N/A" ) toast.dismiss()
   return (
     <>
       <Head>
