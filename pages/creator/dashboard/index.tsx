@@ -15,7 +15,7 @@ import Head from "next/head";
 export default function Dashboard() {
   const { data: session } = useSession();
   const [lastUpdated, setLastUpdated] = useState("Fetching...");
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const [contents, setContents] = useState([
     { views: 0, clicks: 0, skips: 0, contentID: "" },
   ]);
@@ -42,7 +42,6 @@ export default function Dashboard() {
   useEffect(() => {
     if (!session?.user) return;
     getAllContent(setLastUpdated, setStats, setContents).then(() => {
-      setIsLoaded(true);
     });
   }, [session?.user]);
 

@@ -36,6 +36,12 @@ export default async function getAllContent(
         skips: number;
         contentID: string;
       }) => {
+        setStats({
+          views: content.views,
+          clicks: content.clicks,
+          skips: content.skips,
+          chartData: [],
+        })
         contents.push(content);
         getContentDataHistory(content.contentID, undefined).then(
           (contentDataHistory) => {
@@ -45,7 +51,7 @@ export default async function getAllContent(
               monthlyPerformance
             );
             // Add up all the monthly data to get the total views, clicks, and skips
-            // Start at one for each content to account for data innaccuracy. 
+            // Start at one for each content to account for data innaccuracy.
             // TODO fix data innaccuracy in the backend
             let totalViews = contents.length;
             let totalClicks = contents.length;
@@ -55,24 +61,20 @@ export default async function getAllContent(
               totalViews += value.views;
               totalClicks += value.clicks;
               totalSkips += value.skips;
+              setStats({
+                views: totalViews,
+                clicks: totalClicks,
+                skips: totalSkips,
+                chartData: createChartData(
+                  monthlyPerformance,
+                  oldMonthlyPerformance
+                ),
+              });
             });
-
-            let chartData = createChartData(
-              monthlyPerformance,
-              oldMonthlyPerformance
-            );
 
             let lastUpdated = new Date().toLocaleString();
             setLastUpdated(lastUpdated);
-
             setContents(contents);
-            // setStats
-            setStats({
-              views: totalViews,
-              clicks: totalClicks,
-              skips: totalSkips,
-              chartData,
-            });
           }
         );
         /*
