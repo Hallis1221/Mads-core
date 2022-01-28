@@ -9,7 +9,9 @@ const { MONGO_DATABASE_URL } = process.env;
 const connectDB = async () =>
   // connect to mongoose using the url from .env.local
   await mongoose
-    .connect(MONGO_DATABASE_URL as string)
+    .connect(MONGO_DATABASE_URL as string, {
+      maxPoolSize: 10,
+    })
     // catch any errors and log them
     .catch((err: any) => console.log(err));
 console.log("Mongoose Connection Established");
