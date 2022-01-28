@@ -44,8 +44,7 @@ export async function userCreateContent(
   },
   { user }: any
 ) {
-  cleanDB()
-  console.log(user);
+  // cleanDB()
   // Check that the user is authenticated.
   if (!permittedToWriteContent("", user)) throw new Error("Unauthorized");
 
