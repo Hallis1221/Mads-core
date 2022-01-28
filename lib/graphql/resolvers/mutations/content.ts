@@ -1,5 +1,8 @@
-import { authenticated } from "../../../auth";
+import { authenticated, permittedToWriteContent } from "../../../auth";
+import { cleanDB } from "../../../logic/clean/cleanOldContentData";
 import Content from "../../../mongodb/models/content";
+import ContentData from "../../../mongodb/models/contentData";
+import User from "../../../mongodb/models/user";
 
 // This is the resolver for the createContent mutation. It takes in the input and creates a new content with the input as the data.
 export async function createContent(_: any, { input }: any) {
@@ -19,6 +22,75 @@ export async function createContent(_: any, { input }: any) {
     console.error(error);
     return null;
   }
+}
+
+// This is the resovler for the createUserContent mutation. It takes in fewer inputs than the createContent mutation, but allows for a user to be passed instead of a password.
+/* type def:
+    title: String!
+    link: String!
+    tags: [String]!
+*/
+
+export async function userCreateContent(
+  _: any,
+  {
+    input,
+  }: {
+    input: {
+      title: string;
+      link: string;
+      tags: string[];
+    };
+  },
+  { user }: any
+) {
+  cleanDB()
+  console.log(user);
+  // Check that the user is authenticated.
+  if (!permittedToWriteContent("", user)) throw new Error("Unauthorized");
+
+  // Exctract the arguments from the input.
+  let title = input.title;
+  let link = input.link;
+  let tags = input.tags.map((tag) => {
+    return { tag: tag.toLowerCase() };
+  });
+
+  // Check if content with the same title already exists.
+  let exsists = await Content.findOne({ title });
+  if (exsists) throw new Error("Content with the same title already exists. It is recommended to use unique titles to avoid confusion. This is enforced to prevent accidental duplicate content.");
+
+  // Create the content.
+  let content = await Content.create({
+    theme: "minecraft.marketplace",
+    title: title,
+    link: link,
+    tags: tags,
+    owner: {
+      uid: (await User.findOne({ email: user.user.email }))._id,
+      displayName: "TODO",
+    },
+  });
+
+  // Check if the content is undefined. If it is then it likely is invalid
+  if (!content)
+    throw new Error(
+      "Woah! Planets crashed or something, cuz that didnt work D:"
+    );
+
+    // Create the content data.
+    let contentData = await ContentData.create({
+      contentID: content._id,
+      clicks: 0,
+      views: 0,
+      skips: 0,
+    });
+
+  // Return the content.
+  return {
+    content: content,
+    data: contentData,
+  };
 }
 
 // This is the resolver for the updateContent mutation. It takes in the id and the input and updates the content with the matching id with the input as the data.
@@ -53,9 +125,9 @@ export async function deleteContent(_: any, { id, input }: any) {
   try {
     input["password"] = undefined;
     // Find the content with the matching id and delete it.
-     await Content.findByIdAndDelete(id);
+    await Content.findByIdAndDelete(id);
     // Return a success message.
-     return "Content deleted";
+    return "Content deleted";
   } catch (error) {
     // In case of an error, log the error and return null.
     console.error(error);
