@@ -9,6 +9,7 @@ import ReactLoading from "react-loading";
 import getAllContent from "../../../lib/logic/dashboard/getData/getAllContent";
 import ContentsCard from "../../../components/dashboard/chart/sidecard/contents";
 import toast from "react-hot-toast";
+import Head from "next/head";
 
 // TODO move everything to mads core
 export default function Dashboard() {
@@ -85,6 +86,9 @@ export default function Dashboard() {
   }
   return (
     <>
+      <Head>
+        <title>Mads Dashboard | {session.user.name}</title>
+      </Head>
       <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
         <SideBar />
         <div className="px-16 ">

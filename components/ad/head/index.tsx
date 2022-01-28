@@ -4,6 +4,7 @@ import { ReactElement } from "react";
 export default function Header({ title = "", description = "", image = undefined }: any): ReactElement {
     return (
         <Head>
+            <title>{title}</title>
             <meta property="og:title" content={title} />
             <meta property="og:type" content="website" />
             <meta property="og:url" content="https://marketads.me" />

@@ -67,14 +67,14 @@ export async function userCreateContent(
     tags: tags,
     owner: {
       uid: (await User.findOne({ email: user.user.email }))._id,
-      displayName: "TODO",
+      displayName: user.user.name ? user.user.name : "TODO",
     },
   });
 
   // Check if the content is undefined. If it is then it likely is invalid
   if (!content)
     throw new Error(
-      "Woah! Planets crashed or something, cuz that didnt work D:"
+      "Woah! Planets crashed or something, cuz that didnt work D:. The content was not found after creating it, as such the content was likely not created. Please try again."
     );
 
     // Create the content data.

@@ -1,12 +1,11 @@
 import { NextPage } from "next/types";
 import React from "react";
-import {
-  registerForCreatorWaitlist,
-} from "../../lib/logic/requests/frontend";
+import { registerForCreatorWaitlist } from "../../lib/logic/requests/frontend";
 import toast from "react-hot-toast";
 import NavBar from "../../components/navigation/navbar";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import Head from "next/head";
 
 // Waitlist page that has a form where users can enter their email address
 const CreatorWaitlist: NextPage = () => {
@@ -16,6 +15,9 @@ const CreatorWaitlist: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Mads Creator Waitlist</title>
+      </Head>
       <NavBar />
       <div className="w-screen h-full flex flex-col justify-center items-center pt-24">
         <div className="flex justify-between ">
@@ -44,26 +46,26 @@ const CreatorWaitlist: NextPage = () => {
                     <div className="flex-1 w-0 p-4">
                       <div className="flex items-start">
                         <div className="ml-3 flex-1">
-                
                           <p className="mt-1 text-sm text-gray-500">
-                            You need to be signed in with a valid email to register for the waitlist.
+                            You need to be signed in with a valid email to
+                            register for the waitlist.
                           </p>
                         </div>
                       </div>
                     </div>
                     <Link href="/account" passHref>
-                    <div className="flex border-l border-gray-200">
-                      <button
-                        onClick={() => toast.dismiss()}
-                        className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      >
-                        Register
-                      </button>
-                    </div>
+                      <div className="flex border-l border-gray-200">
+                        <button
+                          onClick={() => toast.dismiss()}
+                          className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        >
+                          Register
+                        </button>
+                      </div>
                     </Link>
                   </div>
                 ));
-                setIsSubmitting(false);
+              setIsSubmitting(false);
             }}
             type="submit"
             disabled={isSubmitting}

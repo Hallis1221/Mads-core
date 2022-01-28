@@ -1,4 +1,5 @@
 import { useSession , signOut, getProviders } from "next-auth/react";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import MagicEmailSignin from "../components/auth/signin";
 import NavBar from "../components/navigation/navbar";
@@ -18,6 +19,10 @@ export default function AccountPage({ }: any) {
   if (session) {
     return (
       <>
+      <Head>
+        <title>Mads Account</title>
+      <link rel="icon" href="/favicon.ico" />
+      </Head>
         <NavBar />
         <div className="w-screen h-full flex flex-col justify-center items-center mt-64">
           Signed in as {session.user?.email} <br />
@@ -29,6 +34,10 @@ export default function AccountPage({ }: any) {
   }
   return (
     <>
+    <Head>
+      <title>Mads Account</title>
+      <link rel="icon" href="/favicon.ico" />
+    </Head>
       <NavBar />
       <div className="w-screen flex flex-col justify-center items-center pt-24">
         Not signed in <br />

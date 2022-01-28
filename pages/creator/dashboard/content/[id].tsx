@@ -1,5 +1,6 @@
 import Icon from "awesome-react-icons";
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -88,7 +89,11 @@ export default function Page() {
       </div>
     );
   return (
-    <main>
+<>
+<Head>
+  <title>Mads {content.title} dashboard </title>
+</Head>
+<main>
       <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
         <SideBar />
         <div className="px-16 ">
@@ -162,6 +167,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-    </main>
+    </main></>
   );
 }
