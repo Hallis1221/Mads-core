@@ -72,9 +72,22 @@ export default async function getAllContent(
               });
             });
 
+            let chartData = createChartData(
+              monthlyPerformance,
+              oldMonthlyPerformance
+            );
+
             let lastUpdated = new Date().toLocaleString();
             setLastUpdated(lastUpdated);
+
             setContents(contents);
+            // setStats
+            setStats({
+              views: totalViews,
+              clicks: totalClicks,
+              skips: totalSkips,
+              chartData,
+            });
           }
         );
         /*

@@ -28,7 +28,8 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
     let ids = stats.map((content: { contentID: any }) => content.contentID);
     if (contents.length === ids.length) return;
     ids.forEach((id: string) => {
-      if (id != "")
+      if (id !== "" && id !== undefined) {
+        console.log("Getting content with id: " + id);
         getContentWithID(id).then((content: any) => {
           let contentStats = stats.find(
             (content: { contentID: any }) => content.contentID == id
@@ -49,7 +50,7 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
           });
 
           if (doneContents.length >= stats.length) setContents(doneContents);
-        });
+        });}
     });
   }, [contents.length, stats]);
 
