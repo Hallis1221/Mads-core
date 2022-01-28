@@ -1,14 +1,11 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import SideBar from "../../../../components/dashboard/sidebar";
-import {
-  createUserContent,
-  registerForCreatorWaitlist,
-} from "../../../../lib/logic/requests/frontend";
+import { createUserContent } from "../../../../lib/logic/requests/frontend";
 import Link from "next/link";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import { ReactChild, ReactFragment, ReactPortal, useState } from "react";
+import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
 export default function SubmissionPage({}) {
@@ -51,10 +48,7 @@ function ContentSubmissionForm({}): React.ReactElement {
           href="/creator/dashboard/content/[id]"
           as={`/creator/dashboard/content/${contentID}`}
         >
-          
-          <a
-          className="text-blue-500 hover:text-blue-700 pl-5"
-          >View content</a>
+          <a className="text-blue-500 hover:text-blue-700 pl-5">View content</a>
         </Link>
       </div>
     );
@@ -127,15 +121,15 @@ function ContentSubmissionForm({}): React.ReactElement {
           <ErrorMessage name="link" component="div" />
           <div className="text-xl  font-bold tracking-no">Tags</div>
           <div className="flex flex-row">
-         <div className="flex flex-col">
-         <Field
-              className="w-full h-12 p-2 border-2 border-gray-400 rounded-lg"
-              type="text"
-              name="tags"
-              placeholder="Tags"
-            />
-          <ErrorMessage name="tags" component="div" />
-         </div>
+            <div className="flex flex-col">
+              <Field
+                className="w-full h-12 p-2 border-2 border-gray-400 rounded-lg"
+                type="text"
+                name="tags"
+                placeholder="Tags"
+              />
+              <ErrorMessage name="tags" component="div" />
+            </div>
 
             <div className="w-full h-12 p-2 border-2 border-gray-400 rounded-lg">
               <button
