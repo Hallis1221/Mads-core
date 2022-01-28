@@ -230,7 +230,9 @@ export async function createUserContent(
     gql`
       mutation Mutation($input: UserContentInput) {
         userCreateContent(input: $input,) {
-          content
+          content {
+            id
+          }
         }
       }
     `,
