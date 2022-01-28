@@ -41,8 +41,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     console.log("Fetching data...");
-    if (session && session.user) 
-    getAllContent(setLastUpdated, setStats, setContents);
+    if (session && session.user)
+      getAllContent(setLastUpdated, setStats, setContents);
   }, [session]);
 
   if (!isLoaded)
@@ -53,7 +53,12 @@ export default function Dashboard() {
             <SideBar />
             <div className="px-16 h-full w-full flex flex-col justify-center ">
               <div className="flex flex-row w-full justify-center">
-                <ReactLoading type="spin" color="black" height={250} width={250} />
+                <ReactLoading
+                  type="spin"
+                  color="black"
+                  height={250}
+                  width={250}
+                />
               </div>
             </div>
           </div>
@@ -91,14 +96,6 @@ export default function Dashboard() {
     );
   }
   console.log("Rerendering dashboard");
-  let contentStats = contents.map((content) => {
-    return {
-      contentID: content.contentID,
-      views: content.views,
-      clicks: content.clicks,
-      skips: content.skips,
-    };
-  });
   return (
     <>
       <Head>
@@ -134,7 +131,16 @@ export default function Dashboard() {
                 starting
               />
 
-              <ContentsCard stats={contentStats} />
+              <ContentsCard
+                stats={contents.map((content) => {
+                  return {
+                    contentID: content.contentID,
+                    views: content.views,
+                    clicks: content.clicks,
+                    skips: content.skips,
+                  };
+                })}
+              />
             </div>
           </div>
         </div>

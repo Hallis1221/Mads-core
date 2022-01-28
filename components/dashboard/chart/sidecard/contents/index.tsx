@@ -10,11 +10,9 @@ import Loading from "react-loading";
 import { getContentWithID } from "../../../../../lib/logic/requests/frontend";
 import Link from "next/link";
 
-export default function ContentsCard({
-  stats,
-}: {
-  stats: any;
-}): ReactElement {
+let hasRendered = false;
+
+export default function ContentsCard({ stats }: { stats: any }): ReactElement {
   let [contents, setContents] = useState([
     {
       views: 0,
@@ -27,8 +25,8 @@ export default function ContentsCard({
     },
   ]);
 
+  console.log("Getting contents...");
   getContent(stats, contents, setContents);
-
 
   if (
     !contents ||
@@ -85,20 +83,27 @@ export default function ContentsCard({
   );
 }
 
-
-async function getContent (stats: { contentID: any; }[], contents: string | any[], setContents: (arg0: any[]) => void) {
+async function getContent(
+  stats: { contentID: any }[],
+  contents: string | any[],
+  setContents: (arg0: any[]) => void
+) {
   let order = 0;
 
   let doneContents: any[] = [];
+  let doneIDS: any[] = [];
   let ids = stats.map((content: { contentID: any }) => content.contentID);
-  console.log(ids);
-  if (contents.length < ids.length)
+  if (contents.length < ids.length && contents.length <= 1 && !hasRendered) {
+    hasRendered = true;
+    console.log("[", order, "] ", ids, contents.length);
+    order++;
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i];
-      if (id !== "" && id !== undefined) {
+      if (id !== "" && id !== undefined && !doneIDS.includes(id)) {
         console.log("[", order, "] ", "Getting content with id: " + id);
         order++;
         let content = await getContentWithID(id);
+        doneIDS.push(id);
         console.log("[", order, "] ", "Got content with id: " + id);
         order++;
 
@@ -126,4 +131,5 @@ async function getContent (stats: { contentID: any; }[], contents: string | any[
         }
       }
     }
+  }
 }
