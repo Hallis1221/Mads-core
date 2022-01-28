@@ -41,11 +41,26 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!session?.user) return;
-    getAllContent(setLastUpdated, setStats, setContents);
-    setIsLoaded(true);
+    getAllContent(setLastUpdated, setStats, setContents).then(() => {
+      setIsLoaded(true);
+    });
   }, [session?.user]);
 
-  if (!isLoaded) return <ReactLoading type="spin" color="#fff" />;
+  if (!isLoaded)
+    return (
+      <>
+        <div className="">
+          <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
+            <SideBar />
+            <div className="px-16 h-full w-full flex flex-col justify-center ">
+              <div className="flex flex-row w-full justify-center">
+                <ReactLoading type="spin" color="black" height={250} width={250} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
 
   if (!session?.user)
     return (

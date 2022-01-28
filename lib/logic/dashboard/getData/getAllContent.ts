@@ -6,7 +6,7 @@ import { getCreatorPerformance } from "../../requests/frontend";
 import getHistory from "../getHistory";
 import createChartData from "../createChartData";
 
-export default function getAllContent(
+export default async function getAllContent(
   setLastUpdated: (arg0: string) => void,
   setStats: (arg0: {
     views: any;
@@ -16,7 +16,7 @@ export default function getAllContent(
   }) => void,
   setContents: (arg0: any) => void
 ) {
-  getCreatorPerformance().then((res) => {
+  await getCreatorPerformance().then((res) => {
     let creatorPerformance = res.getUserContentPerformances;
     if (!creatorPerformance) return;
 
@@ -112,4 +112,5 @@ export default function getAllContent(
       }
     );
   });
+  console.log("getAllContent");
 }

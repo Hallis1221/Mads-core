@@ -1,6 +1,3 @@
-// This is the resolver for the getUserContentPerformances query. It takes in a user or userID and returns all the views, clicks, and skips for the user across all the content linked to their UID.
-// It is protected with either a password or a user passed to the query. If a user is passed, it returns the user's content performances. If a userID is passed, it returns the userIDS's content performances.
-
 import {
   authenticated,
   correctPassword,
@@ -11,9 +8,11 @@ import {
   getUserContentID,
 } from "../../../logic/requests/backend";
 import { isCreator } from "../../../logic/requests/frontend";
-import ContentData from "../../../mongodb/models/contentData";
 import ContentDataHistory from "../../../mongodb/models/contentDataHistory";
 import User from "../../../mongodb/models/user";
+
+// This is the resolver for the getUserContentPerformances query. It takes in a user or userID and returns all the views, clicks, and skips for the user across all the content linked to their UID.
+// It is protected with either a password or a user passed to the query. If a user is passed, it returns the user's content performances. If a userID is passed, it returns the userIDS's content performances.
 
 export async function getUserContentPerformances(
   _: any,

@@ -10,7 +10,7 @@ const uri = process.env.MONGO_DATABASE_URL
 const options = {
   useUnifiedTopology: true,
   useNewUrlParser: true,
-  poolSize: 2,
+  maxPoolSize: 10,
 }
 
 let client
