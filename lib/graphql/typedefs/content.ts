@@ -12,6 +12,7 @@ export const contentTypeDefs = gql`
 
   type Mutation {
     createContent(input: ContentInput): Content
+    userCreateContent(input: UserContentInput): ContentWithData
     updateContent(id: ID!, input: ContentInput): Content
     deleteContent(id: ID!, input: PasswordInput): Content
   }
@@ -26,6 +27,24 @@ export const contentTypeDefs = gql`
     owner: ContentOwner!
   }
 
+  type ContentData {
+    contentID: String!
+    clicks: Int!
+    views: Int!
+    skips: Int!
+  }
+
+  type ContentWithData {
+    content: Content!
+    data: ContentData!
+  }
+
+  input UserContentInput {
+    title: String!
+    link: String!
+    tags: [String]!
+  }
+
   input ContentInput {
     theme: String!
     title: String!
@@ -33,7 +52,7 @@ export const contentTypeDefs = gql`
     uploadDate: String!
     owner: ContentOwnerInput!
     tags: [CTagInput]!
-    password: String
+    password: String!
   }
 
   type ContentOwner {
