@@ -1,5 +1,4 @@
-import { intervalTimes } from '@config/interval';
-
+import {intervalTimes} from '../config/time'
 
 // function for creating intervaled time. Returns a Date object
 export function createIntervalDate(): Date {

@@ -3,8 +3,8 @@ export type AdMAtch = {
   contentID: string;
 
   // The begin date of the ad match
-  beginDate: Date;
+  begins: Date;
 
   // The end date of the ad match
-  endDate: Date;
+  ends: Date;
 };

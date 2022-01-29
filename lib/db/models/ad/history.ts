@@ -1,44 +1,42 @@
 import mongoose from "mongoose";
+
 mongoose.Promise = global.Promise;
 
-const AdDataSchema = new mongoose.Schema({
-  // The adID of the ad associated with the adData is used as the primary key
+const AdDataHistorySchema = new mongoose.Schema({
+  // The contentID of the content associated with the contentData is used as the primary key
   adID: {
     type: String,
     required: true,
   },
 
-  // The number of times the ad has been clicked
+  // The date for this history entry
+  date: {
+    type: Date,
+    required: true,
+  },
+
+  // The number of times the content has been clicked
   clicks: {
     type: Number,
     required: false,
   },
 
-  // This number of times this ad has been viewed
+  // The number of times this content has been viewed
   views: {
     type: Number,
     required: false,
   },
 
-  // The number of times this ad has been skipped
+  // The number of times this content has been skipped
   skips: {
     type: Number,
     required: false,
   },
-
-  matches: {
-    type: [
-      {
-        // The contentID of the content that matched this ad
-        contentID: String,
-        begins: Date,
-        ends: Date,
-      }
-    ],
-  }
 });
 
-const AdDataDB = mongoose.models.AdData || mongoose.model("AdData", AdDataSchema);
+const AdDataHistoryDB =
+  mongoose.models.AdDataHistory ||
+  mongoose.model("AdDataHistory", AdDataHistorySchema);
 
 // EXPORTING OUR MODEL
-export default AdDataDB;
+export default AdDataHistoryDB;

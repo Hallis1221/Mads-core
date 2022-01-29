@@ -1,5 +1,5 @@
-import AdDataHistoryDB from "../../../db/models/ad/adDataHistory";
-import AdDataDB from "../../../db/models/ad/history";
+import AdDataHistoryDB from "../../../db/models/ad/history";
+import AdDataDB from "../../../db/models/ad/data";
 import { createIntervalDate } from "../../../interval";
 
 // Export defualt function for registering an ad skip. The function takes in the adID as its only argument.

@@ -8,7 +8,7 @@ export type Ad = {
   theme: String;
 
   // the ad's id
-  id: String;
+  _id: String;
 
   // The ad's user friendly title
   title: String;
