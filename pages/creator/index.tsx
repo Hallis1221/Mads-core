@@ -1,6 +1,6 @@
 import { NextPage } from "next/types";
 import React from "react";
-import { registerForCreatorWaitlist } from "../../lib/logic/requests/frontend";
+import { registerForCreatorWaitlist } from "../../leglib/logic/requests/frontend";
 import toast from "react-hot-toast";
 import NavBar from "../../components/navigation/navbar";
 import { useSession } from "next-auth/react";

@@ -13,10 +13,10 @@ import ChangeLogCard from "../../../../components/dashboard/chart/sidecard/chang
 import ContentsCard from "../../../../components/dashboard/chart/sidecard/contents";
 import SideBar from "../../../../components/dashboard/sidebar";
 import DashboardTopRow from "../../../../components/dashboard/toprow";
-import getOwner from "../../../../lib/data/owns";
-import getContent from "../../../../lib/logic/dashboard/getData/getContent";
-import { getContentData } from "../../../../lib/logic/requests/backend";
-import { getContentWithID } from "../../../../lib/logic/requests/frontend";
+import getOwner from "../../../../leglib/data/owns";
+import getContent from "../../../../leglib/logic/dashboard/getData/getContent";
+import { getContentData } from "../../../../leglib/logic/requests/backend";
+import { getContentWithID } from "../../../../leglib/logic/requests/frontend";
 
 export default function Page() {
   const router = useRouter();

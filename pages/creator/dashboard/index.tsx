@@ -6,7 +6,7 @@ import InfoCard from "../../../components/dashboard/cards/infocard";
 import SideBar from "../../../components/dashboard/sidebar";
 import DashboardTopRow from "../../../components/dashboard/toprow";
 import ReactLoading from "react-loading";
-import getAllContent from "../../../lib/logic/dashboard/getData/getAllContent";
+import getAllContent from "../../../leglib/logic/dashboard/getData/getAllContent";
 import ContentsCard from "../../../components/dashboard/chart/sidecard/contents";
 import toast from "react-hot-toast";
 import Head from "next/head";

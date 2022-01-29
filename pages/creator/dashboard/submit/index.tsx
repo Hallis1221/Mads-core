@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import SideBar from "../../../../components/dashboard/sidebar";
-import { createUserContent } from "../../../../lib/logic/requests/frontend";
+import { createUserContent } from "../../../../leglib/logic/requests/frontend";
 import Link from "next/link";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
