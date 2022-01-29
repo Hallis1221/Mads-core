@@ -51,7 +51,7 @@ export async function getContentMonthHistory(
 
   // After date, 30 days from the current date
   let beforeDate = new Date();
-  beforeDate.setDate(beforeDate.getDate() - 30);
+  beforeDate.setDate(beforeDate.getDate() - 31);
 
   // Before date, current date
   let afterDate = new Date();
@@ -78,11 +78,11 @@ export async function getComperableContentHistory(
 
   // After date, 30 days from the current date
   let beforeDate = new Date();
-  beforeDate.setDate(beforeDate.getDate() - 60);
+  beforeDate.setDate(beforeDate.getDate() - 62);
 
   // Before date, current date
   let afterDate = new Date();
-  afterDate.setDate(afterDate.getDate() - 30);
+  afterDate.setDate(afterDate.getDate() - 31);
 
   let content = await ContentDataHistory.find({
     contentID: contentID,
