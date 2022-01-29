@@ -1,10 +1,6 @@
 // Import mongoose
 import mongoose from "mongoose";
-
-// Set mongoose settings, most notably maxPoolSize to 10
-const options = {
-  maxPoolSize: 10,
-};
+import { mongooseConnectOptions } from "../../../config/db";
 
 // Get the MONGO_DATABASE_URL environment variable
 const uri = process.env.MONGO_DATABASE_URL;
@@ -23,7 +19,7 @@ export default async function connectDB(): Promise<mongoose.Connection> {
   console.log("Connecting to MongoDB...");
 
   // Connect to MongoDB
-  await mongoose.connect(uri, options);
+  await mongoose.connect(uri, mongooseConnectOptions);
 
   // Console log a success message to let the user know that the app is connected to MongoDB
   console.log("Connected to MongoDB!");

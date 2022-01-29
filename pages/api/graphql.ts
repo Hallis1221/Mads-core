@@ -5,15 +5,14 @@ import {
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
 
-import resolvers from "../../lib/graphql/resolvers";
-import { typeDefinitions } from "../../lib/graphql/typedefs";
-import { connectIfReady } from "../../lib/utils/connection";
+import resolvers from "../../leglib/graphql/resolvers";
+import { typeDefinitions } from "../../leglib/graphql/typedefs";
 import { getSession } from "next-auth/react";
 import {createRateLimitDirective} from "graphql-rate-limit"
 import { NextApiRequest, NextApiResponse } from "next/types";
+import connectDB from "../../lib/db/connect/mongoose/connect";
 
-connectIfReady();
-const rateLimitDirective = createRateLimitDirective({ identifyContext: (ctx) => ctx.id });
+connectDB();
 const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({
   workspaceName: "MADS api",
   settings: {
