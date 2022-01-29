@@ -1,7 +1,7 @@
 // Function that checks if the provided user is a creator. Returns true if the user is a creator, false if not.
 
 import ContentDB from "../../../db/models/content";
-import UserDB from "../../../db/models/user";
+import UserDB from "../../../db/models/auth/user";
 import { User } from "../../../types/user";
 
 // The isCreator function is used to provide a short hand for selecting the user from the DB and getting the creator field.
