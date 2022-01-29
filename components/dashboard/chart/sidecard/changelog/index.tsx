@@ -2,7 +2,7 @@ import Link from "next/link";
 import { md5 } from "pure-md5";
 import { ReactElement, useState, useEffect } from "react";
 import Loading from "react-loading";
-import { getContentWithID } from "../../../../../lib/logic/requests/frontend";
+import { getContentWithID } from "../../../../../leglib/logic/requests/frontend";
 
 type Change = {
   title: string;

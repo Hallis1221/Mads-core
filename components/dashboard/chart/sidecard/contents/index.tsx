@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import Loading from "react-loading";
-import { getContentWithID } from "../../../../../lib/logic/requests/frontend";
+import { getContentWithID } from "../../../../../leglib/logic/requests/frontend";
 import Link from "next/link";
 
 let hasRendered = false;

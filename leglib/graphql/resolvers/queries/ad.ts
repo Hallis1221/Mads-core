@@ -1,5 +1,5 @@
+import AdDB from "../../../../lib/db/models/ad";
 import { authenticated } from "../../../auth";
-import AdDB from "../../../mongodb/models/ad";
 
 // This is the resolver for the getAds query. It takes in the input (for the password) and returns all ads.
 export async function getAds(_: any, { input }: any) {
