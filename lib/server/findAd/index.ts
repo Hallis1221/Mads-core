@@ -4,6 +4,7 @@ import AdDataDB from "../../db/models/ad/data";
 import { createIntervalTimePair } from "../../interval";
 import { Ad } from "../../types/ad";
 import { Content } from "../../types/content";
+import addAdDataMatch from "../addAdMatch";
 
 // The matchWithAd function takes in an Content object and matches it with an Ad object.
 export async function matchWithAd(content: Content): Promise<Ad> {
@@ -106,4 +107,12 @@ export async function matchWithAd(content: Content): Promise<Ad> {
   };
 
   // Add the match to the ads ad data
+  await addAdDataMatch(winnder.ad, match);
+  // Log that we found a match
+  console.log(
+    `Found a match for content: ${content.title}. It matched with ad: ${winnder.ad.title}`
+  );
+
+  // Return the winnder ad
+  return winnder.ad;
 }
