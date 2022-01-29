@@ -8,7 +8,6 @@ import {
 import resolvers from "../../leglib/graphql/resolvers";
 import { typeDefinitions } from "../../leglib/graphql/typedefs";
 import { getSession } from "next-auth/react";
-import {createRateLimitDirective} from "graphql-rate-limit"
 import { NextApiRequest, NextApiResponse } from "next/types";
 import connectDB from "../../lib/db/connect/mongoose/connect";
 
