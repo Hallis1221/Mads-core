@@ -1,20 +1,20 @@
 import Head from "next/head";
 import { ReactElement, useEffect, useState } from "react";
-import { correctPassword } from "../../lib/auth";
+import { correctPassword } from "../../leglib/auth";
 import MainAd from "../../components/ad";
 import {
   getContentWithID,
   pingAdData,
   pingContentData,
   registerView,
-} from "../../lib/logic/requests/frontend";
+} from "../../leglib/logic/requests/frontend";
 import {
   createContentData,
   getContentIDS,
   findAd,
   getAdIDS,
   createAdData,
-} from "../../lib/logic/requests/backend";
+} from "../../leglib/logic/requests/backend";
 import { loadEnvConfig } from "@next/env";
 import CornerLogo from "../../components/logo";
 import ReactiveCountdown from "../../components/countdown";
