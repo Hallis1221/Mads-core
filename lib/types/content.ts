@@ -2,7 +2,7 @@ import { Owner } from "./owner";
 
 export type Content = {
   // The content's id (ContentID)
-  _id: string;
+  _id: string | undefined | null;
 
   // The theme for the content
   theme: string;

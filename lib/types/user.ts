@@ -4,4 +4,7 @@ export type User = {
 
     // The users id, nullable
     id: string | null;
+
+    // The users display name, nullable
+    name: string | null;
 }
