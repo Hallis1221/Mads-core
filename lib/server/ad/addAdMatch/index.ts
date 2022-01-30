@@ -1,9 +1,9 @@
-import AdDataDB from "../../db/models/ad/data";
-import ContentDB from "../../db/models/content";
-import { Ad } from "../../types/ad";
-import { Content } from "../../types/content";
-import { AdData } from "../../types/data/adData";
-import { AdMAtch } from "../../types/match";
+import AdDataDB from "../../../db/models/ad/data";
+import ContentDB from "../../../db/models/content";
+import { Ad } from "../../../types/ad";
+import { Content } from "../../../types/content";
+import { AdData } from "../../../types/data/adData";
+import { AdMAtch } from "../../../types/match";
 
 // The resolver for the addAdDataMatch mutation. It takes in the Ad as its only argument and returns the updated AdData.
 export default async function addAdDataMatch(
