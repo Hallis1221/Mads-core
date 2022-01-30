@@ -44,5 +44,3 @@ export async function updateAdDataMutation(
     throw new Error("User is not authorized to update an adData");
   }
 }
-
-// THis is the resolver for the addAdDataMatch
