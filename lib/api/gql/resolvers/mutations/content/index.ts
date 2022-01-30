@@ -7,15 +7,24 @@ import { User } from "../../../../../types/user";
 // This is the resolver for the createContent mutation.  It takes in an content object and creates a new ad with the ad object.
 export default async function createContentMutation(
   _: any,
-  { content, apiKey }: { content: {
-    title: string,
-    link: string,
-    tags: string[],
-  }; apiKey: string },
-  {user}: { user: User }
+  {
+    content,
+    apiKey,
+  }: {
+    content: {
+      title: string;
+      link: string;
+      tags: string[];
+    };
+    apiKey: string;
+  },
+  { user }: { user: User }
 ): Promise<Content> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, undefined) || await permittedToCreateContent(user) ) {
+  if (
+    (await isAuthorized("admin", apiKey, undefined)) ||
+    (await permittedToCreateContent(user))
+  ) {
     const addb = new ContentDB(content);
     const newcontent = await addb.save();
     return newcontent;
