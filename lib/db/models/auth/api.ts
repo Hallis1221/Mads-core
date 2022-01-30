@@ -11,5 +11,5 @@ const ApiSchema = new mongoose.Schema({
 
 });
 
-const ApiDB = mongoose.models.User || mongoose.model("User", ApiSchema);
+const ApiDB = mongoose.models.ApiKeys || mongoose.model("ApiKeys", ApiSchema);
 export default ApiDB;
