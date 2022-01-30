@@ -5,11 +5,11 @@ import {
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
 
-import resolvers from "../../leglib/graphql/resolvers";
-import { typeDefinitions } from "../../leglib/graphql/typedefs";
 import { getSession } from "next-auth/react";
 import { NextApiRequest, NextApiResponse } from "next/types";
 import connectDB from "../../lib/db/connect/mongoose/connect";
+import typeDefinitions from "../../lib/config/api/gql/typedefs";
+import resolvers from "../../lib/api/gql/resolvers";
 
 connectDB();
 const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({

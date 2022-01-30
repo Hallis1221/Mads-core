@@ -7,7 +7,7 @@ import { Content } from "../../../types/content";
 import addAdDataMatch from "../addAdMatch";
 
 // The matchWithAd function takes in an Content object and matches it with an Ad object.
-export async function matchWithAd(content: Content): Promise<Ad> {
+export async function matchWithAd(tags: String[], theme: String, id: string): Promise<Ad> {
   // Get all the ads
   const ads: Array<Ad> = await AdDB.find({});
 
@@ -21,20 +21,17 @@ export async function matchWithAd(content: Content): Promise<Ad> {
   let potentialAds: Array<Ad> = [];
 
   // Narrow down the list of ads to only those that match the content theme
-  for (const ad of ads) if (ad.theme === content.theme) potentialAds.push(ad);
+  for (const ad of ads) if (ad.theme === theme) potentialAds.push(ad);
 
   // Return a random ad if we do not have any ads that match the content theme.
   // Console log that we did not find any ads that match the content theme.
   if (potentialAds.length <= minimumAdsToRace) {
-    console.log(`No ads found for theme: ${content.theme}`);
+    console.log(`No ads found for theme: ${theme}`);
     return ads[Math.floor(Math.random() * ads.length)];
   }
 
   // Save all the content tags in an array with lowercase letters
-  const contentTags: Array<string> = content.tags.map((tag: string) =>
-    tag.toLowerCase()
-  );
-
+  const contentTags: Array<string> = tags.map((tag) => tag.toLowerCase());
   // Sort the list of potential ads by their relevance, according to their tags and tag priorites
 
   // Initialize a winnder variable for the ad we want to return
@@ -101,7 +98,7 @@ export async function matchWithAd(content: Content): Promise<Ad> {
     begins: Date;
     ends: Date;
   } = {
-    contentID: content._id,
+    contentID: id,
     begins: datePair.begins,
     ends: datePair.ends,
   };
@@ -110,7 +107,7 @@ export async function matchWithAd(content: Content): Promise<Ad> {
   await addAdDataMatch(winnder.ad, match);
   // Log that we found a match
   console.log(
-    `Found a match for content: ${content.title}. It matched with ad: ${winnder.ad.title}`
+    `Found a match for content: ${id}. It matched with ad: ${winnder.ad.title}`
   );
 
   // Return the winnder ad

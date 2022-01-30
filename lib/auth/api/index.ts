@@ -2,6 +2,8 @@ import { md5 } from "pure-md5";
 import { apiiKeyCharacters, apiKeyLength } from "../../config/auth";
 import ApiDB from "../../db/models/auth/api";
 
+export const apiKey = process.env.API_KEY || "";
+
 // The authenticated function is used to check if the provided api key is valid.
 export async function apiKeyAuthenticated(apiKey: string): Promise<boolean> {
   if (!apiKey) return false;

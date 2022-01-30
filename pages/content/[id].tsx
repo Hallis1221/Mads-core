@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { ReactElement, useEffect, useState } from "react";
-import { correctPassword } from "../../leglib/auth";
 import MainAd from "../../components/ad";
 import {
   getContentWithID,
@@ -8,13 +7,6 @@ import {
   pingContentData,
   registerView,
 } from "../../leglib/logic/requests/frontend";
-import {
-  createContentData,
-  getContentIDS,
-  findAd,
-  getAdIDS,
-  createAdData,
-} from "../../leglib/logic/requests/backend";
 import { loadEnvConfig } from "@next/env";
 import CornerLogo from "../../components/logo";
 import ReactiveCountdown from "../../components/countdown";
@@ -24,6 +16,13 @@ import Header from "../../components/ad/head";
 import TopAuth from "../../components/auth/topbar";
 import NavBar from "../../components/navigation/navbar";
 import { Ad } from "../../lib/types/ad";
+import { matchWithAd } from "../../lib/server/ad/findAd";
+import { apiKey, createApiKey } from "../../lib/auth/api";
+import ContentDB from "../../lib/db/models/content";
+import ContentDataDB from "../../lib/db/models/content/data";
+import AdDataDB from "../../lib/db/models/ad/data";
+import AdDB from "../../lib/db/models/ad";
+import connectDB from "../../lib/db/connect/mongoose/connect";
 
 export default function AdPage(props: any): ReactElement {
   // get the ad and content from props, fetched by the server in getStaticProps
@@ -94,8 +93,8 @@ export async function getStaticProps({ params }: any) {
     let theme = content.theme;
 
     // find a relevant ad with similair tags and preferred theme
-    ad = await findAd(tags, theme, id, correctPassword);
-    console.log("Content with id of " + id + " matched ad with id of " + ad.id);
+    ad = await matchWithAd(tags, theme, id);
+    console.log("Content with id of " + id + " matched ad with id of " + ad._id);
   } catch (error) {
     console.log("Error getting content with id: " + id + " " + error);
     // if something went wrong, we return a 404 page. For example if the contentID or no ad was found
@@ -121,13 +120,13 @@ export async function getStaticPaths() {
   let contentids: { id: string }[] = [];
   let adids: { id: string }[] = [];
 
-  // if we dont have a password in the env config, we throw an error
-  if (!correctPassword) throw new Error("Password is not set in .env.local");
+  // if we dont have an apikey in the env config, we throw an error
+  if (!apiKey) throw new Error("Apikey is not set in .env.local");
 
   // get all contentIDs from the database and save them in the ids array
-  contentids = await getContentIDS(correctPassword);
+  contentids = await ContentDB.find({});
   // get all adIDs from the database and save them in the ids array
-  adids = await getAdIDS(correctPassword);
+  adids = await AdDB.find({});
 
   // create an array of paths from the id of each element in the ids array
   const paths = contentids.map((content: { id: string }) => {
@@ -138,35 +137,42 @@ export async function getStaticPaths() {
     };
   });
 
-  try {
     // go trough each contentID and ensure the contentData exists, if not create it
     for (const id in contentids) {
-      await pingContentData(contentids[id].id, correctPassword).catch(async (e) => {
+      await ContentDataDB.findOne({ contentID: contentids[id].id }).catch(async (e) => {
         console.log(
           "Contentdata not found for id: " + contentids[id].id,
           ". Creating... (",
           e,
           ")"
         );
-        await createContentData(contentids[id].id, correctPassword);
+        await ContentDataDB.create({
+          contentID: contentids[id].id,
+          views: 0,
+          clicks: 0,
+          skips: 0,
       });
-    }
-
+    });
+  }
     // go trough each adID and ensure the adData exists, if not create it
     for (const id in adids) {
-      await pingAdData(adids[id].id).catch(async (e) => {
+      await AdDataDB.findOne({ adID: adids[id].id }).catch(async (e) => {
+
         console.log(
           "Addata not found for id: " + adids[id].id,
           ". Creating... (",
           e,
           ")"
         );
-        await createAdData(adids[id].id, correctPassword);
+        await AdDataDB.create({
+          adID: adids[id].id,
+          clicks: 0,
+          views: 0,
+          skips: 0,
+          matches: []
       });
-    }
-  } catch (error) {
-    console.log(error);
-  }
+    });
+  } 
 
   // return the paths with a fallback of blocking.
   // We'll pre-render only these paths at build time.
