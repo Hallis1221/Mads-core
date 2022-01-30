@@ -27,7 +27,7 @@ export async function apiKeyAuthenticated(apiKey: string): Promise<boolean> {
 // The createApiKey function is used to create a new api key, hash it, save it to the DB and return the api key.
 export async function createApiKey(): Promise<string> {
   // Create a new api key
-  let apiKey: string | undefined = undefined;
+  let apiKey: string | undefined = "";
 
   // Loop trough every number from 0 to the max number of characters in the api key
   for (var i = 0, n = apiiKeyCharacters.length; i < length; ++i) {
