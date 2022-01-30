@@ -1,9 +1,9 @@
-import { minimumAdsToRace } from "../../config/ads";
-import AdDB from "../../db/models/ad";
-import AdDataDB from "../../db/models/ad/data";
-import { createIntervalTimePair } from "../../interval";
-import { Ad } from "../../types/ad";
-import { Content } from "../../types/content";
+import { minimumAdsToRace } from "../../../config/ads";
+import AdDB from "../../../db/models/ad";
+import AdDataDB from "../../../db/models/ad/data";
+import { createIntervalTimePair } from "../../../interval";
+import { Ad } from "../../../types/ad";
+import { Content } from "../../../types/content";
 import addAdDataMatch from "../addAdMatch";
 
 // The matchWithAd function takes in an Content object and matches it with an Ad object.
