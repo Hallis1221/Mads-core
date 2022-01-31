@@ -1,12 +1,6 @@
 import Head from "next/head";
 import { ReactElement, useEffect, useState } from "react";
 import MainAd from "../../components/ad";
-import {
-  getContentWithID,
-  pingAdData,
-  pingContentData,
-  registerView,
-} from "../../leglib/logic/requests/frontend";
 import { loadEnvConfig } from "@next/env";
 import CornerLogo from "../../components/logo";
 import ReactiveCountdown from "../../components/countdown";

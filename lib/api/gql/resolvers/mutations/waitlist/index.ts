@@ -1,7 +1,8 @@
 // import axios to make http requests
 import axios from "axios";
 
-export async function registerForCreatorWaitlist(_: any, { email, URL }: any) {
+export async function registerForCreatorWaitlistMutation(_: any, { email, URL }: any) {
+  console.log("registerForCreatorWaitlist", email, URL);
   return await axios
     .post("https://getwaitlist.com/api/v1/waitlists/submit", {
       api_key: "PMD4UV",
@@ -19,19 +20,3 @@ export async function registerForCreatorWaitlist(_: any, { email, URL }: any) {
     });
 }
 
-export async function getUserInfo(_: any, { email }: any) {
-  return await axios
-    .post("https://getwaitlist.com/api/v1/users/status", {
-      api_key: "PMD4UV",
-      email: email,
-    })
-    .then((response) => {
-      return { ...response.data, exists: true };
-    })
-
-    .catch(() => {
-      return {
-        exsits: false,
-      };
-    });
-}

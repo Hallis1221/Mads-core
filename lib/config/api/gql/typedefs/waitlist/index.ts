@@ -2,14 +2,14 @@ import { gql } from "apollo-server-micro";
 
 export const waitlistTypeDefs = gql`
   type Mutation {
-    registerForCreatorWaitlist(
+    registerForCreatorWaitlistMutation(
       email: String!
       URL: String!
     ): CreatorWaitlistReturn!
   }
 
   type Query {
-    getUserInfo(
+    getUserInfoQuery(
       email: String!
     ): CreatorWaitlistReturn!
   }

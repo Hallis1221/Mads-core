@@ -6,9 +6,9 @@ export const dataTypeDefs = gql`
   }
 
   type Mutation {
-    registerViews(adID: ID!, contentID: ID!): Boolean
-    registerClicks(adID: ID!, contentID: ID!): Boolean
-    registerSkips(adID: ID!, contentID: ID!): Boolean
+    registerViewsMutation(adID: ID!, contentID: ID!): Boolean
+    registerClicksMutation(adID: ID!, contentID: ID!): Boolean
+    registerSkipsMutation(adID: ID!, contentID: ID!): Boolean
     defaultUserMutation(userID: String!): User!
   }
 

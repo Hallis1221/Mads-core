@@ -1,17 +1,19 @@
 import { gql } from "apollo-server-micro";
 
 export const adDataTypeDefs = gql`
+  scalar Date
+
   type Query {
     getAdDataQuery(adID: String!, apiKey: String): AdData!
   }
 
   type Mutation {
-    createAdDataMutation(adData: AdData!, apiKey: String): AdData!
+    createAdDataMutation(adData: AdDataInput!, apiKey: String): AdData!
 
     updateAdDataMutation(
       adDataID: String!
       apiKey: String!
-      adData: AdData!
+      adData: AdDataInput!
     ): AdData!
   }
 
@@ -24,6 +26,20 @@ export const adDataTypeDefs = gql`
   }
 
   type Match {
+    contentID: String!
+    begins: Date!
+    ends: Date!
+  }
+
+  input AdDataInput {
+    adID: String!
+    clicks: Int!
+    views: Int!
+    skips: Int!
+    matches: [MatchInput]!
+  }
+
+  input MatchInput {
     contentID: String!
     begins: Date!
     ends: Date!

@@ -12,17 +12,24 @@ export const contentDataTypeDefs = gql`
 
   type Mutation {
     createContentDataMutation(
-      contentData: ContentData!
+      contentData: ContentDataInput!
       apiKey: String
     ): ContentData!
     updateContentDataMutation(
       contentDataID: String!
       apiKey: String!
-      contentData: ContentData!
+      contentData: ContentDataInput!
     ): ContentData!
   }
 
   type ContentData {
+    contentID: String!
+    clicks: Int!
+    views: Int!
+    skips: Int!
+  }
+
+  input ContentDataInput {
     contentID: String!
     clicks: Int!
     views: Int!

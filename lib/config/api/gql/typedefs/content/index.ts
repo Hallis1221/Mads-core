@@ -25,30 +25,28 @@ export const contentTypeDefs = gql`
     ): Content!
   }
 
-  input ContentInput {
-    theme: String!
-    title: String!
-    link: String!
-    uploadDate: String!
-    owner: ContentOwnerInput!
-    tags: [CTagInput]!
-    password: String!
-  }
-
-  input LimitedContentInput {
-    title: String!
-    link: String!
-    tags: [String]!
-  }
-
   type Content {
     id: ID!
     theme: String!
     title: String!
     link: String!
     uploadDate: String!
-    tags: [CTag]!
+    tags: [Tag]!
     owner: ContentOwner!
+  }
+
+  type Tag {
+    tag: String!
+  }
+
+  type ContentOwner {
+    uid: String!
+    displayName: String!
+  }
+
+  type ContentWithData {
+    content: Content!
+    data: [ContentData]!
   }
 
   type ContentData {
@@ -58,8 +56,21 @@ export const contentTypeDefs = gql`
     skips: Int!
   }
 
-  type ContentWithData {
-    content: Content!
-    data: ContentData!
+  input ContentInput {
+    theme: String!
+    title: String!
+    link: String!
+    uploadDate: String!
+    tags: [TagInput]!
+  }
+
+  input LimitedContentInput {
+    title: String!
+    link: String!
+    tags: [TagInput]!
+  }
+
+  input TagInput {
+    tag: String!
   }
 `;

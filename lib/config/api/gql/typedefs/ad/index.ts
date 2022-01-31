@@ -7,8 +7,8 @@ export const adTypeDefs: DocumentNode = gql`
   }
 
   type Mutation {
-    createAdMutation(ad: Ad!, apiKey: String): Ad!
-    updateAdMutation(adID: String!, apiKey: String, ad: Ad!): Ad!
+    createAdMutation(ad: AdInput!, apiKey: String): Ad!
+    updateAdMutation(adID: String!, apiKey: String, ad: AdInput!): Ad!
   }
 
   type Ad {
@@ -26,4 +26,34 @@ export const adTypeDefs: DocumentNode = gql`
     tags: [Tag]!
     owner: AdOwner!
   }
+
+  type AdOwner {
+    uid: String!
+    displayName: String!
+  }
+
+  type Tag {
+    tag: String!
+    priority: Int!
+  }
+
+  input AdInput {
+    type: String!
+    theme: String!
+    title: String!
+    link: String!
+    image: String
+    video: String
+    maxClicks: Int!
+    maxViews: Int!
+    startDate: String!
+    endDate: String!
+    tags: [TagInput]!
+  }
+
+  input TagInput {
+    tag: String!
+    priority: Int!
+  }
+
 `;

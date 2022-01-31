@@ -1,6 +1,21 @@
 // This is a list of all the resolvers in our app, both queries and mutations.
 // It is more readable to have the actual resolvers in a seperate file but they are referenced here in order to have it nice and tidy for our api endpoint.
 
+import createAdMutation, { updateAdMutation } from "./mutations/ad";
+import createAdDataMutation, { updateAdDataMutation } from "./mutations/ad/data";
+import {
+  createContentMutation,
+  adminCreateContentMutation,
+  updateContentMutation,
+} from "./mutations/content";
+import createContentDataMutation, { updateContentDataMutation } from "./mutations/content/data";
+import {
+  registerSkipsMutation,
+  registerClicksMutation,
+  registerViewsMutation,
+} from "./mutations/register";
+import defaultUserMutation from "./mutations/user";
+import { registerForCreatorWaitlistMutation } from "./mutations/waitlist";
 import getAdQuery from "./queries/ad";
 import getAdDataQuery from "./queries/ad/data";
 import {
@@ -15,6 +30,7 @@ import {
   getLastContentDataQuery,
 } from "./queries/content/data";
 import { isCreatorQuery } from "./queries/user";
+import { getUserInfoQuery } from "./queries/waitlist";
 
 const resolvers = {
   Query: {
@@ -37,9 +53,40 @@ const resolvers = {
 
     // Ad data
     getAdDataQuery,
+
+    // Waitlist
+    getUserInfoQuery,
   },
 
-  Mutation: {},
+  Mutation: {
+    // Waitlist
+    registerForCreatorWaitlistMutation,
+
+    // User
+    defaultUserMutation,
+
+    // Register
+    registerSkipsMutation,
+    registerClicksMutation,
+    registerViewsMutation,
+
+    // Content
+    createContentMutation,
+    adminCreateContentMutation,
+    updateContentMutation,
+
+    // Content data
+    createContentDataMutation,
+    updateContentDataMutation,
+
+    // Ad
+    createAdMutation,
+    updateAdMutation,
+
+    // Ad data
+    createAdDataMutation,
+    updateAdDataMutation
+  },
 };
 
 export default resolvers;
