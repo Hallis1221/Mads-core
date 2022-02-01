@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import SeriousFooter from "../components/footer/serious";
 
 export default function NewHome({}) {
   return (
@@ -9,7 +10,7 @@ export default function NewHome({}) {
         <title>Market Advertisments</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className=" w-screen h-screen relative ">
+      <main className=" w-full h-full relative ">
         <Image
           src="https://pixelpoly.co/assets/img/portfolio/ctf.png"
           layout="fill"
@@ -54,6 +55,8 @@ export default function NewHome({}) {
           </div>
         </div>
       </main>
+      <SeriousFooter/>
+
     </>
   );
 }
