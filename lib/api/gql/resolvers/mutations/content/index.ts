@@ -32,10 +32,10 @@ export async function adminCreateContentMutation(
 export async function createContentMutation(
   _: any,
   {
-    contentInput,
+    content,
     apiKey,
   }: {
-    contentInput: {
+    content: {
       title: string;
       link: string;
       tags: string[];
@@ -44,14 +44,16 @@ export async function createContentMutation(
   },
   { user }: { user: User }
 ) {
+  let contentInput = content;
+  
   if (
-    (await isAuthorized("admin", apiKey, undefined)) ||
+    (await isAuthorized("admin", apiKey, {contentid: undefined})) ||
     (await permittedToCreateContent(user))
   ) {
     const title: string = contentInput.title;
     const link: string = contentInput.link;
-    const tags: string[] = contentInput.tags.map((tag: string) =>
-      tag.toLowerCase()
+    const tags: string[] = contentInput.tags.map((tag: any) =>
+      tag.tag.toLowerCase()
     );
 
     const exsists = await ContentDB.findOne({ title });

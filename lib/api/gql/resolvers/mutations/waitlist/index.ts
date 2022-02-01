@@ -2,7 +2,6 @@
 import axios from "axios";
 
 export async function registerForCreatorWaitlistMutation(_: any, { email, URL }: any) {
-  console.log("registerForCreatorWaitlist", email, URL);
   return await axios
     .post("https://getwaitlist.com/api/v1/waitlists/submit", {
       api_key: "PMD4UV",

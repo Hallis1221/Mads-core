@@ -62,6 +62,12 @@ export const contentTypeDefs = gql`
     link: String!
     uploadDate: String!
     tags: [TagInput]!
+    owner: ContentOwnerInput!
+  }
+
+  input ContentOwnerInput {
+    uid: String!
+    displayName: String!
   }
 
   input LimitedContentInput {
