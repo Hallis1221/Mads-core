@@ -67,7 +67,7 @@ export async function createContentMutation(
       link,
       tags,
       owner: {
-        uid: (await UserDB.findOne({ email: user.email }))._id,
+        uid: (await UserDB.findOne({ email: user.email }))._id || "",
         displayName: user.name ? user.name : "TODO",
       },
       _id: undefined,

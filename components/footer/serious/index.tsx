@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 export default function SeriousFooter() {
     return <footer className="flex flex-1 flex-row py-8 px-0 border-t-2 border-solid text-xl border-gray-300 justify-center items-center w-full">
