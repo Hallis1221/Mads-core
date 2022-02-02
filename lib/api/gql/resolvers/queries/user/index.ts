@@ -1,4 +1,5 @@
 import { isAuthorized } from "../../../../../auth/checks";
+import { isCreator } from "../../../../../auth/checks/user";
 import UserDB from "../../../../../db/models/auth/user";
 import { User } from "../../../../../types/user";
 
@@ -8,16 +9,8 @@ export async function isCreatorQuery(
   { email }: { email: string | undefined },
   { user }: { user: User }
 ): Promise<boolean> {
-  if (user) {
-    if (await isAuthorized("creator", user, undefined)) return true;
-    return false;
-  } else if (email) {
-    let user = await UserDB.findOne({ email });
-    if (user) {
-      if (await isAuthorized("creator", user, undefined)) return true;
-      return false;
-    } else {
-      return false;
-    }
-  } else throw new Error("User is not defined");
+  if (email) return await isCreator(email);
+  else if (user) return await isCreator(user.email);
+
+  throw new Error("You need to be logged or provide an email to perform this action");
 }
