@@ -8,6 +8,10 @@ export const contentDataTypeDefs = gql`
     getUserContentDataQuery(userID: String!, apiKey: String): [ContentData]!
     getContentDataMonthQuery(contentID: String!, apiKey: String): ContentData!
     getLastContentDataQuery(contentID: String!, apiKey: String): ContentData!
+    getContentHistoryQuery(
+      contentID: String!
+      apiKey: String
+    ): ContentDataHistory!
   }
 
   type Mutation {
@@ -22,11 +26,44 @@ export const contentDataTypeDefs = gql`
     ): ContentData!
   }
 
+  type ContentDataHistory {
+    views: Int
+    clicks: Int
+    skips: Int
+    chartData: [ChartData]
+  }
+
+  type ChartData {
+    now: NowCD
+    last: LastCD
+  }
+
+  type LastCD {
+    views: Int
+    clicks: Int
+    skips: Int
+    date: String
+  }
+
+  type NowCD {
+    views: Int
+    clicks: Int
+    skips: Int
+    date: String
+  }
+
+  type ContentData {
+    views: Int
+    clicks: Int
+    skips: Int
+    contentID: String
+  }
+
   type ContentData {
     contentID: String!
-    clicks: Int!
-    views: Int!
-    skips: Int!
+    clicks: Int
+    views: Int
+    skips: Int
   }
 
   input ContentDataInput {

@@ -3,11 +3,11 @@ export type ContentData = {
   contentID: string;
 
   // The amount of views the content has received
-  views: number;
+  views: number | null | undefined;
 
   // The amount of clicks the content has received
-  clicks: number;
+  clicks: number | null  | undefined;
 
   // The amount of skips the content has received
-  skips: number;
+  skips: number | null | undefined;
 };

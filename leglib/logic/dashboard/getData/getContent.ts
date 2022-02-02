@@ -1,8 +1,4 @@
-import {
-  getContentDataHistory,
-  getOldContentDataHistory,
-} from "../../requests/backend";
-import { getCreatorPerformance } from "../../requests/frontend";
+
 import getHistory from "../getHistory";
 import createChartData from "../createChartData";
 
@@ -19,7 +15,7 @@ export default function getContent(
   let monthlyPerformance: Map<string, any> = new Map<string, any>();
   let oldMonthlyPerformance: Map<string, any> = new Map<string, any>();
 
-  getContentDataHistory(contentID, undefined).then((contentDataHistory) => {
+  getContentDataHistory(contentID, undefined).then((contentDataHistory) => {  
     monthlyPerformance = getHistory(
       contentDataHistory,
       { contentID },

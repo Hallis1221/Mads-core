@@ -3,7 +3,7 @@ import {
   getOldContentDataHistory,
 } from "../../requests/backend";
 import { getCreatorPerformance } from "../../requests/frontend";
-import getHistory from "../getHistory";
+import getHistory from "../../../../lib/server/history/getHistory";
 import createChartData from "../createChartData";
 import toast from "react-hot-toast";
 

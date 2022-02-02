@@ -16,7 +16,7 @@ export async function getContentDataQuery(
   if (await isAuthorized("none", user, { contentid: contentID })) {
     let contentData = await ContentDataDB.findOne({ contentID });
 
-    if (!contentData) throw new Error("Content data not found");
+    if (!contentData) throw new Error(`Content data not found for  ${contentID}`);
 
     return contentData;
   } else {
@@ -34,17 +34,23 @@ export async function getUserContentDataQuery(
   { user }: { user: User | undefined }
 ): Promise<ContentData[]> {
   if (apiKey)
-    if (await isAuthorized("admin", apiKey, undefined))
-      return await getUserContentData(userID);
+    if (await isAuthorized("admin", apiKey, { contentid: undefined }))
+      if (!userID) throw new Error("UserID is required");
+      else return await getUserContentData(userID);
 
   if (user)
-    if (await isAuthorized("creator", user, undefined)) {
+    if (await isAuthorized("creator", user, { contentid: undefined })) {
       if (!user.id)
         user.id = (
           await UserDB.findOne({ email: user.email }).select("_id")
         )._id;
-      return await getUserContentData(user.id);
-    }
+
+      if (user.id) return await getUserContentData(user.id);
+    } else throw new Error("User is not authorized to get user content data");
+
+  throw new Error(
+    "You need to be logged or provide an apikey to perform this action"
+  );
 }
 
 // This is the resolver for the getContentDataMonth query. It takes in a contentID and returns the stats from the current month for the content.
@@ -52,14 +58,19 @@ export async function getContentDataMonthQuery(
   _: any,
   { contentID, apiKey }: { contentID: string; apiKey: string },
   { user }: { user: User }
-): Promise<ContentData> {
+): Promise<ContentData[]> {
   if (apiKey)
-    if (await isAuthorized("admin", apiKey, undefined))
+    if (await isAuthorized("admin", apiKey, { contentid: undefined }))
       return await getContentDataHistory(contentID);
 
   if (user)
-    if (await isAuthorized("user", user, undefined))
+    if (await isAuthorized("user", user, { contentid: undefined }))
       return await getContentDataHistory(contentID);
+    else throw new Error("User is not authorized to get content data");
+
+  throw new Error(
+    "You need to be logged or provide an apikey to perform this action"
+  );
 }
 
 // This is the resolver for the getLastContentData query. It takes in a contentID and returns the stats from the last month for the content.
@@ -67,12 +78,17 @@ export async function getLastContentDataQuery(
   _: any,
   { contentID, apiKey }: { contentID: string; apiKey: string },
   { user }: { user: User }
-): Promise<ContentData> {
+): Promise<ContentData[]> {
   if (apiKey)
-    if (await isAuthorized("admin", apiKey, undefined))
+    if (await isAuthorized("admin", apiKey, { contentid: undefined }))
       return await getContentDataHistory(contentID, 1);
 
   if (user)
-    if (await isAuthorized("user", user, undefined))
+    if (await isAuthorized("user", user, { contentid: undefined }))
       return await getContentDataHistory(contentID, 1);
+    else throw new Error("User is not authorized to get user content data");
+
+  throw new Error(
+    "You need to be logged or provide an apikey to perform this action"
+  );
 }

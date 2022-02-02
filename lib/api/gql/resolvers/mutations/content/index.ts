@@ -20,7 +20,7 @@ export async function adminCreateContentMutation(
   { user }: { user: User }
 ): Promise<Content> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, undefined)) {
+  if (await isAuthorized("admin", apiKey, {contentid: undefined})) {
     const addb = new ContentDB(content);
     const newcontent = await addb.save();
     return newcontent;
@@ -115,7 +115,7 @@ export async function updateContentMutation(
   }
 ): Promise<Content> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, undefined)) {
+  if (await isAuthorized("admin", apiKey, {contentid: undefined})) {
     const newcontent = await ContentDB.findByIdAndUpdate(contentID, {
       $set: content,
     });

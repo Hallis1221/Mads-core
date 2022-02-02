@@ -32,7 +32,7 @@ export async function isAuthorized(
   // Then check if the user is an admin
 
 if (typeof authentication !== "object")
-    throw new Error("Authentication is not an object");
+    throw new Error("Apikey was provided as the sole authentication method, but was invalid.");
 
 
   if (accessLevel === "admin") {
@@ -71,4 +71,6 @@ if (typeof authentication !== "object")
     else if (await isContentOwner(authentication, context.contentid)) return true;
     else throw new Error("User is not the owner of the content");
   }
+
+  return false;
 }
