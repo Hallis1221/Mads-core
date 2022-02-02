@@ -29,7 +29,7 @@ import {
   getContentDataMonthQuery,
   getLastContentDataQuery,
 } from "./queries/content/data";
-import { getContentHistoryQuery } from "./queries/content/data/history/getContentHistory";
+import { getAllContentHistoryQuery, getContentHistoryQuery } from "./queries/content/data/history/getContentHistory";
 import { isCreatorQuery } from "./queries/user";
 import { getUserInfoQuery } from "./queries/waitlist";
 
@@ -49,6 +49,7 @@ const resolvers = {
     getContentDataMonthQuery,
     getLastContentDataQuery,
     getContentHistoryQuery,
+    getAllContentHistoryQuery,
 
     // Ads
     getAdQuery,

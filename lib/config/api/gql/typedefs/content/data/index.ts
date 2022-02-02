@@ -12,6 +12,10 @@ export const contentDataTypeDefs = gql`
       contentID: String!
       apiKey: String
     ): ContentDataHistory!
+    getAllContentHistoryQuery(
+      apiKey: String
+      userID: String!
+    ): [ContentDataHistory]!
   }
 
   type Mutation {
@@ -27,6 +31,7 @@ export const contentDataTypeDefs = gql`
   }
 
   type ContentDataHistory {
+    contentID: String!
     views: Int
     clicks: Int
     skips: Int

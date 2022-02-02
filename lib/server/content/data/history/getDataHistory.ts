@@ -80,6 +80,7 @@ export async function getContentHistory(contentID: string) {
       views: views,
       clicks: clicks,
       skips: skips,
+      contentID: contentID,
       chartData: chartData,
   };
 }
