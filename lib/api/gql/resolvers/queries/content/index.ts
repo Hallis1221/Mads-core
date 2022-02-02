@@ -29,9 +29,9 @@ export async function getContentsQuery(
   _: any,
   { apiKey }: { apiKey: string }
 ): Promise<Content[]> {
-  if (await isAuthorized("admin", apiKey, undefined)) {
+  if (await isAuthorized("admin", apiKey, { contentid: undefined }))
     return await getContent(undefined);
-  }
+  throw new Error("User is not authorized to get user content");
 }
 
 // This is the resolver for the getUserContent query. It takes in the user or userID and returns all the contents linked to the user.
@@ -44,10 +44,23 @@ export async function getUserContentQuery(
   { user }: { user: User | undefined }
 ): Promise<Content[]> {
   if (apiKey)
-    if (await isAuthorized("admin", apiKey, undefined))
-      return await getUserContent(userID);
+    if (
+      await isAuthorized("admin", apiKey, {
+        contentid: undefined,
+      })
+    ) {
+      if (!userID && user && user.id) userID = user.id;
+      if (userID) return await getUserContent(userID);
+      else throw new Error("UserID is required");
+    }
 
-  if (user)
-    if (await isAuthorized("user", user, undefined))
+  if (user && user.id)
+    if (
+      await isAuthorized("user", user, {
+        contentid: undefined,
+      })
+    )
       return await getUserContent(user.id);
+
+  throw new Error("User is not authorized to get user content");
 }

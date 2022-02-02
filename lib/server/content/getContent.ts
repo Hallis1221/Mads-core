@@ -25,16 +25,65 @@ export function getContent(id: string | string[] | undefined) {
   }
 }
 
-export function getUserContent(uid: string) {
-  // TODO this approch might not work. Might have to get all the content and then filter it.
-  const contents = ContentDB.find({
+export async function getUserContent(uid: string) {
+  // TODO surly this is not the best way to do this. Loads of DB reads
+
+
+  // Select the owner and _id to not get the whole content, works better at scale
+  let contents = await ContentDB.find({
     owner: {
-      uid: uid,
+      $exists: true,
+    },
+  })
+    .select("owner")
+    .select("_id");
+
+  contents = contents.filter((content) => {
+    return content.owner.uid === uid;
+  });
+
+  let userContents = await ContentDB.find({
+    _id: {
+      $in: contents.map((content) => {
+        return content._id;
+      }),
     },
   });
 
   // If the content does not exist, throw an error
-  if (!contents) throw new Error("Content does not exist.");
+  if (!userContents) throw new Error("Did not find any content");
 
-  return contents;
+  return userContents;
+}
+
+
+export async function getUserContentIDS(uid: string) {
+  // TODO surly this is not the best way to do this. Loads of DB reads
+
+
+  // Select the owner and _id to not get the whole content, works better at scale
+  let contents = await ContentDB.find({
+    owner: {
+      $exists: true,
+    },
+  })
+    .select("owner")
+    .select("_id");
+
+  contents = contents.filter((content) => {
+    return content.owner.uid === uid;
+  });
+
+  let userContents = await ContentDB.find({
+    _id: {
+      $in: contents.map((content) => {
+        return content._id;
+      }),
+    },
+  }).select("_id");
+
+  // If the content does not exist, throw an error
+  if (!userContents) throw new Error("Did not find any content");
+
+  return userContents;
 }
