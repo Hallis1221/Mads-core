@@ -1,4 +1,4 @@
-import { Parallax, Background } from "react-parallax";
+import { Parallax } from "react-parallax";
 import Image from "next/image";
 
 export default function AboutPage({}) {

@@ -1,11 +1,11 @@
 import { NextPage } from "next/types";
 import React from "react";
-import { registerForCreatorWaitlist } from "../../leglib/logic/requests/frontend";
 import toast from "react-hot-toast";
 import NavBar from "../../components/navigation/navbar";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Head from "next/head";
+import { registerForCreatorWaitlist } from "../../lib/api/requests/frontend";
 
 // Waitlist page that has a form where users can enter their email address
 const CreatorWaitlist: NextPage = () => {
