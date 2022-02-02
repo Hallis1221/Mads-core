@@ -2,8 +2,8 @@ import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import { verifyUser } from "../../../leglib/logic/requests/frontend";
 import clientPromise from "../../../lib/db/connect/connect";
+import defaultUser from "../../../lib/server/user/defaultUser";
 
 export default NextAuth({
   secret: process.env.NA_SECRET,
@@ -28,7 +28,7 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      verifyUser(user.email);
+      defaultUser(user.userID as string|| "");
       return true;
     },
 

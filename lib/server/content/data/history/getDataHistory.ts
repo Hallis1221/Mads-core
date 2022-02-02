@@ -1,8 +1,8 @@
-import createChartData from "../../../../../leglib/logic/dashboard/createChartData";
 import ContentDataHistoryDB from "../../../../db/models/content/history";
 import { ContentData } from "../../../../types/data/contentData";
 import { ContentDataHistory } from "../../../../types/data/history/contentData";
 import getHistory from "../../../history/getHistory";
+import createChartData from "../chart/createChartData";
 
 export async function getContentDataHistory(
   contentID: string,

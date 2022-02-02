@@ -1,4 +1,3 @@
-import createChartData from "../../../../../../../../leglib/logic/dashboard/createChartData";
 import { isAuthorized } from "../../../../../../../auth/checks";
 import { getContentHistory } from "../../../../../../../server/content/data/history/getDataHistory";
 import {
