@@ -6,10 +6,10 @@ import InfoCard from "../../../components/dashboard/cards/infocard";
 import SideBar from "../../../components/dashboard/sidebar";
 import DashboardTopRow from "../../../components/dashboard/toprow";
 import ReactLoading from "react-loading";
-import getAllContent from "../../../leglib/logic/dashboard/getData/getAllContent";
 import ContentsCard from "../../../components/dashboard/chart/sidecard/contents";
 import toast from "react-hot-toast";
 import Head from "next/head";
+import { getAllUserContent } from "../../../lib/api/requests/frontend";
 
 // TODO move everything to mads core
 export default function Dashboard() {
@@ -44,7 +44,12 @@ export default function Dashboard() {
     toast.dismiss()
     toast.loading("Started fetching data... This could take up to 30 seconds.", );
     if (session && session.user)
-      getAllContent(setLastUpdated, setStats, setContents);
+      {
+        getAllUserContent().then((res: any) => {
+            console.log("res is: ", res);
+
+        });
+      }
   }, [session]);
 
   if (!session?.user)

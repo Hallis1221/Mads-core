@@ -14,7 +14,7 @@ export const contentDataTypeDefs = gql`
     ): ContentDataHistory!
     getAllContentHistoryQuery(
       apiKey: String
-      userID: String!
+      userID: String
     ): [ContentDataHistory]!
   }
 

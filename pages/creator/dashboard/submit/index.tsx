@@ -1,12 +1,12 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import SideBar from "../../../../components/dashboard/sidebar";
-import { createUserContent } from "../../../../leglib/logic/requests/frontend";
 import Link from "next/link";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { createUserContent } from "../../../../lib/api/requests/frontend";
 
 export default function SubmissionPage({}) {
   // Get authentication session
@@ -74,7 +74,12 @@ function ContentSubmissionForm({}): React.ReactElement {
       onSubmit={(values) => {
         setIsSubmitting(true);
         let tags = values.tags.split(",");
-        createUserContent(values.title, values.link, tags)
+        createUserContent({
+          title: values.title,
+          link: values.link,
+          tags: tags,
+          theme: "minecraft.marketplace",
+        })
           .then((val) => {
             setContentID(val.userCreateContent.content.id);
             toast.success("Content submitted successfully");

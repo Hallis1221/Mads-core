@@ -33,3 +33,63 @@ export async function registerForCreatorWaitlist(email: string, URL: string) {
     )
   ).registerForCreatorWaitlistMutation;
 }
+
+export async function getAllUserContent() {
+  return (
+    await gqc.request(
+      gql`
+        query Query {
+          getAllContentHistoryQuery {
+            contentID
+          }
+        }
+      `,
+    )
+  ).getAllContentHistoryQuery;
+}
+
+export async function createUserContent(content: {
+  theme: string;
+  title: string;
+  link: string;
+  tags: string[];
+}) {
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation($content: LimitedContentInput!) {
+          createContentMutation(content: $content) {
+            data {
+              skips
+              views
+              clicks
+              contentID
+            }
+          }
+        }
+      `,
+      {
+        content: content,
+      }
+    )
+  ).createContentMutation;
+}
+
+export async function getContentWithID(contentID: string) {
+  return (
+    await gqc.request(
+      gql`
+        query Query($getContentQueryId: String!) {
+          getContentQuery(id: $getContentQueryId) {
+            theme
+            title
+            link
+          }
+        }
+      `,
+      {
+        getContentQueryId: contentID,
+      }
+    )
+  ).getContentQuery;
+}

@@ -10,7 +10,7 @@ export const contentTypeDefs = gql`
   type Mutation {
     createContentMutation(
       content: LimitedContentInput!
-      apiKey: String!
+      apiKey: String
     ): ContentWithData!
 
     adminCreateContentMutation(
@@ -26,13 +26,17 @@ export const contentTypeDefs = gql`
   }
 
   type Content {
-    id: ID!
-    theme: String!
-    title: String!
-    link: String!
-    uploadDate: String!
-    tags: [Tag]!
-    owner: ContentOwner!
+    id: ID
+    theme: String
+    title: String
+    link: String
+    uploadDate: String
+    tags: [CTag]
+    owner: ContentOwner
+  }
+  
+  type CTag {
+    tag: String!
   }
 
   type Tag {
@@ -73,7 +77,11 @@ export const contentTypeDefs = gql`
   input LimitedContentInput {
     title: String!
     link: String!
-    tags: [TagInput]!
+    tags: [LMITag]!
+  }
+
+  input LMITag{
+    tag: String!
   }
 
   input TagInput {

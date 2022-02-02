@@ -7,4 +7,7 @@ export type User = {
 
     // The users display name, nullable
     name: string | null;
+
+    // Could circle
+    user: User;
 }

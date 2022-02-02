@@ -11,15 +11,16 @@ export async function isAuthorized(
     contentid: string | undefined;
   }
 ): Promise<boolean> {
+  
+  // If the accesslevel is none, return true
+  // TODO implement rate limiting
+  if (accessLevel === "none") return true;
+
   // If the access level is not defined, throw an error
   if (!accessLevel) throw new Error("Access level is undefined");
 
   // If the authentication is not defined, throw an error
   if (!authentication) throw new Error("Authentication is undefined");
-
-  // If the accesslevel is none, return true
-  // TODO implement rate limiting
-  if (accessLevel === "none") return true;
 
   // If a api key is provided as the authentication and the key is valid, for now give the user access to everything.
   // TODO add api levels when the api becomes public
@@ -40,6 +41,8 @@ if (typeof authentication !== "object")
     else if (!authentication.email) throw new Error("User email is undefined");
     else if (await isAdmin(authentication.email)) return true;
   }
+
+  if (!authentication.email && authentication.user.email) authentication.email = authentication.user.email;
 
   // If the access level is user, check if a user is provided in the context, if not, throw an error
   if (accessLevel === "user") {

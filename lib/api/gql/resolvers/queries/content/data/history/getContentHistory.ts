@@ -1,4 +1,5 @@
 import { isAuthorized } from "../../../../../../../auth/checks";
+import UserDB from "../../../../../../../db/models/auth/user";
 import { getContentHistory } from "../../../../../../../server/content/data/history/getDataHistory";
 import {
   getUserContent,
@@ -67,14 +68,22 @@ export async function getAllContentHistoryQuery(
       );
 
       return contentHistory;
-
     }
 
-  if (user)
-    if ((await isAuthorized("user", user, { contentid: undefined })) && user.id)
-      await getUserContent(user.id);
+  if (user && (await isAuthorized("user", user, { contentid: undefined })))
+    if (
+      (await isAuthorized("user", user, { contentid: undefined })) &&
+      user.id
+    ) {
+      return await getUserContent(user.id);
+    } else {
+      user.id = (
+        await UserDB.findOne({ email: user.email }).select("_id")
+      )._id.toString();
+      if (user.id) return await getUserContent(user.id);
+    }
 
   throw new Error(
-    "You need to be logged or provide an apikey to perform this action"
+    `    You need to be logged or provide an apiKey to get all user content history. User provided: ${user.user}/${user}, key provided: ${apiKey}`
   );
 }

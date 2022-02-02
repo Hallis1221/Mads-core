@@ -1,22 +1,13 @@
-import Icon from "awesome-react-icons";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Loading from "react-loading";
 import MagicEmailSignin from "../../../../components/auth/signin";
 import DashboardMainCol from "../../../../components/dashboard";
 import InfoCard from "../../../../components/dashboard/cards/infocard";
-import ChartCard from "../../../../components/dashboard/chart/chartcard";
 import ChangeLogCard from "../../../../components/dashboard/chart/sidecard/changelog";
-import ContentsCard from "../../../../components/dashboard/chart/sidecard/contents";
 import SideBar from "../../../../components/dashboard/sidebar";
-import DashboardTopRow from "../../../../components/dashboard/toprow";
-import getOwner from "../../../../leglib/data/owns";
-import getContent from "../../../../leglib/logic/dashboard/getData/getContent";
-import { getContentData } from "../../../../leglib/logic/requests/backend";
-import { getContentWithID } from "../../../../leglib/logic/requests/frontend";
 
 export default function Page() {
   const router = useRouter();
