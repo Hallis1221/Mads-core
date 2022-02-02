@@ -43,7 +43,7 @@ export async function getAllUserContent() {
             contentID
           }
         }
-      `,
+      `
     )
   ).getAllContentHistoryQuery;
 }
@@ -81,9 +81,13 @@ export async function getContentWithID(contentID: string) {
       gql`
         query Query($getContentQueryId: String!) {
           getContentQuery(id: $getContentQueryId) {
+            id
             theme
             title
             link
+            tags {
+              tag
+            }
           }
         }
       `,
@@ -92,4 +96,23 @@ export async function getContentWithID(contentID: string) {
       }
     )
   ).getContentQuery;
+}
+
+export async function getContentDataWithID(contentID: string) {
+  return (
+    await gqc.request(
+      gql`
+        query Query($contentId: String!) {
+          getContentDataQuery(contentID: $contentId) {
+            clicks
+            views
+            skips
+          }
+        }
+      `,
+      {
+        contentId: contentID,
+      }
+    )
+  ).getContentDataQuery;
 }

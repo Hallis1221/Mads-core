@@ -9,7 +9,11 @@ import ReactLoading from "react-loading";
 import ContentsCard from "../../../components/dashboard/chart/sidecard/contents";
 import toast from "react-hot-toast";
 import Head from "next/head";
-import { getAllUserContent } from "../../../lib/api/requests/frontend";
+import {
+  getAllUserContent,
+  getContentDataWithID,
+  getContentWithID,
+} from "../../../lib/api/requests/frontend";
 
 // TODO move everything to mads core
 export default function Dashboard() {
@@ -41,15 +45,53 @@ export default function Dashboard() {
 
   useEffect(() => {
     console.log("Fetching data...");
-    toast.dismiss()
-    toast.loading("Started fetching data... This could take up to 30 seconds.", );
-    if (session && session.user)
-      {
-        getAllUserContent().then((res: any) => {
-            console.log("res is: ", res);
+    toast.dismiss();
+    toast.loading("Started fetching data... This could take up to 30 seconds.");
+    if (session && session.user) {
+      getAllUserContent().then((res: any) => {
+        console.log("res is: ", res);
+        setLastUpdated(new Date(Date.now()).toLocaleString());
 
+        // Extract the content data from the response
+        const contents = res.map((content: any) => {
+          return {
+            views: content.views,
+            clicks: content.clicks,
+            skips: content.skips,
+            contentID: content.contentID,
+          };
         });
-      }
+
+        // Extract content ids from the response
+        const contentIDs = res.map((content: any) => {
+          return content.contentID;
+        });
+        console.log("contentIDs is: ", contentIDs);
+
+        // Get the content for each content id
+        const contentPromises = contentIDs.map((contentID: string) => {
+          return getContentWithID(contentID);
+        });
+
+        Promise.all(contentPromises).then((content: any) => {
+          // For each content, add the content data to the content object
+          const contentWithData = content.map((content: any) => {
+            getContentDataWithID(content.id).then((stat: any) => {
+              return {
+                ...content,
+                views: stat.views,
+                clicks: stat.clicks,
+                skips: stat.skips,
+              };
+            });
+          });
+          console.log("content is: ", contentWithData);
+          setContents(content);
+          toast.dismiss();
+        });
+        setContents(contents);
+      });
+    }
   }, [session]);
 
   if (!session?.user)
@@ -82,7 +124,7 @@ export default function Dashboard() {
     );
   }
   console.log("Rerendering dashboard");
-  if(stats.chartData && stats && stats.views != "N/A" ) toast.dismiss()
+  if (stats.chartData && stats && stats.views != "N/A") toast.dismiss();
   return (
     <>
       <Head>

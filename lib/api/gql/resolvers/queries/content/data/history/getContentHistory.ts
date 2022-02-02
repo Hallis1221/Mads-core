@@ -75,12 +75,39 @@ export async function getAllContentHistoryQuery(
       (await isAuthorized("user", user, { contentid: undefined })) &&
       user.id
     ) {
-      return await getUserContent(user.id);
+      let content = await getUserContent(user.id);
+
+      // Convert _id to contentID
+      content = content.map((content) => {
+        content.contentID = content._id.toString();
+        delete content._id;
+        return content;
+      });
+
+      return content;
     } else {
       user.id = (
         await UserDB.findOne({ email: user.email }).select("_id")
       )._id.toString();
-      if (user.id) return await getUserContent(user.id);
+      if (user.id) {
+        let contents = await getUserContent(user.id);
+
+        // Convert _id to contentID
+        contents = contents.map((content) => {
+          content.contentID = content._id.toString();
+          delete content._id;
+          return content;
+        });
+
+        // Get the content history for each content
+        contents = await Promise.all(
+          contents.map(async (content) => {
+            return await getContentHistory(content.contentID);
+          })
+        );
+
+        return contents;
+      }
     }
 
   throw new Error(
