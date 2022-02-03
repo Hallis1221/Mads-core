@@ -41,7 +41,9 @@ export default async function addAdDataMatch(
   // If the match already exists, throw an error
   if (exsists) {
     // Get the existing match adData
-    console.warn(`Match already exists for adID: ${ad._id} and contentID: ${adMatch.contentID}`);
+    console.warn(
+      `Match already exists for adID: ${ad._id} and contentID: ${adMatch.contentID}`
+    );
     return await AdDataDB.findOne({ adID: adData.adID });
   }
 
@@ -54,12 +56,21 @@ export default async function addAdDataMatch(
     let adBegins: number = adMatch.begins.getTime();
 
     // If the begins are the same, return true
-    if (matchBegins === adBegins) return true;
+    if (matchBegins === adBegins) {
+      return true;
+    }
   });
 
   // If the begins are occupied, throw an error
-  if (beginDateOccupied)
-    throw new Error(`Match beginning at ${adMatch.begins} is already occupied`);
+  if (beginDateOccupied) {
+    console.warn(
+      `Match begins at the same time as another match for adID: ${ad._id} and contentID: ${adMatch.contentID}`
+    );
+    return await AdDataDB.findOne({
+      adID: adData.adID,
+      matches: { $elemMatch: { contentID: adMatch.contentID } },
+    });
+  }
 
   // Check if theres as ad that is starting after the new match
   const altersTime = adData.matches.find((match: AdMAtch) => {

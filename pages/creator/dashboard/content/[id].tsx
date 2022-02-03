@@ -92,10 +92,14 @@ export default function Page() {
         if (totalClicks === 0) totalClicks = content.clicks;
         if (totalSkips === 0) totalSkips = content.skips;
 
+        if (typeof totalViews !== "number") totalViews = 0;
+        if (typeof totalClicks !== "number") totalClicks = 0;
+        if (typeof totalSkips !== "number") totalSkips = 0;
+
         setStats({
-          views: totalViews.toString(),
-          clicks: totalClicks.toString(),
-          skips: totalSkips.toString(),
+          views: totalViews.toString() || "N/A",
+          clicks: totalClicks.toString() || "N/A",
+          skips: totalSkips.toString() || "N/A",
           chartData: chartData,
         });
       });

@@ -109,10 +109,10 @@ export default function Dashboard() {
       
         // Set the combinedChartData to the stats
         setStats({
-          views: totalViews.toString(),
-          clicks: totalClicks.toString(),
-          skips: totalSkips.toString(),
-          chartData: combinedChartData,
+          views: totalViews.toString() || "",
+          clicks: totalClicks.toString() || "",
+          skips: totalSkips.toString() || "",
+          chartData: combinedChartData || [],
         });
 
 
