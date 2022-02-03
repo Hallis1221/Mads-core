@@ -14,6 +14,7 @@ const uri = process.env.MONGO_DATABASE_URL;
 
 // Sync function to connect to MongoDB. This function is exported.
 export default function clientPromise(): Promise<MongoClient> {
+  console.log("Giving out a clientPromise...");
   // If the MONGO_DATABASE_URL environment variable is not set, throw an error
   if (!uri) throw new Error("Please add your Mongo URI to .env.local");
 
@@ -35,8 +36,8 @@ export default function clientPromise(): Promise<MongoClient> {
   }
 
   // Console log a message to let the user know that the app has given out a clientPromise
-  console.log("Giving out a clientPromise...");
-
+  console.log("Given out a clientPromise!");
+  
   // Return the connection
   return clientPromise;
 }

@@ -182,3 +182,52 @@ export async function getContentHistory(contentID: string) {
     )
   ).getContentHistoryQuery;
 }
+
+export async function registerView(contentID: string, adID: string) {
+  console.log(contentID, "contentID");
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation($adId: ID!, $contentId: ID!) {
+          registerViewsMutation(adID: $adId, contentID: $contentId)
+        }
+      `,
+      {
+        adId: adID,
+        contentId: contentID,
+      }
+    )
+  ).registerViewsMutation;
+}
+
+export async function registerSkip(contentID: string, adID: string) {
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation($adId: ID!, $contentId: ID!) {
+          registerSkipsMutation(adID: $adId, contentID: $contentId)
+        }
+      `,
+      {
+        adId: adID,
+        contentId: contentID,
+      }
+    )
+  ).registerSkipsMutation;
+}
+
+export async function registerClick(contentID: string, adID: string) {
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation($adId: ID!, $contentId: ID!) {
+          registerClicksMutation(adID: $adId, contentID: $contentId)
+        }
+      `,
+      {
+        adId: adID,
+        contentId: contentID,
+      }
+    )
+  ).registerClicksMutation;
+}

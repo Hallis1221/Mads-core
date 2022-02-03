@@ -9,6 +9,7 @@ export default async function registerAdView(adID: string): Promise<void> {
 
   // If the ad and date is not found in the history database, create a new entry
   if (!(await AdDataHistoryDB.findOne({ adID, date }))) {
+    console.log(`Creating new adDataHistory entry for adID: ${adID}`);
     await AdDataHistoryDB.create({
       adID,
       date,
@@ -39,6 +40,6 @@ export default async function registerAdView(adID: string): Promise<void> {
     console.log(`Ad data created for adID: ${adID}`);
   } else {
     // If the ad data is found in the database, increment the views by 1
-    await AdDataDB.findOneAndUpdate({ adID }, { $inc: { views: 1 } });
+    await AdDataDB.findOneAndUpdate({ adID: adID }, { $inc: { views: 1 } });
   }
 }

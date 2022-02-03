@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ReactElement } from "react";
-import { registerClick } from "../../../leglib/logic/requests/frontend";
+import { registerClick } from "../../../lib/api/requests/frontend";
 
 export default function ImageAd({ad , content}: any): ReactElement {
   // perhaps the image should be bigger for big screens

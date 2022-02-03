@@ -11,8 +11,8 @@ export default async function connectDB(): Promise<mongoose.Connection> {
   if (!uri) throw new Error("Please add your Mongo URI to .env.local");
 
   // Check if the connection is already established
-  if (mongoose.connection.readyState === 1)
-    throw new Error("DB is already connected");
+  if (mongoose.connection.readyState === 1) return mongoose.connection;
+  // throw new Error("DB is already connected");
 
   // Console log a message to let the user know that the app is attempting to connect to MongoDB
   console.log("Connecting to MongoDB...");

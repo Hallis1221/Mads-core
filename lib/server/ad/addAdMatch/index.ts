@@ -39,10 +39,11 @@ export default async function addAdDataMatch(
   });
 
   // If the match already exists, throw an error
-  if (exsists)
-    throw new Error(
-      `Match between contentID: ${adMatch.contentID} and adID: ${ad._id} already exists`
-    );
+  if (exsists) {
+    // Get the existing match adData
+    console.warn(`Match already exists for adID: ${ad._id} and contentID: ${adMatch.contentID}`);
+    return await AdDataDB.findOne({ adID: adData.adID });
+  }
 
   // Check if theres already a match beginning at the same time as the new match
   const beginDateOccupied = adData.matches.find((match: AdMAtch) => {

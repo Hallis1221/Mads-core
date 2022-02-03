@@ -11,6 +11,7 @@ export default async function registerContentView(
 
   // If the content and date is not found in the history database, create a new entry
   if (!(await ContentDataHistoryDB.findOne({ contentID, date }))) {
+    console.log(`Creating new contentDataHistory entry for contentID: ${contentID}`);
     await ContentDataHistoryDB.create({
       contentID,
       date,
@@ -41,6 +42,6 @@ export default async function registerContentView(
     console.log(`Content data created for contentID: ${contentID}`);
   } else {
     // If the content data is found in the database, increment the views by 1
-    await ContentDataDB.findOneAndUpdate({ contentID }, { $inc: { views: 1 } });
+   await ContentDataDB.findOneAndUpdate({ contentID }, { $inc: { views: 1 } });
   }
 }

@@ -12,6 +12,8 @@ export async function registerViewsMutation(
   _: undefined,
   { adID, contentID }: { adID: string; contentID: string }
 ): Promise<void> {
+  console.log("Registering views...");
+  
   await registerAdView(adID);
 
   await registerContentView(contentID);
