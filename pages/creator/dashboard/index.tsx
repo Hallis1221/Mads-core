@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import Head from "next/head";
 import {
   getAllUserContent,
+  getAllUserContentFull,
   getContentDataWithID,
   getContentWithID,
 } from "../../../lib/api/requests/frontend";
@@ -48,8 +49,19 @@ export default function Dashboard() {
     toast.dismiss();
     toast.loading("Started fetching data... This could take up to 30 seconds.");
     if (session && session.user) {
-      getAllUserContent().then((res: any) => {
+      getAllUserContentFull().then((res: any) => {
         console.log("res is: ", res);
+        setStats({
+          views: res[0].views,
+          clicks: res[0].clicks,
+          skips: res[0].skips,
+          chartData: res[0].chartData,
+        });
+
+        let totalViews = 0;
+        let totalClicks = 0;
+        let totalSkips = 0;
+
         setLastUpdated(new Date(Date.now()).toLocaleString());
 
         // Extract the content data from the response
@@ -66,30 +78,40 @@ export default function Dashboard() {
         const contentIDs = res.map((content: any) => {
           return content.contentID;
         });
-        console.log("contentIDs is: ", contentIDs);
 
         // Get the content for each content id
         const contentPromises = contentIDs.map((contentID: string) => {
           return getContentWithID(contentID);
         });
 
-        Promise.all(contentPromises).then((content: any) => {
+        Promise.all(contentPromises).then(async (fetchedContent: any) => {
           // For each content, add the content data to the content object
-          const contentWithData = content.map((content: any) => {
-            getContentDataWithID(content.id).then((stat: any) => {
-              return {
-                ...content,
-                views: stat.views,
-                clicks: stat.clicks,
-                skips: stat.skips,
-              };
-            });
+
+         const contentData = fetchedContent.map(async (content: any) => {
+
+            // Find the content in the content array
+            const index = fetchedContent.findIndex(
+              (_content: any) => _content.id === content.id
+            );
+
+            let stats = await getContentDataWithID(content.id);
+
+
+            // Add the content data to the content array
+            contents[index] = {
+              ...contents[index],
+              ...stats,
+          };
+
+
           });
-          console.log("content is: ", contentWithData);
-          setContents(content);
-          toast.dismiss();
+
+          // Set the contents when fetching is complete
+          Promise.all(contentData).then(() => {
+            setContents(contents);
+            toast.dismiss();
+          });
         });
-        setContents(contents);
       });
     }
   }, [session]);
@@ -162,6 +184,7 @@ export default function Dashboard() {
 
               <ContentsCard
                 stats={contents.map((content) => {
+                  console.log("contendt is: ", content);
                   return {
                     contentID: content.contentID,
                     views: content.views,
