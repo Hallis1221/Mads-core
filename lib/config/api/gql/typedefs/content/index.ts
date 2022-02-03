@@ -50,7 +50,7 @@ export const contentTypeDefs = gql`
 
   type ContentWithData {
     content: Content!
-    data: [ContentData]!
+    data: ContentData!
   }
 
   type ContentData {
@@ -77,7 +77,7 @@ export const contentTypeDefs = gql`
   input LimitedContentInput {
     title: String!
     link: String!
-    tags: [LMITag]!
+    tags: [String]!
   }
 
   input LMITag{

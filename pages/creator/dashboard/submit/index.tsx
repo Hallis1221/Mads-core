@@ -78,13 +78,13 @@ function ContentSubmissionForm({}): React.ReactElement {
           title: values.title,
           link: values.link,
           tags: tags,
-          theme: "minecraft.marketplace",
         })
           .then((val) => {
-            setContentID(val.userCreateContent.content.id);
-            toast.success("Content submitted successfully");
+            setContentID(val.contentID);
             setCreated(true);
             setIsSubmitting(false);
+            toast.success("Content submitted successfully");
+
           })
           .catch((err) => {
             console.log(

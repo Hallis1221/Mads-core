@@ -22,6 +22,8 @@ export async function permittedToGetContent(
 export async function permittedToCreateContent(user: User): Promise<boolean> {
   if (!user) return false;
 
+  if (!user.email) user.email = user.user.email;
+
   // Check if the user is a creator, if not return false
   if (!(await isCreator(user.email))) return false;
 

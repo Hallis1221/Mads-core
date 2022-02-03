@@ -20,7 +20,7 @@ export async function adminCreateContentMutation(
   { user }: { user: User }
 ): Promise<Content> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, {contentid: undefined})) {
+  if (await isAuthorized("admin", apiKey, { contentid: undefined })) {
     const addb = new ContentDB(content);
     const newcontent = await addb.save();
     return newcontent;
@@ -45,16 +45,15 @@ export async function createContentMutation(
   { user }: { user: User }
 ) {
   let contentInput = content;
-  
-  if (
-    (await isAuthorized("admin", apiKey, {contentid: undefined})) ||
-    (await permittedToCreateContent(user))
-  ) {
+
+  if (await permittedToCreateContent(user)) {
     const title: string = contentInput.title;
     const link: string = contentInput.link;
-    const tags: string[] = contentInput.tags.map((tag: any) =>
-      tag.tag.toLowerCase()
-    );
+    let tags: string[] = contentInput.tags.map((tag: any) => {
+      if (typeof tag === "string") return tag.toLowerCase();
+      else if (typeof tag === "object") return tag.tag.toLowerCase();
+      else return "undefined tag";
+    });
 
     const exsists = await ContentDB.findOne({ title });
     if (exsists)
@@ -62,6 +61,11 @@ export async function createContentMutation(
         "Content with the same title already exists. It is recommended to use unique titles to avoid confusion. This is enforced to prevent accidental duplicate content."
       );
 
+      // Convert tags to object if they are strings
+      tags = tags.map((tag: any) => {
+        if (typeof tag === "string") return { tag };
+        else return tag;
+      });
     const content: Content = {
       title,
       link,
@@ -89,12 +93,13 @@ export async function createContentMutation(
     };
 
     const contentDataDB = await ContentDataDB.create(contentData);
-
     return {
       content: contentDB,
-      contentData: contentDataDB,
+      data: contentDataDB,
     };
   }
+
+  throw new Error("User is not authorized to create an content");
 }
 
 // This is the resolver for the updateContent mutation.  It takes in an content object and updates the ad with the ad object.
@@ -115,7 +120,7 @@ export async function updateContentMutation(
   }
 ): Promise<Content> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, {contentid: undefined})) {
+  if (await isAuthorized("admin", apiKey, { contentid: undefined })) {
     const newcontent = await ContentDB.findByIdAndUpdate(contentID, {
       $set: content,
     });

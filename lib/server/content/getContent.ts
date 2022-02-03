@@ -1,22 +1,21 @@
 import ContentDB from "../../db/models/content";
 
-export function getContent(id: string | string[] | undefined) {
+export async function getContent(id: string | string[] | undefined) {
   if (typeof id === "string") {
-    const content = ContentDB.findById(id);
-
+    const content = await ContentDB.findById(id);
     // If the content does not exist, throw an error
     if (!content) throw new Error("Content does not exist.");
 
     return content;
   } else if (Array.isArray(id)) {
-    const contents = ContentDB.find({ _id: { $in: id } });
+    const contents = await ContentDB.find({ _id: { $in: id } });
 
     // If the content does not exist, throw an error
     if (!contents) throw new Error("Content does not exist.");
 
     return contents;
   } else {
-    const contents = ContentDB.find({});
+    const contents = await ContentDB.find({});
 
     // If the content does not exist, throw an error
     if (!contents) throw new Error("Content does not exist.");

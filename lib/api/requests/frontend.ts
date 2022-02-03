@@ -1,4 +1,5 @@
 import { gql } from "graphql-request";
+import { Tag } from "../../types/tag";
 import { gqc } from "../gql/client";
 
 export async function isCreator(email: string) {
@@ -80,7 +81,6 @@ export async function getAllUserContentFull() {
 }
 
 export async function createUserContent(content: {
-  theme: string;
   title: string;
   link: string;
   tags: string[];
@@ -91,16 +91,17 @@ export async function createUserContent(content: {
         mutation Mutation($content: LimitedContentInput!) {
           createContentMutation(content: $content) {
             data {
-              skips
-              views
-              clicks
               contentID
             }
           }
         }
       `,
       {
-        content: content,
+        content: {
+          title: content.title,
+          link: content.link,
+          tags: content.tags,
+        },
       }
     )
   ).createContentMutation;
