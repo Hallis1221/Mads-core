@@ -12,7 +12,14 @@ import typeDefinitions from "../../lib/config/api/gql/typedefs";
 import resolvers from "../../lib/api/gql/resolvers";
 
 connectDB();
-const ApiProductionLanding = ApolloServerPluginLandingPageLocalDefault({ footer: false });
+const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({
+  workspaceName: "MADS api",
+  settings: {
+    "request.credentials": "include",
+    "schema.polling.enable": true,
+    "editor.theme": "dark",
+  },
+});
 const ApiLocalLanding = ApolloServerPluginLandingPageLocalDefault({ footer: false });
 
 const apolloServer = new ApolloServer({
