@@ -8,7 +8,11 @@ export default async function createContentDataMutation(
   { contentData, apiKey }: { contentData: ContentData; apiKey: string }
 ): Promise<ContentData> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, undefined)) {
+  if (
+    await isAuthorized("admin", apiKey, {
+      contentid: undefined,
+    })
+  ) {
     const contentdb = new ContentDataDB(contentData);
     const newcontentData = await contentdb.save();
     return newcontentData;
@@ -27,7 +31,11 @@ export async function updateContentDataMutation(
   }: { contentDataID: string; apiKey: string; contentData: ContentData }
 ): Promise<ContentData> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, undefined)) {
+  if (
+    await isAuthorized("admin", apiKey, {
+      contentid: undefined,
+    })
+  ) {
     const newcontentData = await ContentDataDB.findByIdAndUpdate(
       contentDataID,
       { $set: contentData }

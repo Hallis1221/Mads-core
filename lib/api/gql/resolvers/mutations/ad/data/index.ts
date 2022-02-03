@@ -8,7 +8,9 @@ export default async function createAdDataMutation(
   { adData, apiKey }: { adData: AdData; apiKey: string }
 ): Promise<AdData> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, undefined)) {
+  if (await isAuthorized("admin", apiKey, {
+    contentid: undefined,
+  })) {
     const addb = new AdDataDB(adData);
     const newadData = await addb.save();
     return newadData;
@@ -27,7 +29,9 @@ export async function updateAdDataMutation(
   }: { adDataID: string; apiKey: string; adData: AdData }
 ): Promise<AdData> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, undefined)) {
+  if (await isAuthorized("admin", apiKey, {
+    contentid: undefined,
+  })) {
     const newadData = await AdDataDB.findByIdAndUpdate(adDataID, {
       $set: adData,
     });

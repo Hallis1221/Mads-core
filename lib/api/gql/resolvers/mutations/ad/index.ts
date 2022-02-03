@@ -8,7 +8,11 @@ export default async function createAdMutation(
   { ad, apiKey }: { ad: Ad; apiKey: string }
 ): Promise<Ad> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, undefined)) {
+  if (
+    await isAuthorized("admin", apiKey, {
+      contentid: undefined,
+    })
+  ) {
     const addb = new AdDB(ad);
     const newad = await addb.save();
     return newad;
@@ -23,7 +27,11 @@ export async function updateAdMutation(
   { adID, apiKey, ad }: { adID: string; apiKey: string; ad: Ad }
 ): Promise<Ad> {
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, undefined)) {
+  if (
+    await isAuthorized("admin", apiKey, {
+      contentid: undefined,
+    })
+  ) {
     const newad = await AdDB.findByIdAndUpdate(adID, { $set: ad });
 
     // If the ad is not found, throw an error
