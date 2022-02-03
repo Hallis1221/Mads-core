@@ -1,4 +1,7 @@
 export type Tag = {
-    tag: string;
-    priority: number;
-}
+  // The tag's name
+  tag: string;
+
+  // The tag's priority
+  priority: number;
+};

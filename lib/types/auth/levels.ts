@@ -1,0 +1,1 @@
+export type AuthLevels = "user" | "admin" | "creator" | "none" | "owner";

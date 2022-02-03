@@ -7,8 +7,8 @@ import {
   useState,
 } from "react";
 import Loading from "react-loading";
-import { getContentWithID } from "../../../../../lib/logic/requests/frontend";
 import Link from "next/link";
+import { getContentWithID } from "../../../../../lib/api/requests/frontend";
 
 let hasRendered = false;
 
@@ -59,7 +59,11 @@ export default function ContentsCard({ stats }: { stats: any }): ReactElement {
                   </Link>
                 </div>
                 <div className="text-sm font-light text-left text-[#9FA2B4] text-opacity-50 italic pt-2 pb-5">
-                  Your {content.tags[0].tag} content has been viewed{" "}
+                  Your {
+                    content.tags !== null 
+                    ? content.tags[0].tag
+                    : ""
+                  } content has been viewed{" "}
                   {content.views} times and clicked {content.clicks} times. That
                   is a click through rate of{" "}
                   {

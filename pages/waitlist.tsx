@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
 import { NextPage } from "next/types";
-import CornerLogo from "../components/logo";
 import NavBar from "../components/navigation/navbar";
 
 const Waitlist: NextPage = () => {

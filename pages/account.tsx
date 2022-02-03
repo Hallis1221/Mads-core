@@ -1,9 +1,9 @@
-import { useSession, signOut, getProviders } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import MagicEmailSignin from "../components/auth/signin";
 import NavBar from "../components/navigation/navbar";
-import { isCreator } from "../lib/logic/requests/frontend";
+import { isCreator } from "../lib/api/requests/frontend";
 
 export default function AccountPage({}: any) {
   const { data: session } = useSession();

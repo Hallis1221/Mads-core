@@ -1,6 +1,6 @@
 import { SetStateAction } from "react";
 import Countdown from "react-countdown";
-import { registerSkip } from "../../lib/logic/requests/frontend";
+import { registerSkip } from "../../lib/api/requests/frontend";
 
 export default function ReactiveCountdown({
   isDone,

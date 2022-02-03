@@ -1,4 +1,7 @@
 export type Owner = {
-    uid: string;
-    displayName: string;
+  // The user's id (UID)
+  uid: string;
+
+  // The user's display name
+  displayName: string;
 };

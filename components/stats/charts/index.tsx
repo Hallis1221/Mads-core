@@ -15,8 +15,8 @@ function createMockData(days: number) {
   let multiplier = 1000;
   for (let i = 0; i < days; i++) {
     data.push({
+      date: format(new Date(new Date(2019, 0, i + 1).getTime()), "dd") + "th",
       now: {
-        date: format(new Date(new Date(2019, 0, i + 1).getTime()), "dd") + "th",
         views: Math.round(Math.random() * multiplier + i * 75),
         clicks: Math.round(Math.random() * multiplier + i * 10),
         skips: Math.round(Math.random() * multiplier + i * 10),
@@ -46,9 +46,9 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
     // For each entry to data
     for (let i = 0; i < data.length; i++) {
       // check if the date is in missingDays
-      if (missingDays.includes(data[i].now.date))
+      if (missingDays.includes(data[i].date))
         // if it is, remove it from missingDays
-        missingDays.splice(missingDays.indexOf(data[i].now.date), 1);
+        missingDays.splice(missingDays.indexOf(data[i].date), 1);
     }
     // For each missing day
     for (let i = 0; i < missingDays.length; i++) {
@@ -80,13 +80,12 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
       try {
         return parseInt(str.replace("th", ""));
       } catch (error) {
-        console.error(error, str);
         return 0;
       }
     }
 
-    if (formatify(a.now.date) < formatify(b.now.date)) return -1;
-    if (formatify(a.now.date) > formatify(b.now.date)) return 1;
+    if (formatify(a.date) < formatify(b.date)) return -1;
+    if (formatify(a.date) > formatify(b.date)) return 1;
     return 0;
   });
 
@@ -139,7 +138,7 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
           axisLine={true}
           opacity={0.5}
           ticks={hortizontalTicks}
-          dataKey={"now.date"}
+          dataKey={"date"}
         />
         <Tooltip />
         <CartesianGrid
