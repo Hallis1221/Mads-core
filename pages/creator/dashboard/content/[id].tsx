@@ -8,6 +8,7 @@ import DashboardMainCol from "../../../../components/dashboard";
 import InfoCard from "../../../../components/dashboard/cards/infocard";
 import ChangeLogCard from "../../../../components/dashboard/chart/sidecard/changelog";
 import SideBar from "../../../../components/dashboard/sidebar";
+import { getContentDataWithID, getContentHistory, getContentWithID } from "../../../../lib/api/requests/frontend";
 
 export default function Page() {
   const router = useRouter();
@@ -49,7 +50,7 @@ export default function Page() {
     if (!id || (id && id.length <= 12) || typeof id !== "string") return;
     getContentWithID(id as string)
       .then((content) => {
-        getContentData(id as string, "").then(
+        getContentDataWithID(id as string).then(
           (stats: { views: number; clicks: number; skips: number }) => {
             console.log(stats);
             content.views = stats.views;
@@ -67,7 +68,15 @@ export default function Page() {
 
   useEffect(() => {
     if (!session) return;
-    getContent(setLastUpdated, setStats, id as string);
+    getContentWithID(id as string).then((content) => {
+      getContentHistory(id as string).then((contentStats) => {
+        console.log(contentStats);
+        setStats(contentStats);
+      });
+      console.log(content);
+      setContent(content);
+      setLastUpdated(new Date(Date.now()).toLocaleString());
+    });
   }, [id, session]);
 
   if (!content) return <div>Content not found</div>;

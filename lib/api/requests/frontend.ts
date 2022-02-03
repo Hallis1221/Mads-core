@@ -148,3 +148,37 @@ export async function getContentDataWithID(contentID: string) {
     )
   ).getContentDataQuery;
 }
+
+export async function getContentHistory(contentID: string) {
+  return (
+    await gqc.request(
+      gql`
+        query GetContentHistoryQuery($contentId: String!, $apiKey: String) {
+          getContentHistoryQuery(contentID: $contentId, apiKey: $apiKey) {
+            skips
+            clicks
+            views
+            contentID
+            chartData {
+              last {
+                views
+                clicks
+                skips
+                date
+              }
+              now {
+                views
+                clicks
+                skips
+                date
+              }
+            }
+          }
+        }
+      `,
+      {
+        contentId: contentID,
+      }
+    )
+  ).getContentHistoryQuery;
+}
