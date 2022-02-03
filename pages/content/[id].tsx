@@ -91,6 +91,13 @@ export async function getStaticProps({ params }: any) {
   let content: object | any;
   let ad: object | any;
 
+  console.log("Connecting to database");
+  console.time("Connected to database in");
+
+  await connectDB();
+  console.timeEnd("Connected to database in");
+
+
   try {
     // get the content from the database
     console.log("Fetching content");
