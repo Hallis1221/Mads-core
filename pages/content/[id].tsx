@@ -4,7 +4,6 @@ import MainAd from "../../components/ad";
 import Header from "../../components/ad/head";
 import ReactiveAdInfo from "../../components/ad/info";
 import ReactiveCountdown from "../../components/countdown";
-import NotSeriousFooter from "../../components/footer";
 import NavBar from "../../components/navigation/navbar";
 import { registerView } from "../../lib/api/requests/frontend";
 
@@ -17,6 +16,7 @@ import ContentDataDB from "../../lib/db/models/content/data";
 import { matchWithAd } from "../../lib/server/ad/findAd";
 import connectDB from "../../lib/db/connect/mongoose/connect";
 import { getContent } from "../../lib/server/content/getContent";
+import SeriousFooter from "../../components/footer/serious";
 
 export default function AdPage(props: any): ReactElement {
   // get the ad and content from props, fetched by the server in getStaticProps
@@ -75,7 +75,7 @@ export default function AdPage(props: any): ReactElement {
         </div>
       </main>
 
-      <NotSeriousFooter />
+      <SeriousFooter />
     </div>
   );
 }
