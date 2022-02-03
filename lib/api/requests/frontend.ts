@@ -184,7 +184,6 @@ export async function getContentHistory(contentID: string) {
 }
 
 export async function registerView(contentID: string, adID: string) {
-  console.log(contentID, "contentID");
   return (
     await gqc.request(
       gql`
