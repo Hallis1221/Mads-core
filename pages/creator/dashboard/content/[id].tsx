@@ -22,6 +22,8 @@ export default function Page() {
     skips: "N/A" || 0,
     chartData: [
       {
+        date: "",
+
         now: {
           views: 0,
           clicks: 0,
@@ -70,10 +72,24 @@ export default function Page() {
     if (!session) return;
     getContentWithID(id as string).then((content) => {
       getContentHistory(id as string).then((contentStats) => {
-        console.log(contentStats);
-        setStats(contentStats);
+
+        let chartData = contentStats.chartData.map((data: any) => {
+          console.log(data);
+          return {
+            date: data.now.date,
+           ...data
+          };
+        });
+        setStats({
+          views: contentStats.views,
+          clicks: contentStats.clicks,
+          skips: contentStats.skips,
+          chartData: chartData
+          
+        });
+
       });
-      console.log(content);
+
       setContent(content);
       setLastUpdated(new Date(Date.now()).toLocaleString());
     });

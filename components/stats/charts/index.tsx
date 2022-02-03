@@ -80,7 +80,6 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
       try {
         return parseInt(str.replace("th", ""));
       } catch (error) {
-        console.error(error, str);
         return 0;
       }
     }
