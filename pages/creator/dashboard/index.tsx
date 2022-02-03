@@ -15,6 +15,7 @@ import {
   getContentDataWithID,
   getContentWithID,
 } from "../../../lib/api/requests/frontend";
+import { ContentData } from "../../../lib/types/data/contentData";
 
 // TODO move everything to mads core
 export default function Dashboard() {
@@ -62,10 +63,67 @@ export default function Dashboard() {
         let totalClicks = 0;
         let totalSkips = 0;
 
+        // Calculate total views, clicks, and skips
+        res.forEach((content: ContentData) => {
+          totalViews += content.views || 0;
+          totalClicks += content.clicks || 0;
+          totalSkips += content.skips || 0;
+        });
+
+        // Combine all the chartdata into one array by combining the same data in now and last
+        let combinedChartData: any = [];
+        res.forEach((content: any) => {
+          content.chartData.forEach((data: any) => {
+            // Check if the combinedChartData already has the same date
+            let combinedChartDataIndex = combinedChartData.findIndex(
+              (ccdi: any) => ccdi.date == data.now.date
+            );
+
+            if (combinedChartDataIndex == -1) {
+              // If it doesn't, add it
+              combinedChartData.push({
+                date: data.now.date,
+                now: {
+                  date: data.now.date,
+                  views: data.now.views,
+                  clicks: data.now.clicks,
+                  skips: data.now.skips,
+                },
+                last: {
+                  views: data.last.views,
+                  clicks: data.last.clicks,
+                  skips: data.last.skips,
+                },
+              });
+            } else {
+              // If it does, add the data to the combinedChartData
+              combinedChartData[combinedChartDataIndex].now.views +=
+                data.now.views;
+              combinedChartData[combinedChartDataIndex].now.clicks +=
+                data.now.clicks;
+              combinedChartData[combinedChartDataIndex].now.skips +=
+                data.now.skips;
+            }
+          });
+        });
+      
+        // Set the combinedChartData to the stats
+        setStats({
+          views: totalViews.toString(),
+          clicks: totalClicks.toString(),
+          skips: totalSkips.toString(),
+          chartData: combinedChartData,
+        });
+
+
         setLastUpdated(new Date(Date.now()).toLocaleString());
 
-        // Extract the content data from the response
-        const contents = res.map((content: any) => {
+        // Let contents be the res without the chartData
+        // Remove the chartData from the res
+        let contents = res.map((content: any) => {
+          totalViews += content.views;
+          totalClicks += content.clicks;
+          totalSkips += content.skips;
           return {
             views: content.views,
             clicks: content.clicks,
@@ -74,44 +132,7 @@ export default function Dashboard() {
           };
         });
 
-        // Extract content ids from the response
-        const contentIDs = res.map((content: any) => {
-          return content.contentID;
-        });
-
-        // Get the content for each content id
-        const contentPromises = contentIDs.map((contentID: string) => {
-          return getContentWithID(contentID);
-        });
-
-        Promise.all(contentPromises).then(async (fetchedContent: any) => {
-          // For each content, add the content data to the content object
-
-         const contentData = fetchedContent.map(async (content: any) => {
-
-            // Find the content in the content array
-            const index = fetchedContent.findIndex(
-              (_content: any) => _content.id === content.id
-            );
-
-            let stats = await getContentDataWithID(content.id);
-
-
-            // Add the content data to the content array
-            contents[index] = {
-              ...contents[index],
-              ...stats,
-          };
-
-
-          });
-
-          // Set the contents when fetching is complete
-          Promise.all(contentData).then(() => {
-            setContents(contents);
-            toast.dismiss();
-          });
-        });
+        setContents(contents);
       });
     }
   }, [session]);
@@ -127,6 +148,7 @@ export default function Dashboard() {
   let contentIDS = contents
     .map((content) => content.contentID)
     .filter((contentID) => contentID != "");
+
 
   if (
     stats &&
@@ -145,7 +167,9 @@ export default function Dashboard() {
       }
     );
   }
+
   console.log("Rerendering dashboard");
+  
   if (stats.chartData && stats && stats.views != "N/A") toast.dismiss();
   return (
     <>
@@ -169,13 +193,13 @@ export default function Dashboard() {
                 color={"#FF7976"}
                 title={"Estimated revenue"}
                 value={
-                  typeof stats.views === "string" ||
-                  typeof stats.clicks === "string"
+                   stats.views === "0" ||
+                   stats.clicks === "0"
                     ? "N/A"
                     : "$" +
                       (
-                        stats.views * (1 / 1000) +
-                        stats.clicks * (25 / 1000)
+                        parseInt(stats.views) * (1 / 1000) +
+                        parseInt(stats.clicks) * (25 / 1000)
                       ).toFixed(3)
                 }
                 icon={"check-circle"}
@@ -184,7 +208,6 @@ export default function Dashboard() {
 
               <ContentsCard
                 stats={contents.map((content) => {
-                  console.log("contendt is: ", content);
                   return {
                     contentID: content.contentID,
                     views: content.views,

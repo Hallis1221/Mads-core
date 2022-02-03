@@ -48,6 +48,37 @@ export async function getAllUserContent() {
   ).getAllContentHistoryQuery;
 }
 
+export async function getAllUserContentFull() {
+  return (
+    await gqc.request(
+      gql`
+        query Query {
+          getAllContentHistoryQuery {
+            contentID
+            skips
+            clicks
+            views
+            chartData {
+              now {
+                views
+                clicks
+                date
+                skips
+              }
+              last {
+                date
+                skips
+                clicks
+                views
+              }
+            }
+          }
+        }
+      `
+    )
+  ).getAllContentHistoryQuery;
+}
+
 export async function createUserContent(content: {
   theme: string;
   title: string;
