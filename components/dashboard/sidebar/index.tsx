@@ -27,7 +27,13 @@ export default function SideBar() {
       title: "Submit",
       link: "/creator/dashboard/submit",
       icon: "plus",
-    }
+    },
+    {
+      id: 3,
+      title:"Account",
+      link: "/creator/dashboard/account",
+      icon: "user",
+    },
   ];
 
   items.forEach((item) => {
