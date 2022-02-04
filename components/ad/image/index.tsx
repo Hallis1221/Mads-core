@@ -14,7 +14,7 @@ export default function ImageAd({ad , content}: any): ReactElement {
         layout="intrinsic"
         className="h-full hover:cursor-pointer"
         onClick={async () => {
-          registerClick(ad.id, content.id);
+          registerClick(content.id, ad.id);
           window.open(ad.link, "_blank");
         } } />
     </div>;

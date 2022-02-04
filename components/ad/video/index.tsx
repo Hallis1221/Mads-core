@@ -25,8 +25,8 @@ export default function VideoAd({ ad, content, setIsDone }: any): ReactElement {
         className="text-xl font-bold font-sans text-white absolute z-10 text-shadow-lg pl-4 bottom-20 md:text-2xl lg:text-3xl xl:text-4xl lg:pl-4 lg:bottom-20 xl:bottom-[4.75rem] md:bottom-20 hover:cursor-pointer"
         onClick={() => {
           if (startedPlayer) {
-            registerClick(ad.id, content.id);
-            console.log("clicked");
+            registerClick(content.id, ad.id);
+            console.log("Registered click");
             setPaused(true);
             window.open(ad.link, "_blank");
           }
