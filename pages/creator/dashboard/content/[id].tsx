@@ -88,9 +88,9 @@ export default function Page() {
           };
         });
 
-        if (totalViews === 0) totalViews = content.views;
-        if (totalClicks === 0) totalClicks = content.clicks;
-        if (totalSkips === 0) totalSkips = content.skips;
+        if (totalViews <= content.views) totalViews = content.views;
+        if (totalClicks <= content.clicks) totalClicks = content.clicks;
+        if (totalSkips <= content.skips) totalSkips = content.skips;
 
         if (typeof totalViews !== "number") totalViews = 0;
         if (typeof totalClicks !== "number") totalClicks = 0;
