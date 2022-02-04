@@ -23,7 +23,7 @@ export default function ReactiveCountdown({
         if (isDone)
           return (
             <a href={content.link} onClick={()=>{
-              registerSkip(ad.id, content.id)
+              registerSkip(content.id, ad.id)
             }} className="text-xl font-bold ">
               Skip
             </a>
