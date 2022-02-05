@@ -3,6 +3,7 @@
 
 import createAdMutation, { updateAdMutation } from "./mutations/ad";
 import createAdDataMutation, { updateAdDataMutation } from "./mutations/ad/data";
+import { createCreatorKeyMutation } from "./mutations/api";
 import {
   createContentMutation,
   adminCreateContentMutation,
@@ -88,7 +89,10 @@ const resolvers = {
 
     // Ad data
     createAdDataMutation,
-    updateAdDataMutation
+    updateAdDataMutation,
+
+    // Api
+    createCreatorKeyMutation,
   },
 };
 

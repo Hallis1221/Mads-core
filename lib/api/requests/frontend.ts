@@ -230,3 +230,15 @@ export async function registerClick(contentID: string, adID: string) {
     )
   ).registerClicksMutation;
 }
+
+export async function createApiKey() {
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation {
+          createCreatorKeyMutation
+        }
+      `
+    )
+  ).createCreatorKeyMutation;
+}

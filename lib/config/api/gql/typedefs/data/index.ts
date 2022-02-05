@@ -9,6 +9,7 @@ export const dataTypeDefs = gql`
     registerViewsMutation(adID: ID!, contentID: ID!): Boolean
     registerClicksMutation(adID: ID!, contentID: ID!): Boolean
     registerSkipsMutation(adID: ID!, contentID: ID!): Boolean
+    createCreatorKeyMutation: String!
     defaultUserMutation(userID: String!): User!
   }
 
