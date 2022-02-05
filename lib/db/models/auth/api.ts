@@ -9,6 +9,10 @@ const ApiSchema = new mongoose.Schema({
         required: true,
     },
 
+    userID: {
+        type: String,
+    }
+
 });
 
 const ApiDB = mongoose.models.ApiKeys || mongoose.model("ApiKeys", ApiSchema);
