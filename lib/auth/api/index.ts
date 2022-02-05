@@ -3,6 +3,7 @@ import { apiiKeyCharacters, apiKeyLength } from "../../config/auth";
 import ApiDB from "../../db/models/auth/api";
 import UserDB from "../../db/models/auth/user";
 import { logger } from "../../log";
+import { User } from "../../types/user";
 
 export const apiKey = process.env.API_KEY || "";
 
@@ -25,6 +26,33 @@ export async function apiKeyAuthenticated(apiKey: string): Promise<boolean> {
 
   // If the api key is the same as the one in the DB, return true
   return true;
+}
+
+// The apiKeyLevel function is used to check the level of the api key.
+export async function apiKeyLevel(apiKey: string) {
+  if (!apiKeyAuthenticated) throw new Error("API key is not valid");
+
+  // Get the user id from the api key
+  let userID: string | undefined;
+  try {
+    userID = (await ApiDB.findOne({ hash: md5(apiKey) }).select("userID"))
+      .userID;
+  } catch (error) {
+    throw new Error("API key is not valid");
+  }
+  if (!userID) throw new Error("User ID is not defined on the api key");
+
+  // Get the user from the DB
+  const user: any | null = await UserDB.findOne({ userID });
+
+  if (!user) throw new Error("User is not defined on the api key");
+  
+  if (user.admin) return "admin";
+
+  if (user.creator) return "creator";
+
+  return "user";
+
 }
 
 // The createApiKey function is used to create a new api key, hash it, save it to the DB and return the api key.
@@ -62,7 +90,7 @@ export async function createApiKey(userID: string): Promise<string> {
   const hashedApiKey: string = md5(apiKey);
 
   // Save the api key to the DB
-  let newDBEntry = await ApiDB.create({ hash: hashedApiKey });
+  let newDBEntry = await ApiDB.create({ hash: hashedApiKey, userID });
 
   // Return the api key
   logger.warn("Created new api key with hash: " + newDBEntry.hash);
