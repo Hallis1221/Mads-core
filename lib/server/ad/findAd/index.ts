@@ -6,7 +6,11 @@ import { Ad } from "../../../types/ad";
 import addAdDataMatch from "../addAdMatch";
 
 // The matchWithAd function takes in an Content object and matches it with an Ad object.
-export async function matchWithAd(tags: String[], theme: String, id: string): Promise<Ad> {
+export async function matchWithAd(
+  tags: String[],
+  theme: String,
+  id: string
+): Promise<Ad> {
   // Get all the ads
   const ads: Array<Ad> = await AdDB.find({});
 
@@ -34,7 +38,7 @@ export async function matchWithAd(tags: String[], theme: String, id: string): Pr
   // Sort the list of potential ads by their relevance, according to their tags and tag priorites
 
   // Initialize a winnder variable for the ad we want to return
-  let winnder: {
+  let winner: {
     score: number;
     ad: Ad;
   } = {
@@ -74,7 +78,7 @@ export async function matchWithAd(tags: String[], theme: String, id: string): Pr
 
     // if the ad relevance is greater than the current winner's relevance, replace the winner
     if (views < ad.maxViews && clicks < ad.maxClicks) {
-      if (score > winnder.score) winnder = { score, ad };
+      if (score > winner.score) winner = { score, ad };
     } else {
       // Log that the ad is not a winner because it has reached its max views or clicks
       console.log(
@@ -103,12 +107,16 @@ export async function matchWithAd(tags: String[], theme: String, id: string): Pr
   };
 
   // Add the match to the ads ad data
-  await addAdDataMatch(winnder.ad, match);
+  let winnerdata = await addAdDataMatch(winner.ad, match);
+
+  // Check that the winnerid is equal to the ad's id
+  if (winnerdata.adID.toString() !== winner.ad._id.toString())
+    throw new Error("Winner id does not match ad id");
   // Log that we found a match
   console.log(
-    `Found a match for content: ${id}. It matched with ad: ${winnder.ad.title}`
+    `Found a match for content: ${id}. It matched with ad: ${winner.ad.title}`
   );
 
   // Return the winnder ad
-  return winnder.ad;
+  return winner.ad;
 }
