@@ -12,7 +12,13 @@ const ApiSchema = new mongoose.Schema({
     userID: {
         type: String,
         required: true,
-    }
+    },
+
+    // The creation date of the API key
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
 
 });
 
