@@ -84,15 +84,9 @@ function ContentSubmissionForm({}): React.ReactElement {
             setCreated(true);
             setIsSubmitting(false);
             toast.success("Content submitted successfully");
-
           })
           .catch((err) => {
-            console.log(
-              err.message
-                .split(`{"response":`)[0]
-                .replace(/\n/g, "")
-                .replace(":", "")
-            );
+            console.error(err);
             toast.error(
               err.message
                 .split(`{"response":`)[0]

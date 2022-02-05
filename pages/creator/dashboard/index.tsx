@@ -50,7 +50,6 @@ export default function Dashboard() {
     toast.loading("Started fetching data... This could take up to 30 seconds.");
     if (session && session.user) {
       getAllUserContentFull().then((res: any) => {
-        console.log("User content: ");
         console.table(res);
         setStats({
           views: res[0].views,
@@ -106,7 +105,7 @@ export default function Dashboard() {
             }
           });
         });
-      
+
         // Set the combinedChartData to the stats
         setStats({
           views: totalViews.toString() || "",
@@ -114,7 +113,6 @@ export default function Dashboard() {
           skips: totalSkips.toString() || "",
           chartData: combinedChartData || [],
         });
-
 
         setLastUpdated(new Date(Date.now()).toLocaleString());
 
@@ -149,7 +147,6 @@ export default function Dashboard() {
     .map((content) => content.contentID)
     .filter((contentID) => contentID != "");
 
-
   if (
     stats &&
     typeof stats.views == "number" &&
@@ -168,9 +165,9 @@ export default function Dashboard() {
     );
   }
 
-  console.log("Rerendering dashboard");
-  
   if (stats.chartData && stats && stats.views != "N/A") toast.dismiss();
+  console.info(`Rerendering dashboard with ${contents.length} contents. Logged in as ${session.user.email}`);
+
   return (
     <>
       <Head>
@@ -193,8 +190,7 @@ export default function Dashboard() {
                 color={"#FF7976"}
                 title={"Estimated revenue"}
                 value={
-                   stats.views === "0" ||
-                   stats.clicks === "0"
+                  stats.views === "0" || stats.clicks === "0"
                     ? "N/A"
                     : "$" +
                       (

@@ -73,7 +73,6 @@ export default function Page() {
         setContent(content);
       })
       .catch((err) => {
-        console.log(err);
         console.error(`Error fetching content with id: ${id}. ${err}`);
         return;
       });
@@ -82,7 +81,8 @@ export default function Page() {
     getContentWithID(id as string).then((content) => {
       getContentHistory(id as string).then((contentStats) => {
         let chartData = contentStats.chartData.map((data: any) => {
-          console.log(data);
+          console.log("Got data for the ", data.now.date, " day of the month.");
+          console.table(data);
           return {
             date: data.now.date,
             ...data,
