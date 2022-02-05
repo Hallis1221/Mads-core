@@ -1,7 +1,7 @@
 import winston from "winston";
 
 export const logger = winston.createLogger({
-    level: 'info',
+    level: 'debug',
     format: winston.format.colorize(),
   });
   

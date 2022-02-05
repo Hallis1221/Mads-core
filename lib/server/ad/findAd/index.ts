@@ -108,12 +108,12 @@ export async function matchWithAd(
   };
 
   // Add the match to the ads ad data
-  let winnerdata = await addAdDataMatch(winner.ad, match);
-
+  let winnerid = await addAdDataMatch(winner.ad, match);
+  logger.debug(`Winner data: ${winnerid}`);
   // Check that the winnerid is equal to the ad's id
-  if (winnerdata.adID.toString() !== winner.ad._id.toString())
-    winner.ad = await AdDB.findById(winnerdata.adID).then((ad) => {
-      logger.warn("Overwrote ad winner beacuse addAdDataMatch failed. ");
+  if (winnerid !== winner.ad._id.toString())
+    winner.ad = await AdDB.findById(winnerid).then((ad) => {
+      logger.warn("Overwrote ad winner beacuse addAdDataMatch failed. New ad:   " + winner);
       return ad;
     });
 

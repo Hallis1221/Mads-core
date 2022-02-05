@@ -10,7 +10,7 @@ import { AdMAtch } from "../../../types/match";
 export default async function addAdDataMatch(
   ad: Ad,
   adMatch: AdMAtch
-): Promise<AdData> {
+): Promise<String> {
   // Instead of checking the validity of the input all at once we do it in several steps to give a more detailed error message.
 
   // Find the adData with the matching adID
@@ -45,7 +45,7 @@ export default async function addAdDataMatch(
     logger.warn(
       `Match already exists for adID: ${ad._id} and contentID: ${adMatch.contentID}`
     );
-    return await AdDataDB.findOne({ adID: adData.adID });
+    return (await AdDataDB.findOne({ adID: adData.adID, contentID: adMatch.contentID }).select("adID")).adID;
   }
 
   // Check if theres already a match beginning at the same time as the new match
@@ -67,10 +67,10 @@ export default async function addAdDataMatch(
     logger.warn(
       `Match begins at the same time as another match for adID: ${ad._id} and contentID: ${adMatch.contentID}`
     );
-    return await AdDataDB.findOne({
+    return (await AdDataDB.findOne({
       adID: adData.adID,
       matches: { $elemMatch: { contentID: adMatch.contentID } },
-    });
+    }).select("adID")).adID;
   }
 
   // Check if theres as ad that is starting after the new match
@@ -123,5 +123,5 @@ export default async function addAdDataMatch(
   );
 
   // Return the adData
-  return adData;
+  return adData.adID;
 }
