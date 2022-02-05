@@ -1,4 +1,5 @@
 import UserDB from "../../../../../db/models/auth/user";
+import { logger } from "../../../../../log";
 import { User } from "../../../../../types/user";
 
 // This is the resolver for the defualtUser mutation.
@@ -13,9 +14,7 @@ export default async function defaultUserMutation(
   if (!user.creator) {
     await UserDB.updateOne({ email: user.email }, { creator: false });
 
-    console.log(
-      "Checked and defaulted user creator status for user: " + user.email
-    );
+   logger.debug(`Defaulted user: ${user.email} to creator: false`);
   }
 
   return user;

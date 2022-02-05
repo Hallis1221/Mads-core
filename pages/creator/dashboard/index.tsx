@@ -46,12 +46,12 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    console.log("Fetching data...");
     toast.dismiss();
     toast.loading("Started fetching data... This could take up to 30 seconds.");
     if (session && session.user) {
       getAllUserContentFull().then((res: any) => {
-        console.log("res is: ", res);
+        console.log("User content: ");
+        console.table(res);
         setStats({
           views: res[0].views,
           clicks: res[0].clicks,

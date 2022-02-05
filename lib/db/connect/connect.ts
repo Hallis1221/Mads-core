@@ -3,6 +3,7 @@
 // Import MongoClient from mongodb
 import { MongoClient } from "mongodb";
 import { mongoClientOptions } from "../../config/db";
+import { logger } from "../../log";
 
 // Declare global variables to be used with type checking
 declare global {
@@ -14,7 +15,7 @@ const uri = process.env.MONGO_DATABASE_URL;
 
 // Sync function to connect to MongoDB. This function is exported.
 export default function clientPromise(): Promise<MongoClient> {
-  console.log("Giving out a clientPromise...");
+  logger.info("Giving out MongoClient promise");
   // If the MONGO_DATABASE_URL environment variable is not set, throw an error
   if (!uri) throw new Error("Please add your Mongo URI to .env.local");
 
@@ -36,8 +37,7 @@ export default function clientPromise(): Promise<MongoClient> {
   }
 
   // Console log a message to let the user know that the app has given out a clientPromise
-  console.log("Given out a clientPromise!");
-  
+  logger.debug("Given out MongoClient promise");
   // Return the connection
   return clientPromise;
 }

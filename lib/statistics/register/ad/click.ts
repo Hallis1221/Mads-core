@@ -1,6 +1,7 @@
 import AdDataHistoryDB from "../../../db/models/ad/history";
 import AdDataDB from "../../../db/models/ad/data";
 import { createIntervalDate } from "../../../interval";
+import { logger } from "../../../log";
 
 // Export defualt function for registering an ad click. The function takes in the adID as its only argument.
 export default async function registerAdClick(adID: string): Promise<void> {
@@ -27,7 +28,9 @@ export default async function registerAdClick(adID: string): Promise<void> {
   // If the ad data is not found in the database, create a new entry
   if (!(await AdDataDB.findOne({ adID }))) {
     // Log that the ad data was not found in the database
-    console.log(`Ad data not found for adID: ${adID}`);
+    logger.warn(
+      `Ad data not found for adID: ${adID} in registerAdClick resolver`
+    );
     await AdDataDB.create({
       adID,
       clicks: 1,
@@ -36,7 +39,7 @@ export default async function registerAdClick(adID: string): Promise<void> {
     });
 
     // Log that the ad data was created in the database
-    console.log(`Ad data created for adID: ${adID}`);
+    logger.warn(`Ad data created for adID: ${adID}`);
   } else {
     // If the ad data is found in the database, increment the clicks by 1
     await AdDataDB.findOneAndUpdate({ adID }, { $inc: { clicks: 1 } });

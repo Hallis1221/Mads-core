@@ -2,6 +2,7 @@ import { minimumAdsToRace } from "../../../config/ads";
 import AdDB from "../../../db/models/ad";
 import AdDataDB from "../../../db/models/ad/data";
 import { createIntervalTimePair } from "../../../interval";
+import { logger } from "../../../log";
 import { Ad } from "../../../types/ad";
 import addAdDataMatch from "../addAdMatch";
 
@@ -29,7 +30,7 @@ export async function matchWithAd(
   // Return a random ad if we do not have any ads that match the content theme.
   // Console log that we did not find any ads that match the content theme.
   if (potentialAds.length <= minimumAdsToRace) {
-    console.log(`No ads found for theme: ${theme}`);
+    logger.warn(`No ads found for theme: ${theme}`);
     return ads[Math.floor(Math.random() * ads.length)];
   }
 
@@ -71,8 +72,8 @@ export async function matchWithAd(
       await AdDataDB.findOne({ adID: ad._id }).select("clicks")
     ).clicks;
 
-    // Log some statistics about the ad
-    console.log(
+    // Log some statistics about the ad;
+    logger.debug(
       `Checking ad: ${ad.title} with score: ${score}, views: ${views}, clicks: ${clicks}, maxViews: ${ad.maxViews}, maxClicks: ${ad.maxClicks}`
     );
 
@@ -81,9 +82,9 @@ export async function matchWithAd(
       if (score > winner.score) winner = { score, ad };
     } else {
       // Log that the ad is not a winner because it has reached its max views or clicks
-      console.log(
+      logger.warn(
         `Ad: ${ad.title} is not a winner because it has reached its max views or clicks`
-      );
+      )
     }
   }
 
@@ -111,10 +112,13 @@ export async function matchWithAd(
 
   // Check that the winnerid is equal to the ad's id
   if (winnerdata.adID.toString() !== winner.ad._id.toString())
-    winner.ad = await AdDB.findById(winnerdata.adID).then((ad) => {console.log("Overwrote ad winner beacuse addAdDataMatch failed. "); return ad;});
-  
+    winner.ad = await AdDB.findById(winnerdata.adID).then((ad) => {
+      logger.warn("Overwrote ad winner beacuse addAdDataMatch failed. ");
+      return ad;
+    });
+
   // Log that we found a match
-  console.log(
+  logger.info(
     `Found a match for content: ${id}. It matched with ad: ${winner.ad.title}`
   );
 

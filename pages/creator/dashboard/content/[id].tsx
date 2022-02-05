@@ -74,6 +74,7 @@ export default function Page() {
       })
       .catch((err) => {
         console.log(err);
+        console.error(`Error fetching content with id: ${id}. ${err}`);
         return;
       });
 

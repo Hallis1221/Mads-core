@@ -39,7 +39,7 @@ export default function ReactiveCountdown({
             <a
               className="text-xl font-bold"
               onClick={() => {
-                console.log("Hi");
+                console.warn("Woah! Slow down there cowboy, the timer is still ticking!");
               }}
             >
               {props.seconds}

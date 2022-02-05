@@ -1,3 +1,4 @@
+import { logger } from "../../../../../log";
 import registerAdClick from "../../../../../statistics/register/ad/click";
 import registerAdSkip from "../../../../../statistics/register/ad/skip";
 import registerAdView from "../../../../../statistics/register/ad/view";
@@ -12,7 +13,6 @@ export async function registerViewsMutation(
   _: undefined,
   { adID, contentID }: { adID: string; contentID: string }
 ): Promise<void> {
-  console.log("Registering views...");
   
   await registerAdView(adID);
 

@@ -1,6 +1,7 @@
 import ContentDataDB from "../../../db/models/content/data";
 import ContentDataHistoryDB from "../../../db/models/content/history";
 import { createIntervalDate } from "../../../interval";
+import { logger } from "../../../log";
 
 // Export defualt function for registering a click. The function takes in the contentID as its only argument.
 export default async function registerContentClick(
@@ -29,7 +30,7 @@ export default async function registerContentClick(
   // If the content data is not found in the database, create a new entry
   if (!(await ContentDataDB.findOne({ contentID }))) {
     // Log that the content data was not found in the database
-    console.log(`Content data not found for contentID: ${contentID}`);
+    logger.warn(`Content data not found for contentID: ${contentID}`);
     await ContentDataDB.create({
       contentID,
       clicks: 1,
@@ -38,7 +39,7 @@ export default async function registerContentClick(
     });
 
     // Log that the content data was created in the database
-    console.log(`Content data created for contentID: ${contentID}`);
+    logger.warn(`Content data created for contentID: ${contentID}`);
   } else {
     // If the content data is found in the database, increment the clicks by 1
     await ContentDataDB.findOneAndUpdate(

@@ -1,5 +1,6 @@
 import AdDataDB from "../../../db/models/ad/data";
 import ContentDB from "../../../db/models/content";
+import { logger } from "../../../log";
 import { Ad } from "../../../types/ad";
 import { Content } from "../../../types/content";
 import { AdData } from "../../../types/data/adData";
@@ -41,7 +42,7 @@ export default async function addAdDataMatch(
   // If the match already exists, throw an error
   if (exsists) {
     // Get the existing match adData
-    console.warn(
+    logger.warn(
       `Match already exists for adID: ${ad._id} and contentID: ${adMatch.contentID}`
     );
     return await AdDataDB.findOne({ adID: adData.adID });
@@ -63,7 +64,7 @@ export default async function addAdDataMatch(
 
   // If the begins are occupied, throw an error
   if (beginDateOccupied) {
-    console.warn(
+    logger.warn(
       `Match begins at the same time as another match for adID: ${ad._id} and contentID: ${adMatch.contentID}`
     );
     return await AdDataDB.findOne({

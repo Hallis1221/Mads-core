@@ -18,7 +18,6 @@ export default function MagicEmailSignin() {
       validationSchema={EmailSchema}
       onSubmit={async (values) => {
         toast.loading("Working...");
-        console.log(1);
         await signIn("email", { email: values.email, redirect: false , });
         values.hasSubmitted = true;
         toast.dismiss();

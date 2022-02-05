@@ -10,6 +10,7 @@ import { NextApiRequest, NextApiResponse } from "next/types";
 import connectDB from "../../lib/db/connect/mongoose/connect";
 import typeDefinitions from "../../lib/config/api/gql/typedefs";
 import resolvers from "../../lib/api/gql/resolvers";
+import { logger } from "../../lib/log";
 
 connectDB();
 const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({
@@ -59,7 +60,7 @@ const origin = req.headers.origin;
  
   
   let user = await getSession({ req });
-  // console.log("Passing user to apollo server: ", user);
+  logger.debug("Passing user to apollo server: ", user);
   if (user) apolloServer.requestOptions.context = { req, res, user };
 
   // To use the user object in a resolver, see this example:

@@ -1,6 +1,7 @@
 import { md5 } from "pure-md5";
 import { apiiKeyCharacters, apiKeyLength } from "../../config/auth";
 import ApiDB from "../../db/models/auth/api";
+import { logger } from "../../log";
 
 export const apiKey = process.env.API_KEY || "";
 
@@ -27,7 +28,7 @@ export async function apiKeyAuthenticated(apiKey: string): Promise<boolean> {
 
 // The createApiKey function is used to create a new api key, hash it, save it to the DB and return the api key.
 export async function createApiKey(): Promise<string> {
-  console.log("Creating new api key");
+  logger.warn("Creating new api key");
   // Create a new api key
   let apiKey: string | undefined = "";
 
@@ -51,9 +52,8 @@ export async function createApiKey(): Promise<string> {
 
   // Save the api key to the DB
   let newDBEntry = await ApiDB.create({ hash: hashedApiKey });
-  console.log(newDBEntry);
 
   // Return the api key
-  console.log("New api key created");
+  logger.warn("Created new api key with hash: " + hashedApiKey);
   return apiKey;
 }

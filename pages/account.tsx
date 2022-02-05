@@ -11,7 +11,6 @@ export default function AccountPage({}: any) {
 
   useEffect(() => {
     isCreator(session?.user?.email || "").then((res: any) => {
-      console.log("res", res);
       setCreator(res);
     });
   }, [session]);

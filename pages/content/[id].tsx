@@ -17,6 +17,7 @@ import { matchWithAd } from "../../lib/server/ad/findAd";
 import connectDB from "../../lib/db/connect/mongoose/connect";
 import { getContent } from "../../lib/server/content/getContent";
 import SeriousFooter from "../../components/footer/serious";
+import { logger } from "../../lib/log";
 
 export default function AdPage(props: any): ReactElement {
   // get the ad and content from props, fetched by the server in getStaticProps
@@ -28,8 +29,11 @@ export default function AdPage(props: any): ReactElement {
 
   // useEffect for registering the view. Every time the page is loaded or the adID or contentID changes, this will be called
   useEffect(() => {
-    console.log("Registering view for adID: " + ad.id, "contentID: " + content.id);
-    registerView( content.id, ad.id);
+    console.log(
+      "Registering view for adID: " + ad.id,
+      "contentID: " + content.id
+    );
+    registerView(content.id, ad.id);
   }, [ad.id, content.id]);
 
   // incase something happend with getstaticprops and htis wasnt registered as a 404 already, we here ensure that ad nor the content is null. If either is null, we return a 404 page
@@ -82,7 +86,8 @@ export default function AdPage(props: any): ReactElement {
 
 // getStaticProps is a function that is called by NextJS at build time. With revalidate we force the server to re-fetch the data every x seconds.
 export async function getStaticProps({ params }: any) {
-  console.log("Fetching props");
+  logger.info(`Fetching props for content with id: ${params.id}`);
+  let proptimer = logger.startTimer();
 
   // get the contentID from the url/params
   const { id } = params;
@@ -91,23 +96,13 @@ export async function getStaticProps({ params }: any) {
   let content: object | any;
   let ad: object | any;
 
-  console.log("Connecting to database");
-  console.time("Connected to database in");
-
   await connectDB();
-  console.timeEnd("Connected to database in");
-
 
   try {
     // get the content from the database
-    console.log("Fetching content");
-    console.time("Fetched content in");
-
     content = await getContent(id);
-    console.timeEnd("Fetching content");
-
     if (content === null) {
-      console.error("Error getting content with id: " + id);
+      logger.error("Error getting content with id: " + id + ". It was null");
       return { notFound: true };
     }
 
@@ -116,17 +111,14 @@ export async function getStaticProps({ params }: any) {
     let theme = content.theme;
 
     // find a relevant ad with similair tags and preferred theme. Ignore errors as its likely that the match already exists
-    console.log("Fetching ad");
-    console.time("Fetched ad in");
 
     ad = await matchWithAd(tags, theme, id);
-    console.timeEnd("Fetched ad in");
 
-    console.log(
+    logger.info(
       "Content with id of " + id + " matched ad with id of " + ad._id
     );
   } catch (error) {
-    console.log("Error getting content with id: " + id + " " + error);
+    logger.error("Error getting content with id: " + id + " " + error);
     // if something went wrong, we return a 404 page. For example if the contentID or no ad was found
     return { notFound: true };
   }
@@ -177,7 +169,9 @@ export async function getStaticProps({ params }: any) {
     },
   };
 
-  console.log("Fetched props for content with id: " + id);
+  proptimer.done({
+    message: "Fetched props for content with id: " + id,
+  });
   return {
     props: {
       ad,
@@ -189,8 +183,8 @@ export async function getStaticProps({ params }: any) {
 
 // getStaticPaths is a function that is called by NextJS at build time. It returns an array of paths that are used to generate the pages.
 export async function getStaticPaths() {
-  console.log("Getting static paths");
-  console.time("Got static paths in");
+  logger.warn("Getting static paths");
+  let pathtimer = logger.startTimer();
 
   // create a list of all contentIDs initalized as an empty array
   let contentids: { id: string }[] = [];
@@ -199,26 +193,24 @@ export async function getStaticPaths() {
   // if we dont have an apikey in the env config, we throw an error
   if (!apiKey) throw new Error("Apikey is not set in .env.local");
 
-  console.log("Connecting to database");
-  console.time("Connected to database in");
-
   await connectDB();
-  console.timeEnd("Connected to database in");
 
-  console.log("Fetching contentids");
-  console.time("Fetched contentids in");
+  let cidtimer = logger.startTimer();
   // get all contentIDs from the database and save them in the ids array
   contentids = await ContentDB.find({});
 
-  console.timeEnd("Fetched contentids in");
+  cidtimer.done({
+    message: "Fetched all contentIDs",
+  });
 
-  console.log("Fetching adids");
-  console.time("Fetched adids in");
+  let aidtimer = logger.startTimer();
 
   // get all adIDs from the database and save them in the ids array
   adids = await AdDB.find({});
 
-  console.timeEnd("Fetched adids in");
+  aidtimer.done({
+    message: "Fetched all adIDs",
+  });
 
   // create an array of paths from the id of each element in the ids array
   const paths = contentids.map((content: { id: string }) => {
@@ -229,15 +221,23 @@ export async function getStaticPaths() {
     };
   });
 
-  console.log("Ensuring contentdata");
+  logger.debug(
+    "Generated " +
+      paths.length +
+      " paths for " +
+      contentids.length +
+      " contentIDs."
+  );
+
+  logger.debug(`
+Ensuring that all content has corresponding contentdata`);
 
   // go trough each contentID and ensure the contentData exists, if not create it
   for (const id in contentids) {
-    console.log("Checking content with id: " + contentids[id].id);
-    console.time("Checked content with id: " + contentids[id].id + " in");
+    let ctimer = logger.startTimer();
     await ContentDataDB.findOne({ contentID: contentids[id].id }).catch(
       async (e) => {
-        console.log(
+        logger.warn(
           "Contentdata not found for id: " + contentids[id].id,
           ". Creating... (",
           e,
@@ -251,18 +251,22 @@ export async function getStaticPaths() {
         });
       }
     );
-    console.timeEnd("Checked content with id: " + contentids[id].id + " in");
+    ctimer.done({
+      message: "Checked content with id: " + contentids[id].id,
+      level: "debug",
+    });
   }
   // go trough each adID and ensure the adData exists, if not create it
   for (const id in adids) {
+    let adtimer = logger.startTimer();
     await AdDataDB.findOne({ adID: adids[id].id }).catch(async (e) => {
-      console.log(
+      logger.warn(
         "Addata not found for id: " + adids[id].id,
         ". Creating... (",
         e,
         ")"
       );
-      console.time("Created adata for id: " + adids[id].id + " in");
+
       await AdDataDB.create({
         adID: adids[id].id,
         clicks: 0,
@@ -270,8 +274,10 @@ export async function getStaticPaths() {
         skips: 0,
         matches: [],
       });
-
-      console.timeEnd("Created adata for id: " + adids[id].id + " in");
+    });
+    adtimer.done({
+      message: "Checked ad with id: " + adids[id].id,
+      level: "debug",
     });
   }
 
@@ -279,8 +285,10 @@ export async function getStaticPaths() {
   // We'll pre-render only these paths at build time.
   // { fallback: blocking } will server-render pages
   // on-demand if the path doesn't exist.
-  console.log("Paths; ", paths);
-  console.timeEnd("Got static paths in");
+  pathtimer.done({
+    message: "Generated static paths",
+  });
+
   return {
     paths,
     fallback: "blocking",
