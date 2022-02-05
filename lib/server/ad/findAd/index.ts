@@ -111,7 +111,8 @@ export async function matchWithAd(
 
   // Check that the winnerid is equal to the ad's id
   if (winnerdata.adID.toString() !== winner.ad._id.toString())
-    throw new Error("Winner id does not match ad id");
+    winner.ad = await AdDB.findById(winnerdata.adID).then((ad) => {console.log("Overwrote ad winner beacuse addAdDataMatch failed. "); return ad;});
+  
   // Log that we found a match
   console.log(
     `Found a match for content: ${id}. It matched with ad: ${winner.ad.title}`
