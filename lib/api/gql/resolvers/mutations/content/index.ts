@@ -3,6 +3,7 @@ import { permittedToCreateContent } from "../../../../../auth/checks/content";
 import UserDB from "../../../../../db/models/auth/user";
 import ContentDB from "../../../../../db/models/content";
 import ContentDataDB from "../../../../../db/models/content/data";
+import validateContent from "../../../../../server/content/validate";
 import { Content } from "../../../../../types/content";
 import { ContentData } from "../../../../../types/data/contentData";
 import { User } from "../../../../../types/user";
@@ -54,6 +55,16 @@ export async function createContentMutation(
       else if (typeof tag === "object") return tag.tag.toLowerCase();
       else return "undefined tag";
     });
+
+    // Validate the content
+    await validateContent(
+      undefined,
+      title,
+      link,
+      tags,
+      "create",
+    );
+      
 
     const exsists = await ContentDB.findOne({ title });
     if (exsists)
@@ -126,10 +137,14 @@ export async function updateContentMutation(
     else return tag;
   });
 
-  if (tags.length > 5) throw new Error("You can only have 5 tags");
-  if (content.title.length > 50) throw new Error("Title is too long");
-  if (content.link.length > 25) throw new Error("Link is too long");
-  
+  await validateContent(
+    contentID,
+    content.title,
+    content.link,
+    tags,
+    "update"
+  );
+
 
   // Check if the apiKey is valid
   if (await isAuthorized("creator", user || apiKey, { contentid: contentID })) {
