@@ -20,7 +20,7 @@ export const contentTypeDefs = gql`
 
     updateContentMutation(
       contentID: String!
-      apiKey: String!
+      apiKey: String
       content: LimitedContentInput!
     ): Content!
   }

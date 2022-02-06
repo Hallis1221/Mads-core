@@ -61,11 +61,11 @@ export async function createContentMutation(
         "Content with the same title already exists. It is recommended to use unique titles to avoid confusion. This is enforced to prevent accidental duplicate content."
       );
 
-      // Convert tags to object if they are strings
-      tags = tags.map((tag: any) => {
-        if (typeof tag === "string") return { tag };
-        else return tag;
-      });
+    // Convert tags to object if they are strings
+    tags = tags.map((tag: any) => {
+      if (typeof tag === "string") return { tag };
+      else return tag;
+    });
     const content: Content = {
       title,
       link,
@@ -117,12 +117,23 @@ export async function updateContentMutation(
       link: string;
       tags: string[];
     };
-  }
+  },
+  { user }: { user: User }
 ): Promise<Content> {
+
+  let tags = content.tags.map((tag: any) => {
+    if (typeof tag === "string") return { tag };
+    else return tag;
+  });
+
   // Check if the apiKey is valid
-  if (await isAuthorized("admin", apiKey, { contentid: undefined })) {
+  if (await isAuthorized("creator", user || apiKey, { contentid: contentID })) {
     const newcontent = await ContentDB.findByIdAndUpdate(contentID, {
-      $set: content,
+      $set: {
+        title: content.title,
+        link: content.link,
+        tags,
+      },
     });
 
     // If the content is not found, throw an error

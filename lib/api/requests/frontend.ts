@@ -242,3 +242,38 @@ export async function createApiKey() {
     )
   ).createCreatorKeyMutation;
 }
+
+export async function updateContent(
+  contentID: string,
+  content: {
+    title: string;
+    link: string;
+    tags: string[];
+  }
+) {
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation(
+          $contentId: String!
+          $content: LimitedContentInput!
+        ) {
+          updateContentMutation(
+            contentID: $contentId
+            content: $content
+          ) {
+            id
+          }
+        }
+      `,
+      {
+        contentId: contentID,
+        content: {
+          title: content.title,
+          link: content.link,
+          tags: content.tags,
+        },
+      }
+    )
+  ).updateContentMutation;
+}

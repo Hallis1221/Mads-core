@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import MagicEmailSignin from "../../../../components/auth/signin";
 import DashboardMainCol from "../../../../components/dashboard";
 import InfoCard from "../../../../components/dashboard/cards/infocard";
@@ -12,6 +13,7 @@ import {
   getContentDataWithID,
   getContentHistory,
   getContentWithID,
+  updateContent,
 } from "../../../../lib/api/requests/frontend";
 
 export default function Page() {
@@ -43,6 +45,7 @@ export default function Page() {
   });
 
   const [lastUpdated, setLastUpdated] = useState("Fetching...");
+  const [editing, setEditing] = useState(false);
 
   let [content, setContent] = useState({
     theme: "",
@@ -119,6 +122,7 @@ export default function Page() {
         <MagicEmailSignin />
       </div>
     );
+
   return (
     <>
       <Head>
@@ -128,25 +132,31 @@ export default function Page() {
         <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
           <SideBar />
           <div className="px-16 ">
-            <div className="flex flex-row font-poppins h-36 pt-3 ">
-              <div className="text-3xl  font-semibold pt-7 tracking-no">
-                {content.title}
-              </div>
-              <div className="text-3xl  font-bold tracking-no flex flex-row pt-0">
-                {" "}
-                {content.tags.map((tag) => {
-                  return (
-                    <div
-                      className="text-sm text-white font-bold pt-0 h-fit ml-2 tracking-no rounded-full  bg-red-500"
-                      key={tag.tag}
-                    >
-                      <div className="p-2">{tag.tag}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="flex flex-row justify-start ">
+            {editing ? (
+              <Editable setContent={setContent} content={content} />
+            ) : (
+              <NotEditable setIsEditing={setEditing} content={content} />
+            )}
+            <div
+              className="flex flex-row justify-start "
+              onClick={() => {
+                if (editing) {
+                  setEditing(false);
+                  console.log(content);
+                  let tags = content.tags.map((tag: any) => {
+                    return tag.tag;
+                  });
+
+                  updateContent(content.id, {
+                    title: content.title,
+                    link: content.link,
+                    tags: tags,
+                  }).then(() => {
+                    toast.success("Content updated!");
+                  });
+                }
+              }}
+            >
               <DashboardMainCol
                 views={stats.views}
                 clicks={stats.clicks}
@@ -202,5 +212,120 @@ export default function Page() {
         </div>
       </main>
     </>
+  );
+}
+function Editable({
+  setContent,
+  content,
+
+}: {
+  setContent: any;
+  content: {
+    theme: string;
+    title: string;
+    tags: { tag: string; priority: string }[];
+    link: string;
+    id: string;
+  };
+}) {
+  return (
+    <div className="flex flex-row font-poppins h-36 pt-3 ">
+      <div className="text-3xl pt-7 tracking-no">
+        <input
+          className="font-semibold bg-transparent border-none border-0 w-72"
+          type="text"
+          maxLength={25}
+          minLength={3}
+          placeholder={content.title}
+          onChange={(e) => {
+            if (e.target.value.startsWith(" ")) return;
+            else content.title = e.target.value;
+          }}
+        />
+      </div>
+      <div className="text-3xl  font-bold tracking-no flex flex-row pt-0">
+        {" "}
+        {content.tags.map((tag: { tag: string | undefined }) => {
+          return (
+            <div
+              className="text-sm text-white font-bold pt-0 h-fit ml-2 tracking-no rounded-full  bg-red-500"
+              key={(Date.now()*Math.random()*10).toString()}
+            >
+              <div className="p-2">
+                <input
+                  className="w-16 bg-transparent border-none border-0 text-white"
+                  type="text"
+                  maxLength={10}
+                  minLength={1}
+                  placeholder={tag.tag}
+                  onChange={(e) => {
+                    if (e.target.value.startsWith(" ")) return;
+                    else tag.tag = e.target.value;
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
+        <div
+          className="text-sm text-white font-bold pt-0 h-fit ml-2 tracking-no rounded-2xl  bg-blue-500"
+          onClick={() => {
+            if (content.tags.length <= 5) {
+              content.tags.push({ tag: "", priority: "0" });
+              setContent({
+                ...content,
+                tags: content.tags,
+              });
+            } else toast.error("You can only have 5 tags");
+          }}
+        >
+          <div className="p-2">
+            <div className="w-5 bg-transparent border-none border-0 text-white text-center">
+              +
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NotEditable({
+  setIsEditing,
+  content,
+}: {
+  setIsEditing: (arg0: boolean) => void;
+  content: {
+    theme: string;
+    title: string;
+    tags: { tag: string; priority: string }[];
+    link: string;
+    id: string;
+  };
+}) {
+  return (
+    <button
+      className="font-semibold"
+      onDoubleClick={() => {
+        setIsEditing(true);
+      }}
+    >
+      <div className="flex flex-row font-poppins h-36 pt-3 ">
+        <div className="text-3xl pt-7 tracking-no"> {content.title}</div>
+        <div className="text-3xl  font-bold tracking-no flex flex-row pt-0">
+          {" "}
+          {content.tags.map((tag) => {
+            return (
+              <div
+                className="text-sm text-white font-bold pt-0 h-fit ml-2 tracking-no rounded-full  bg-red-500"
+                key={tag.tag + Date.now().toString()}
+              >
+                <div className="p-2">{tag.tag}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </button>
   );
 }
