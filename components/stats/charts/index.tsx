@@ -35,7 +35,7 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
   let data = chartData;
   let length = data.length;
 
-  if (length <= 1)length= 31; 
+  if (length <= 1) length = 31;
 
   // ensure data has at least 30 days. if a data does not have any data, default data on that day to 0
   if (data.length < length && data.length !== length) {
@@ -59,6 +59,7 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
 
       // add a new entry to data
       data.push({
+        date: date,
         now: {
           date: date,
           views: 0,
@@ -77,16 +78,29 @@ export default function Chart({ chartData }: { chartData: Array<any> }) {
   // Sort data by date
   data.sort((a, b) => {
     function formatify(str: string) {
-      try {
-        return parseInt(str.replace("th", ""));
-      } catch (error) {
+      if (!str) {
         return 0;
       }
+
+      return parseInt(str.replace("th", ""));
+    }
+    if (!a || !b) {
+      return -1;
     }
 
-    if (formatify(a.date) < formatify(b.date)) return -1;
-    if (formatify(a.date) > formatify(b.date)) return 1;
-    return 0;
+    let closenessA =
+      formatify(new Date().getDate().toString()) - formatify(a.date);
+    let closenessB =
+      formatify(new Date().getDate().toString()) - formatify(b.date);
+
+
+      
+    if (closenessA >= 0) {
+      if (closenessB < 0) return 0;
+      if (closenessA < closenessB) return 1;
+      else if (closenessA > closenessB) return -1;
+      return 0;
+    } else return -1;
   });
 
   let highestValue = 0;
