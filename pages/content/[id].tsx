@@ -119,7 +119,6 @@ export async function getStaticProps({ params }: any) {
     );
   } catch (error) {
     logger.error("Error getting content with id: " + id + " " + error);
-    throw error;
     // if something went wrong, we return a 404 page. For example if the contentID or no ad was found
     return { notFound: true };
   }
