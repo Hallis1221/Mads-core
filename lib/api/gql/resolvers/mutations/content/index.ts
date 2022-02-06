@@ -126,6 +126,11 @@ export async function updateContentMutation(
     else return tag;
   });
 
+  if (tags.length > 5) throw new Error("You can only have 5 tags");
+  if (content.title.length > 50) throw new Error("Title is too long");
+  if (content.link.length > 25) throw new Error("Link is too long");
+  
+
   // Check if the apiKey is valid
   if (await isAuthorized("creator", user || apiKey, { contentid: contentID })) {
     const newcontent = await ContentDB.findByIdAndUpdate(contentID, {
