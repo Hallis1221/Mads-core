@@ -173,9 +173,9 @@ export default function Dashboard() {
       <Head>
         <title>Mads Dashboard | {session.user.name}</title>
       </Head>
-      <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
+      <div className="relative h-screen w-full bg-[#F2F7FF] overflow-hidden flex flex-row font-mulish">
         <SideBar />
-        <div className="px-16 ">
+        <div className="px-16 hidden xl:block">
           <DashboardTopRow />
           <div className="flex flex-row justify-start ">
             <DashboardMainCol
