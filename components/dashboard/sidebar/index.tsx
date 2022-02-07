@@ -61,7 +61,7 @@ export default function SideBar() {
                 >
                   <Icon
                     name={item.icon}
-                    className=""
+                    className="z-50"
                     size={30}
                     strokeWidth={2.25}
                   />

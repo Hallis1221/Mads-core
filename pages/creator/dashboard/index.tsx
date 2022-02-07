@@ -289,12 +289,7 @@ function MobileDashboard({
     contentID: string;
   }[];
 }) {
-  if (stats.chartData && stats.chartData.length > 0) {
-    toast.dismiss();
-    toast.error(
-      "To get the full experience, please open the dashboard in a desktop browser."
-    );
-  }
+
   return (
     <div className="pt-24">
       <div className="flex flex-col ">

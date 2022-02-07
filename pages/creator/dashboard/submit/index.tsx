@@ -19,15 +19,14 @@ export default function SubmissionPage({}) {
         <title>Mads Content Submission Page</title>
       </Head>
       <main>
-        <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
+        <div className="absolute h-screen w-full bg-[#F2F7FF] overflow-hidden flex flex-row font-mulish">
           <SideBar />
-          <div className="px-16 ">
-            <div className="text-3xl  font-bold pt-5 tracking-no">
+          <div className="px-0 xl:px-16 ">
+            <div className="text-3xl w-96 right-10 font-bold pt-5 xl:pl-0 pl-16 tracking-no">
               Submission Page
             </div>
-            <div>
-              <ContentSubmissionForm />
-            </div>
+
+            <ContentSubmissionForm />
           </div>
         </div>
       </main>
@@ -101,8 +100,8 @@ function ContentSubmissionForm({}): React.ReactElement {
       }}
     >
       {({}) => (
-        <Form>
-          <div className="text-xl pt-16 font-bold tracking-no">Title</div>
+        <Form className="w-10/12 xl:w-fit pl-10">
+          <div className="text-xl pt-16  font-bold tracking-no">Title</div>
           <Field
             className="w-full h-12 p-2 border-2 border-gray-400 rounded-lg"
             type="text"
