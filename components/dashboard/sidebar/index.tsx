@@ -13,7 +13,7 @@ type DItem = {
 
 export default function SideBar() {
   const router = useRouter();
-  let selected: number;
+  let selected: number = 0;
 
   let items: DItem[] = [
     {

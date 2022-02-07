@@ -16,6 +16,7 @@ import {
   getContentWithID,
 } from "../../../lib/api/requests/frontend";
 import { ContentData } from "../../../lib/types/data/contentData";
+import ChartCard from "../../../components/dashboard/chart/chartcard";
 
 // TODO move everything to mads core
 export default function Dashboard() {
@@ -166,7 +167,9 @@ export default function Dashboard() {
   }
 
   if (stats.chartData && stats && stats.views != "N/A") toast.dismiss();
-  console.info(`Rerendering dashboard with ${contents.length} contents. Logged in as ${session.user.email}`);
+  console.info(
+    `Rerendering dashboard with ${contents.length} contents. Logged in as ${session.user.email}`
+  );
 
   return (
     <>
@@ -177,45 +180,169 @@ export default function Dashboard() {
         <SideBar />
         <div className="px-16 hidden xl:block">
           <DashboardTopRow />
-          <div className="flex flex-row justify-start ">
-            <DashboardMainCol
-              views={stats.views}
-              clicks={stats.clicks}
-              skips={stats.skips}
-              chartData={stats.chartData}
-              lastUpdated={lastUpdated}
-            />
-            <div className="grow ml-16">
-              <InfoCard
-                color={"#FF7976"}
-                title={"Estimated revenue"}
-                value={
-                  stats.views === "0" || stats.clicks === "0"
-                    ? "N/A"
-                    : "$" +
-                      (
-                        parseInt(stats.views) * (1 / 1000) +
-                        parseInt(stats.clicks) * (25 / 1000)
-                      ).toFixed(3)
-                }
-                icon={"check-circle"}
-                starting
-              />
-
-              <ContentsCard
-                stats={contents.map((content) => {
-                  return {
-                    contentID: content.contentID,
-                    views: content.views,
-                    clicks: content.clicks,
-                    skips: content.skips,
-                  };
-                })}
-              />
-            </div>
+          <DesktopDashboard
+            contents={contents}
+            stats={stats}
+            lastUpdated={lastUpdated}
+          />
+        </div>
+        <div className="px-16 block xl:hidden">
+          <div className="absolute top-0 left-14">
+            {" "}
+            <DashboardTopRow />
           </div>
+
+          <MobileDashboard
+            contents={contents}
+            stats={stats}
+            lastUpdated={lastUpdated}
+          />
         </div>
       </div>
     </>
+  );
+}
+
+function DesktopDashboard({
+  stats,
+  lastUpdated,
+  contents,
+}: {
+  stats: {
+    views: string;
+    clicks: string;
+    skips: string;
+    chartData: {
+      now: { views: number; clicks: number; skips: number };
+      last: { views: number; clicks: number; skips: number };
+    }[];
+  };
+  lastUpdated: string;
+  contents: {
+    views: number;
+    clicks: number;
+    skips: number;
+    contentID: string;
+  }[];
+}) {
+  return (
+    <div className="flex flex-row justify-start ">
+      <DashboardMainCol
+        views={stats.views}
+        clicks={stats.clicks}
+        skips={stats.skips}
+        chartData={stats.chartData}
+        lastUpdated={lastUpdated}
+      />
+      <div className="grow ml-16">
+        <InfoCard
+          color={"#FF7976"}
+          title={"Estimated revenue"}
+          value={
+            stats.views === "0" || stats.clicks === "0"
+              ? "N/A"
+              : "$" +
+                (
+                  parseInt(stats.views) * (1 / 1000) +
+                  parseInt(stats.clicks) * (25 / 1000)
+                ).toFixed(3)
+          }
+          icon={"check-circle"}
+          starting
+        />
+
+        <ContentsCard
+          stats={contents.map((content) => {
+            return {
+              contentID: content.contentID,
+              views: content.views,
+              clicks: content.clicks,
+              skips: content.skips,
+            };
+          })}
+        />
+      </div>
+    </div>
+  );
+}
+
+function MobileDashboard({
+  stats,
+  lastUpdated,
+  contents,
+}: {
+  stats: {
+    views: string;
+    clicks: string;
+    skips: string;
+
+    chartData: {
+      now: { views: number; clicks: number; skips: number };
+      last: { views: number; clicks: number; skips: number };
+    }[];
+  };
+  lastUpdated: string;
+  contents: {
+    views: number;
+    clicks: number;
+    skips: number;
+    contentID: string;
+  }[];
+}) {
+  if (stats.chartData && stats.chartData.length > 0) {
+    toast.dismiss();
+    toast.error(
+      "To get the full experience, please open the dashboard in a desktop browser."
+    );
+  }
+  return (
+    <div className="pt-24">
+      <div className="flex flex-col ">
+        <div className="flex w-full flex-row justify-evenly absolute left-0">
+          <InfoCard
+            title={"Total Views"}
+            color={"#57CAEB"}
+            value={stats.views}
+            icon={"bell-off"}
+            starting
+            compact
+          />
+          <InfoCard
+            title={"Total Clicks"}
+            color={"#57CAEB"}
+            value={stats.clicks}
+            icon={"bell-off"}
+            starting
+            compact
+          />
+        </div>
+        <div className="flex w-full flex-row justify-evenly absolute left-0 top-56">
+          <InfoCard
+            title={"Total skips"}
+            color={"#57CAEB"}
+            value={stats.skips}
+            icon={"bell-off"}
+            starting
+            compact
+          />
+          <InfoCard
+            title={"Total revenue"}
+            color={"#57CAEB"}
+            value={
+              stats.views === "0" || stats.clicks === "0"
+                ? "N/A"
+                : "$" +
+                  (
+                    parseInt(stats.views) * (1 / 1000) +
+                    parseInt(stats.clicks) * (25 / 1000)
+                  ).toFixed(3)
+            }
+            icon={"bell-off"}
+            starting
+            compact
+          />
+        </div>
+      </div>
+    </div>
   );
 }
