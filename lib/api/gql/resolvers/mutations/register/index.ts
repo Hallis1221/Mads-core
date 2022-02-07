@@ -1,4 +1,9 @@
+import { md5 } from "pure-md5";
 import { logger } from "../../../../../log";
+import {
+  isAdRateLimited,
+  isContentRateLimited,
+} from "../../../../../server/ratelimit";
 import registerAdClick from "../../../../../statistics/register/ad/click";
 import registerAdSkip from "../../../../../statistics/register/ad/skip";
 import registerAdView from "../../../../../statistics/register/ad/view";
@@ -11,12 +16,27 @@ import registerContentView from "../../../../../statistics/register/content/view
 
 export async function registerViewsMutation(
   _: undefined,
-  { adID, contentID }: { adID: string; contentID: string }
+  { adID, contentID }: { adID: string; contentID: string },
+  { ip }: { ip: string }
 ): Promise<void> {
-  
-  await registerAdView(adID);
+  let adRateLimited = false;
+  let contentRateLimited = false;
 
-  await registerContentView(contentID);
+  ip = md5(ip);
+
+  // Check if the adID is found in the ratelimiter database
+  adRateLimited = await isAdRateLimited(adID, ip, "view");
+
+  // Check if the contentID is found in the ratelimiter database
+  contentRateLimited = await isContentRateLimited(
+    contentID,
+    ip,
+    "view"
+  );
+
+  if (!adRateLimited) await registerAdView(adID);
+
+  if (!contentRateLimited) await registerContentView(contentID);
 
   return;
 }
@@ -26,11 +46,27 @@ export async function registerViewsMutation(
 
 export async function registerClicksMutation(
   _: undefined,
-  { adID, contentID }: { adID: string; contentID: string }
+  { adID, contentID }: { adID: string; contentID: string },
+  { ip }: { ip: string }
 ): Promise<void> {
-  await registerAdClick(adID);
+  let adRateLimited = false;
+  let contentRateLimited = false;
 
-  await registerContentClick(contentID);
+  ip = md5(ip);
+
+  // Check if the adID is found in the ratelimiter database
+  adRateLimited = await isAdRateLimited(adID, ip, "click");
+
+  // Check if the contentID is found in the ratelimiter database
+  contentRateLimited = await isContentRateLimited(
+    contentID,
+    ip,
+    "click"
+  );
+
+  if (!adRateLimited) await registerAdClick(adID);
+
+  if (!contentRateLimited) await registerContentClick(contentID);
 
   return;
 }
@@ -40,11 +76,27 @@ export async function registerClicksMutation(
 
 export async function registerSkipsMutation(
   _: undefined,
-  { adID, contentID }: { adID: string; contentID: string }
+  { adID, contentID }: { adID: string; contentID: string },
+  { ip }: { ip: string }
 ): Promise<void> {
-  await registerAdSkip(adID);
+  let adRateLimited = false;
+  let contentRateLimited = false;
 
-  await registerContentSkip(contentID);
+  ip = md5(ip);
+
+  // Check if the adID is found in the ratelimiter database
+  adRateLimited = await isAdRateLimited(adID, ip, "skip");
+
+  // Check if the contentID is found in the ratelimiter database
+  contentRateLimited = await isContentRateLimited(
+    contentID,
+    ip,
+    "skip"
+  );
+
+  if (!adRateLimited) await registerAdSkip(adID);
+
+  if (!contentRateLimited) await registerContentSkip(contentID);
 
   return;
 }

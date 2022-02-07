@@ -11,6 +11,7 @@ import connectDB from "../../lib/db/connect/mongoose/connect";
 import typeDefinitions from "../../lib/config/api/gql/typedefs";
 import resolvers from "../../lib/api/gql/resolvers";
 import { logger } from "../../lib/log";
+import requestIp from "request-ip";
 
 connectDB();
 const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({
@@ -21,7 +22,9 @@ const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({
     "editor.theme": "dark",
   },
 });
-const ApiLocalLanding = ApolloServerPluginLandingPageLocalDefault({ footer: false });
+const ApiLocalLanding = ApolloServerPluginLandingPageLocalDefault({
+  footer: false,
+});
 
 const apolloServer = new ApolloServer({
   typeDefs: typeDefinitions,
@@ -30,7 +33,7 @@ const apolloServer = new ApolloServer({
     // Install a landing page plugin based on NODE_ENV
     process.env.NODE_ENV === "production"
       ? ApiProductionLanding
-      : ApiLocalLanding
+      : ApiLocalLanding,
   ],
 });
 
@@ -40,28 +43,45 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-const allowedOrigins = ["https://studio.apollographql.com", "http://localhost:3000", "https://www.marketads.me", "https://creator.marketads.me"];
-const origin = req.headers.origin;
+  const allowedOrigins = [
+    "https://studio.apollographql.com",
+    "http://localhost:3000",
+    "https://www.marketads.me",
+    "https://creator.marketads.me",
+  ];
+  const origin = req.headers.origin;
 
-  if (origin && allowedOrigins.includes(origin)) 
+  if (origin && allowedOrigins.includes(origin))
     res.setHeader("Access-Control-Allow-Origin", origin);
-    else 
-    // Ensure we always allow CORS requests from the frontend
-      res.setHeader("Access-Control-Allow-Origin", "https://www.marketads.me");
+  // Ensure we always allow CORS requests from the frontend
+  else res.setHeader("Access-Control-Allow-Origin", "https://www.marketads.me");
 
-    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST',);
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', "true");
+  res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
   if (req.method === "OPTIONS") {
     res.end();
     return false;
   }
- 
-  
+
   let user = await getSession({ req });
+
   logger.debug("Passing user to apollo server: ", user);
-  if (user) apolloServer.requestOptions.context = { req, res, user };
+  if (user)
+    apolloServer.requestOptions.context = {
+      req,
+      res,
+      user,
+      ip: requestIp.getClientIp(req),
+    };
+  else
+    apolloServer.requestOptions.context = {
+      req,
+      res,
+      user,
+      ip: requestIp.getClientIp(req),
+    };
 
   // To use the user object in a resolver, see this example:
   /*
@@ -69,7 +89,7 @@ const origin = req.headers.origin;
       console.log(user);
     }
   */
-  
+
   await startServer;
   await apolloServer.createHandler({
     path: "/api/graphql",
