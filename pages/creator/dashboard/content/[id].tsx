@@ -23,9 +23,9 @@ export default function Page() {
   const { id } = router.query;
 
   const [stats, setStats] = useState({
-    views: "N/A" || 0,
-    clicks: "N/A" || 0,
-    skips: "N/A" || 0,
+    views: "N/A",
+    clicks: "N/A" ,
+    skips: "N/A" ,
     chartData: [
       {
         date: "",
@@ -56,9 +56,9 @@ export default function Page() {
   });
 
   useEffect(() => {
-    let totalViews = 0;
-    let totalClicks = 0;
-    let totalSkips = 0;
+    let totalViews:  string | number  = 0;
+    let totalClicks: string | number  = 0;
+    let totalSkips: string | number = 0;
     if (!id || (id && id.length <= 12) || typeof id !== "string") return;
     getContentWithID(id as string)
       .then((content) => {
@@ -96,9 +96,8 @@ export default function Page() {
         if (totalClicks <= content.clicks) totalClicks = content.clicks;
         if (totalSkips <= content.skips) totalSkips = content.skips;
 
-        if (typeof totalViews !== "number") totalViews = 0;
-        if (typeof totalClicks !== "number") totalClicks = 0;
-        if (typeof totalSkips !== "number") totalSkips = 0;
+        if (totalSkips === 0) totalSkips = "N/A";
+
 
         setStats({
           views: totalViews.toString() || "N/A",

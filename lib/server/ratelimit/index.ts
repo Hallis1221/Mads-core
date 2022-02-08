@@ -33,19 +33,20 @@ export async function isContentRateLimited(
       (ipRateLimit: { ip: string; action: [string] }) => {
         if (ipRateLimit.ip === ip) {
           ipRateLimit.action.forEach((actionRateLimit: string) => {
-            if (actionRateLimit === action) {
+            if (actionRateLimit === action) 
               contentRateLimited = true;
-            }
+            
           });
 
           if (contentRateLimited) {
             logger.debug(`${ip} is rate limited for ${action} on content ${contentID}`);
 
-            return contentRateLimited;
+            return;
           } else {
             // Rate limit the action
             ipRateLimit.action.push(action);
             contentRateLimit.save();
+            return;
           }
         }
       }
