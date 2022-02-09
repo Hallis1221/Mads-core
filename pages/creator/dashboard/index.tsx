@@ -47,9 +47,12 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    toast.dismiss();
-    toast.loading("Started fetching data... This could take up to 30 seconds.");
     if (session && session.user) {
+    toast.dismiss();
+
+      toast.loading(
+        "Started fetching data... This could take up to 30 seconds."
+      );
       getAllUserContentFull().then((res: any) => {
         console.table(res);
         setStats({
@@ -289,7 +292,6 @@ function MobileDashboard({
     contentID: string;
   }[];
 }) {
-
   return (
     <div className="pt-24">
       <div className="flex flex-col ">
