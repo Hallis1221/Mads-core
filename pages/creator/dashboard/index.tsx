@@ -49,7 +49,6 @@ export default function Dashboard() {
   useEffect(() => {
     if (session && session.user) {
     toast.dismiss();
-
       toast.loading(
         "Started fetching data... This could take up to 30 seconds."
       );
