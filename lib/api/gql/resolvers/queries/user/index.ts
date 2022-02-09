@@ -12,5 +12,5 @@ export async function isCreatorQuery(
   if (email) return await isCreator(email);
   else if (user) return await isCreator(user.email);
 
-  throw new Error("You need to be logged or provide an email to perform this action");
+  return false;
 }
