@@ -117,7 +117,9 @@ function ContentSubmissionForm({}): React.ReactElement {
             placeholder="Link"
           />
           <ErrorMessage name="link" component="div" />
-          <div className="text-xl  font-bold tracking-no">Tags</div>
+          <div className="text-xl  font-bold tracking-no  ">Tags
+          <div className="font-normal"> Seperate each tag with a comma.<br/> For example tag1,tag2,tag3</div>
+          </div>
           <div className="flex flex-row">
             <div className="flex flex-col">
               <Field
