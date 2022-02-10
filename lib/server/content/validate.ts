@@ -23,8 +23,8 @@ export default async function validateContent(
       );
   }
 
-  if (title.length >= 100) throw new Error("Title is too long");
-  if (link.length >= 25) throw new Error("Link is too long");
+  if (title.length >= 50) throw new Error("Title is too long");
+  if (link.length >= 100) throw new Error("Link is too long. Limit at 100 characters");
   if (tags.length > 5) throw new Error("You can only have 5 tags");
 
   return;
