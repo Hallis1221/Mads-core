@@ -48,6 +48,9 @@ export default async function addAdDataMatch(
     return (await AdDataDB.findOne({ adID: adData.adID, contentID: adMatch.contentID }).select("adID")).adID;
   }
 
+
+// DISABELED TEMP
+/*
   // Check if theres already a match beginning at the same time as the new match
   const beginDateOccupied = adData.matches.find((match: AdMAtch) => {
     // Get match begins as numbers
@@ -72,7 +75,7 @@ export default async function addAdDataMatch(
       matches: { $elemMatch: { contentID: adMatch.contentID } },
     }).select("adID")).adID;
   }
-
+*/
   // Check if theres as ad that is starting after the new match
   const altersTime = adData.matches.find((match: AdMAtch) => {
     // Get match begins as a number
