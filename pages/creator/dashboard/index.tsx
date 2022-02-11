@@ -53,6 +53,7 @@ export default function Dashboard() {
         "Started fetching data... This could take up to 30 seconds."
       );
       getAllUserContentFull().then((res: any) => {
+        if (res.length <= 0) return; 
         console.table(res);
         setStats({
           views: res[0].views,
