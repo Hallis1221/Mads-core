@@ -35,6 +35,12 @@ export default function SideBar() {
       link: "/creator/dashboard/account",
       icon: "user",
     },
+    {
+      id: 4,
+      title: "Payments",
+      link: "/creator/dashboard/payments",
+      icon: "star",
+    }
   ];
 
   items.forEach((item) => {
