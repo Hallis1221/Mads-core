@@ -254,14 +254,8 @@ export async function updateContent(
   return (
     await gqc.request(
       gql`
-        mutation Mutation(
-          $contentId: String!
-          $content: LimitedContentInput!
-        ) {
-          updateContentMutation(
-            contentID: $contentId
-            content: $content
-          ) {
+        mutation Mutation($contentId: String!, $content: LimitedContentInput!) {
+          updateContentMutation(contentID: $contentId, content: $content) {
             id
           }
         }
@@ -276,4 +270,16 @@ export async function updateContent(
       }
     )
   ).updateContentMutation;
+}
+
+export async function getStripeID() {
+  return (
+    await gqc.request(
+      gql`
+        query Query {
+          getUserStripeIDQuery
+        }
+      `
+    )
+  ).getUserStripeIDQuery;
 }
