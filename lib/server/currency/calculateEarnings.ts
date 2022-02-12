@@ -1,3 +1,4 @@
+import PaymentsDB from "../../db/currency/payments";
 import UserDB from "../../db/models/auth/user";
 import ContentDB from "../../db/models/content";
 import { Content } from "../../types/content";
@@ -31,4 +32,24 @@ export default async function calculateAccountEarnings(
     const earnings = (totalClicks  * (25/1000)) + (totalViews  * (1/1000));
 
     return earnings;
+}
+
+export async function calculateAccountPaidout(
+    userID: string,
+    type: string,
+){
+    let payments = (await PaymentsDB.find({
+        userID: userID,
+        status: "complete",
+        type: type,
+    }).select("amount"));
+
+    let total = 0;
+
+    for (var payment of payments) {
+        total += payment.amount;
+    }
+    
+    return total;
+
 }
