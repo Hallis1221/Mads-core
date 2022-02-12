@@ -283,3 +283,13 @@ export async function getStripeID() {
     )
   ).getUserStripeIDQuery;
 }
+
+export async function getStripeOnboardingLink() {
+  return (await gqc.request(
+    gql`
+      query Query {
+        getUserStripeOnboardingLinkQuery
+      }
+    `
+  )).getUserStripeOnboardingLinkQuery;
+}

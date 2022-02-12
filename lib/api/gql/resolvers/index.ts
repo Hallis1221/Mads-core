@@ -31,7 +31,7 @@ import {
   getLastContentDataQuery,
 } from "./queries/content/data";
 import { getAllContentHistoryQuery, getContentHistoryQuery } from "./queries/content/data/history/getContentHistory";
-import { getUserStripeIDQuery, isCreatorQuery } from "./queries/user";
+import { getUserStripeIDQuery, getUserStripeOnboardingLinkQuery, isCreatorQuery } from "./queries/user";
 import { getUserInfoQuery } from "./queries/waitlist";
 
 const resolvers = {
@@ -63,6 +63,7 @@ const resolvers = {
 
     // User
     getUserStripeIDQuery,
+    getUserStripeOnboardingLinkQuery,
   },
 
   Mutation: {
