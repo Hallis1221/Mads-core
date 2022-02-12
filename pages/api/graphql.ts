@@ -67,15 +67,15 @@ export default async function handler(
 
   let user = await getSession({ req });
 
-  logger.debug("Passing user to apollo server: ", user);
-  if (user)
+  if (user) {
+    logger.debug("Passing user to apollo server: ", user);
     apolloServer.requestOptions.context = {
       req,
       res,
       user,
       ip: requestIp.getClientIp(req),
     };
-  else
+  } else
     apolloServer.requestOptions.context = {
       req,
       res,
