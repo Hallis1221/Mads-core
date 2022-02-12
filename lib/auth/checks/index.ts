@@ -3,7 +3,7 @@ import { User } from "../../types/user";
 import { apiKeyAuthenticated, apiKeyLevel } from "../api";
 import { isAdmin, isContentOwner, isCreator } from "./user";
 
-// The function isAUtherized is used as a general, multi purpose function, it checks whether a user is authorized to perform a certain action with a given access level.
+// The function isAuthorized is used as a general, multi purpose function, it checks whether a user is authorized to perform a certain action with a given access level.
 export async function isAuthorized(
   accessLevel: AuthLevels | undefined,
   authentication: User | string | undefined,
