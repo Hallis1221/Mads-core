@@ -5,7 +5,7 @@ import MagicEmailSignin from "../components/auth/signin";
 import NavBar from "../components/navigation/navbar";
 import { isCreator } from "../lib/api/requests/frontend";
 
-export default function AccountPage({}: any) {
+export default function AccountPage({}: any) : React.ReactElement {
   const { data: session } = useSession();
   const [creator, setCreator] = useState(false);
 
