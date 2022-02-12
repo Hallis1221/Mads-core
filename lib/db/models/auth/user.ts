@@ -38,6 +38,12 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     required: false,
   },
+
+  // The users stripe id, nullable
+  stripeID: {
+    type: String,
+    required: false,
+  },
 });
 
 const UserDB = mongoose.models.User || mongoose.model("User", UserSchema);
