@@ -4,6 +4,7 @@ export const dataTypeDefs = gql`
   type Query {
     isCreatorQuery(email: String): Boolean!
     getUserStripeIDQuery(apiKey: String): String!
+    getUserStripeOnboardingLinkQuery(apiKey: String): String!
   }
 
   type Mutation {
