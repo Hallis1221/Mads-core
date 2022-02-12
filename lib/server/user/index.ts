@@ -1,7 +1,6 @@
 import UserDB from "../../db/models/auth/user";
 import { logger } from "../../log";
 import { User } from "../../types/user";
-import calculateAccountEarnings from "../currency/calculateEarnings";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -59,6 +58,5 @@ export async function getStripeOnboardingLink(
     throw new Error(err);
   });
 
-  console.log(await calculateAccountEarnings("61d9b6381c6d7f252221fe55"))
   return accountLink.url;
 }
