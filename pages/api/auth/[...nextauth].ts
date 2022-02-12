@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "../../../lib/db/connect/connect";
-import defaultUser from "../../../lib/server/user/defaultUser";
+import defaultUser from "../../../lib/server/user";
 import { logger } from "../../../lib/log";
 
 export default NextAuth({
