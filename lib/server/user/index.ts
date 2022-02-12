@@ -44,19 +44,20 @@ export async function createUserStripeID(userID: string): Promise<string> {
 
   return await getUserStripeID(userID);
 }
-
 export async function getStripeOnboardingLink(
   stripeID: string
 ): Promise<string> {
-  const accountLink = await stripe.accountLinks.create({
-    account: stripeID,
-    refresh_url: process.env.NEXTAUTH_URL + "/creator/dashboard/payments",
-    return_url:process.env.NEXTAUTH_URL + "/creator/dashboard/payments",
-    type: "account_onboarding",
-  }).catch((err: string | undefined) => {
-    logger.error(err);
-    throw new Error(err);
-  });
+  const accountLink = await stripe.accountLinks
+    .create({
+      account: stripeID,
+      refresh_url: process.env.NEXTAUTH_URL + "/creator/dashboard/payments",
+      return_url: process.env.NEXTAUTH_URL + "/creator/dashboard/payments",
+      type: "account_onboarding",
+    })
+    .catch((err: string | undefined) => {
+      logger.error(err);
+      throw new Error(err);
+    });
 
   return accountLink.url;
 }
