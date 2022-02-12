@@ -3,10 +3,8 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import SideBar from "../../../../components/dashboard/sidebar";
 import {
-  createApiKey,
   getStripeID,
   getStripeOnboardingLink,
-  isCreator,
 } from "../../../../lib/api/requests/frontend";
 
 export default function PaymentsPage({}) {
