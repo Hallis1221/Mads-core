@@ -17,7 +17,7 @@ export default async function defaultUser(userID: string): Promise<User> {
 }
 
 export async function getUserStripeID(userID: string): Promise<string> {
-let user = await UserDB.findById(userID);
+  let user = await UserDB.findById(userID);
 
   if (!user._id) throw new Error(`User with id: ${userID} not found`);
   if (!user.stripeID)
@@ -30,7 +30,9 @@ export async function createUserStripeID(userID: string): Promise<string> {
 
   if (!user._id) throw new Error(`User with id: ${userID} not found`);
   if (user.stripeID)
-    throw new Error(`User with id: ${userID} already has a stripeID. Call getUserStripeID to get the stripeID`);
+    throw new Error(
+      `User with id: ${userID} already has a stripeID. Call getUserStripeID to get the stripeID`
+    );
 
   const account = await stripe.accounts.create({
     type: "express",
@@ -41,4 +43,28 @@ export async function createUserStripeID(userID: string): Promise<string> {
   logger.debug(`Created user: ${user.email} stripeID: ${account.id}`);
 
   return await getUserStripeID(userID);
+}
+
+export async function getStripeOnboardingLink(
+  stripeID: string
+): Promise<string> {
+  const accountLink = await stripe.accountLinks.create({
+    account: stripeID,
+    refresh_url: process.env.NEXTAUTH_URL + "/creator/dashboard/payments",
+    return_url:process.env.NEXTAUTH_URL + "/creator/dashboard/payments",
+    type: "account_onboarding",
+  }).catch((err: string | undefined) => {
+    logger.error(err);
+    throw new Error(err);
+  });
+
+  const transfer = await stripe.transfers.create({
+    amount: 1,
+    currency: "nok",
+    destination: stripeID,
+  });
+
+  console.log(transfer);
+
+  return accountLink.url;
 }
