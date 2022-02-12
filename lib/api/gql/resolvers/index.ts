@@ -15,7 +15,7 @@ import {
   registerClicksMutation,
   registerViewsMutation,
 } from "./mutations/register";
-import defaultUserMutation from "./mutations/user";
+import {defaultUserMutation, createUserStripeIDMutation } from "./mutations/user";
 import { registerForCreatorWaitlistMutation } from "./mutations/waitlist";
 import getAdQuery from "./queries/ad";
 import getAdDataQuery from "./queries/ad/data";
@@ -31,7 +31,7 @@ import {
   getLastContentDataQuery,
 } from "./queries/content/data";
 import { getAllContentHistoryQuery, getContentHistoryQuery } from "./queries/content/data/history/getContentHistory";
-import { isCreatorQuery } from "./queries/user";
+import { getUserStripeIDQuery, isCreatorQuery } from "./queries/user";
 import { getUserInfoQuery } from "./queries/waitlist";
 
 const resolvers = {
@@ -60,6 +60,9 @@ const resolvers = {
 
     // Waitlist
     getUserInfoQuery,
+
+    // User
+    getUserStripeIDQuery,
   },
 
   Mutation: {
@@ -68,6 +71,7 @@ const resolvers = {
 
     // User
     defaultUserMutation,
+    createUserStripeIDMutation,
 
     // Register
     registerSkipsMutation,
