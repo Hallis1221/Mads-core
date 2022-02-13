@@ -12,7 +12,6 @@ export default async function calculateAccountEarnings(
     let prices = (await ConfigDB.findOne({
         name: "prototyping"
     }).select("prices"))?.prices;
-    console.log(prices);
 
     if (!prices) throw new Error("No prices found");
     
@@ -45,9 +44,21 @@ export async function calculateAccountPaidout(
     userID: string,
     type: string,
 ){
+    if (type === "any"){
+        let paidout = 0;
+        const payments = await PaymentsDB.find({
+        status: "complete" || "pending",
+            userID
+        });
+        for (var payment of payments){
+            paidout += payment.amount;
+        }
+        return paidout;
+    }
+
     let payments = (await PaymentsDB.find({
         userID: userID,
-        status: "complete",
+        status: "complete" || "pending",
         type: type,
     }).select("amount"));
 
