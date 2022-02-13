@@ -6,6 +6,8 @@ import {
   getStripeID,
   getStripeOnboardingLink,
 } from "../../../../lib/api/requests/frontend";
+import ReactLoading from "react-loading";
+import toast from "react-hot-toast";
 
 export default function PaymentsPage({}) {
   // Use session to get user data
@@ -21,7 +23,6 @@ export default function PaymentsPage({}) {
           if (res) setOnboardingURL(res);
         });
       }
-
     });
   }, [session]);
 
@@ -37,10 +38,8 @@ export default function PaymentsPage({}) {
             <div className="text-3xl  font-bold pt-5 tracking-no">
               Hello, {session?.user?.email}
             </div>
-
-  
             {onboardingURL === "" ? (
-              ""
+              <ReactLoading type="spinningBubbles" color="#000" />
             ) : (
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-5 py-2  px-4 rounded"
@@ -48,9 +47,22 @@ export default function PaymentsPage({}) {
                   window.location.href = onboardingURL;
                 }}
               >
-               Setup
+                Setup / Change stripe payout account details.
               </button>
             )}
+            <br />
+            Your stripe payout account id is.
+            <button
+              className="bg-[#fafafa] rounded-md p-3 "
+              onClick={() => {
+                navigator.clipboard.writeText(stripeID);
+                toast.success("Copied to clipboard!");
+              }}
+            >
+              {stripeID}
+            </button>
+            <br /> Our support team may ask for this if issues arise while
+            processing your payout.
           </div>
         </div>
       </main>
