@@ -15,7 +15,7 @@ import {
   registerClicksMutation,
   registerViewsMutation,
 } from "./mutations/register";
-import {defaultUserMutation, createUserStripeIDMutation } from "./mutations/user";
+import {defaultUserMutation, createUserStripeIDMutation, createNewCreatorPaymentMutation } from "./mutations/user";
 import { registerForCreatorWaitlistMutation } from "./mutations/waitlist";
 import getAdQuery from "./queries/ad";
 import getAdDataQuery from "./queries/ad/data";
@@ -31,7 +31,7 @@ import {
   getLastContentDataQuery,
 } from "./queries/content/data";
 import { getAllContentHistoryQuery, getContentHistoryQuery } from "./queries/content/data/history/getContentHistory";
-import { calculateCreatorLifetimeEarningsQuery, getUserStripeIDQuery, getUserStripeOnboardingLinkQuery, isCreatorQuery } from "./queries/user";
+import { calculateCreatorLifetimeEarningsQuery, getAvalibleCreatorPayoutAmountQuery, getPaymentHistoryQuery, getUserStripeIDQuery, getUserStripeOnboardingLinkQuery, isCreatorQuery } from "./queries/user";
 import { getUserInfoQuery } from "./queries/waitlist";
 
 const resolvers = {
@@ -61,10 +61,14 @@ const resolvers = {
     // Waitlist
     getUserInfoQuery,
 
-    // User
+    // Stripe
     getUserStripeIDQuery,
     getUserStripeOnboardingLinkQuery,
+
+    // Payments
     calculateCreatorLifetimeEarningsQuery,
+    getPaymentHistoryQuery,
+    getAvalibleCreatorPayoutAmountQuery,
   },
 
   Mutation: {
@@ -99,6 +103,9 @@ const resolvers = {
 
     // Api
     createCreatorKeyMutation,
+
+    // Payment
+    createNewCreatorPaymentMutation
   },
 };
 
