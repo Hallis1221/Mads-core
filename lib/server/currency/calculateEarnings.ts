@@ -1,5 +1,6 @@
 import PaymentsDB from "../../db/currency/payments";
 import UserDB from "../../db/models/auth/user";
+import ConfigDB from "../../db/models/config";
 import ContentDB from "../../db/models/content";
 import { Content } from "../../types/content";
 import { ContentData } from "../../types/data/contentData";
@@ -8,7 +9,13 @@ import { getUserContentData } from "../content/data/getContentData";
 export default async function calculateAccountEarnings(
     userID: string,
 ){
+    let prices = (await ConfigDB.findOne({
+        name: "prototyping"
+    }).select("prices"))?.prices;
+    console.log(prices);
 
+    if (!prices) throw new Error("No prices found");
+    
     // Get the user's content data
     const userContent: any= await getUserContentData(userID);
 
@@ -29,7 +36,7 @@ export default async function calculateAccountEarnings(
     }
         
     // Calculate the earnings
-    const earnings = (totalClicks  * (25/1000)) + (totalViews  * (1/1000));
+    const earnings = (totalClicks  * prices.click) + (totalViews  * prices.view);
 
     return earnings;
 }
