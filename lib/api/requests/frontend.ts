@@ -285,11 +285,25 @@ export async function getStripeID() {
 }
 
 export async function getStripeOnboardingLink() {
-  return (await gqc.request(
-    gql`
-      query Query {
-        getUserStripeOnboardingLinkQuery
-      }
-    `
-  )).getUserStripeOnboardingLinkQuery;
+  return (
+    await gqc.request(
+      gql`
+        query Query {
+          getUserStripeOnboardingLinkQuery
+        }
+      `
+    )
+  ).getUserStripeOnboardingLinkQuery;
+}
+
+export async function getEarnings() {
+  return (
+    await gqc.request(
+      gql`
+        query Query($apiKey: String) {
+          calculateCreatorLifetimeEarningsQuery(apiKey: $apiKey)
+        }
+      `
+    )
+  ).calculateCreatorLifetimeEarningsQuery;
 }
