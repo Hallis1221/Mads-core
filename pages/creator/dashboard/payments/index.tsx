@@ -27,8 +27,12 @@ export default function PaymentsPage({}) {
         setStripeID(res);
         getStripeOnboardingLink().then((res: any) => {
           if (res) setOnboardingURL(res);
+        }).catch((err: any) => {
+          toast.error(err.message);
         });
       }
+    }).catch((err: any) => {
+      toast.error(err.message);
     });
 
     getPaymentHistory().then((res: any) => {
