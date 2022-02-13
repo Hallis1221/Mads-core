@@ -45,6 +45,12 @@ const ConfigSchema = new mongoose.Schema({
         }
     },
 
+    // Minimum payout amount
+    minimumPayout: {
+        type: Number,
+        required: true,
+    },
+
 });
 
 const ConfigDB = mongoose.models.Config || mongoose.model("Config", ConfigSchema);  
