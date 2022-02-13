@@ -1,4 +1,5 @@
 import PaymentsDB from "../../db/currency/payments";
+import ConfigDB from "../../db/models/config";
 
 export async function quePayment(userID: string, amount: number, type: string) {
   // Check if the user already has a payment pending
@@ -41,10 +42,11 @@ export async function quePayment(userID: string, amount: number, type: string) {
     );
 
   // Ensure the amount is bigger than the minimum payout
-  // TODO - this should be a configurable value in ENV
-  if (amount <= 25)
+  
+  let minimumPayout =  (await ConfigDB.findOne({name: "prototyping"}).select("minimumPayout"))?.minimumPayout
+  if (amount <= minimumPayout)
     throw new Error(
-      `User with id: ${userID} has a balance of ${amount}. The minimum payout is $25. Contact support if you believe this is an error`
+      `User with id: ${userID} has a balance of ${minimumPayout}. The minimum payout is $25. Contact support if you believe this is an error`
     );
     
   // Add the payment to the paymentsDB collection
