@@ -1,11 +1,15 @@
 import { gql } from "apollo-server-micro";
 
 export const dataTypeDefs = gql`
+  scalar Date
+
   type Query {
     isCreatorQuery(email: String): Boolean!
     getUserStripeIDQuery(apiKey: String): String!
     getUserStripeOnboardingLinkQuery(apiKey: String): String!
     calculateCreatorLifetimeEarningsQuery(apiKey: String): Float!
+    getPaymentHistoryQuery(apiKey: String): [Payment!]!
+    getAvalibleCreatorPayoutAmountQuery(apiKey: String): Mins!
   }
 
   type Mutation {
@@ -15,6 +19,19 @@ export const dataTypeDefs = gql`
     createCreatorKeyMutation: String!
     defaultUserMutation(userID: String!): User!
     createUserStripeIDMutation(apiKey: String!): String!
+    createNewCreatorPaymentMutation(apiKey: String): Payment
+  }
+
+  type Payment {
+    amount: Float!
+    status: String!
+    type: String!
+    createdAt: Date!
+  }
+
+  type Mins {
+    minimumPayout: Float!
+    balance: Float!
   }
 
   type User {
