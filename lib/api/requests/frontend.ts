@@ -307,3 +307,49 @@ export async function getEarnings() {
     )
   ).calculateCreatorLifetimeEarningsQuery;
 }
+
+export async function getPaymentHistory() {
+  return (
+    await gqc.request(
+      gql`
+        query Query {
+          getPaymentHistoryQuery {
+            amount
+            status
+            type
+            createdAt
+          }
+        }
+      `
+    )
+  ).getPaymentHistoryQuery;
+}
+
+export async function getAvalibleCreatorPayout() {
+  return (
+    await gqc.request(
+      gql`
+        query Query {
+          getAvalibleCreatorPayoutAmountQuery {
+            minimumPayout
+            balance
+          }
+        }
+      `
+    )
+  ).getAvalibleCreatorPayoutAmountQuery;
+}
+
+export async function createNewPaymentRequest() {
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation {
+          createNewCreatorPaymentMutation {
+            amount
+          }
+        }
+      `
+    )
+  ).createNewCreatorPaymentMutation;
+}
