@@ -3,6 +3,9 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import SideBar from "../../../../components/dashboard/sidebar";
 import {
+  createNewPaymentRequest,
+  getAvalibleCreatorPayout,
+  getPaymentHistory,
   getStripeID,
   getStripeOnboardingLink,
 } from "../../../../lib/api/requests/frontend";
@@ -14,6 +17,9 @@ export default function PaymentsPage({}) {
   const { data: session } = useSession();
   const [stripeID, setStripeID] = useState("");
   const [onboardingURL, setOnboardingURL] = useState("");
+  const [paymentHistory, setPaymentHistory] = useState([]);
+  const [avaliableTakout, setAvaliableTakout] = useState(0);
+  const [minPayout, setMinPayout] = useState(0);
 
   useEffect(() => {
     getStripeID().then((res: any) => {
@@ -24,8 +30,19 @@ export default function PaymentsPage({}) {
         });
       }
     });
-  }, [session]);
 
+    getPaymentHistory().then((res: any) => {
+      if (res) setPaymentHistory(res);
+    });
+
+    getAvalibleCreatorPayout().then((res: any) => {
+      if (res.balance < 0) res.balance = 0;
+      setAvaliableTakout(res.balance.toFixed(2));
+      setMinPayout(res.minimumPayout.toFixed(2));
+    });
+  }, [session]);
+  const eligible =
+    parseInt(minPayout.toString()) < parseInt(avaliableTakout.toString());
   return (
     <>
       <Head>
@@ -50,6 +67,26 @@ export default function PaymentsPage({}) {
                 Setup / Change stripe payout account details.
               </button>
             )}
+            {eligible ? (
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-5 py-2 mx-5 px-4 rounded"
+                onClick={async () => {
+                  toast.loading("Processing payment...", {});
+                  createNewPaymentRequest().then((res: any) => {
+                    toast.dismiss();
+                    if (res) {
+                      toast.success("Payment request created successfully.");
+                    } else {
+                      toast.error("Payment request failed.");
+                    }
+                  });
+                }}
+              >
+                Create new payout
+              </button>
+            ) : (
+              ""
+            )}
             <br />
             Your stripe payout account id is.
             <button
@@ -63,6 +100,33 @@ export default function PaymentsPage({}) {
             </button>
             <br /> Our support team may ask for this if issues arise while
             processing your payout.
+            <div>
+              <br />
+              Avaliable for payout: {avaliableTakout}$. Minimum payout is{" "}
+              {minPayout}$. You are {eligible ? "" : "not"} eligible for payout.
+              <table className="table-auto w-full">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-2">Date</th>
+                    <th className="px-4 py-2">Amount</th>
+                    <th className="px-4 py-2">Status</th>
+                    <th className="px-4 py-2">Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paymentHistory.map((payment: any) => (
+                    <tr key={payment.id}>
+                      <td className="border px-4 py-2">
+                        {new Date(payment.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="border px-4 py-2">{payment.amount}</td>
+                      <td className="border px-4 py-2">{payment.status}</td>
+                      <td className="border px-4 py-2">{payment.type}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </main>
