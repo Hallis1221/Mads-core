@@ -14,12 +14,14 @@ import {
   getAllUserContentFull,
   getContentDataWithID,
   getContentWithID,
+  getEarnings,
 } from "../../../lib/api/requests/frontend";
 import { ContentData } from "../../../lib/types/data/contentData";
 import ChartCard from "../../../components/dashboard/chart/chartcard";
 
 // TODO move everything to mads core
 export default function Dashboard() {
+  const [revenue, setRevenue] = useState(0);
   const { data: session } = useSession();
   const [lastUpdated, setLastUpdated] = useState("Fetching...");
   const [contents, setContents] = useState([
@@ -48,12 +50,16 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (session && session.user) {
-    toast.dismiss();
+      getEarnings().then((res: any) => {
+        console.log(res);
+        setRevenue(res);
+      });
+      toast.dismiss();
       toast.loading(
         "Started fetching data... This could take up to 30 seconds."
       );
       getAllUserContentFull().then((res: any) => {
-        if (res.length <= 0) return; 
+        if (res.length <= 0) return;
         console.table(res);
         setStats({
           views: res[0].views,
@@ -187,6 +193,7 @@ export default function Dashboard() {
             contents={contents}
             stats={stats}
             lastUpdated={lastUpdated}
+            revenue={revenue}
           />
         </div>
         <div className="px-16 block xl:hidden">
@@ -210,7 +217,9 @@ function DesktopDashboard({
   stats,
   lastUpdated,
   contents,
+  revenue,
 }: {
+  revenue: number;
   stats: {
     views: string;
     clicks: string;
@@ -240,15 +249,11 @@ function DesktopDashboard({
       <div className="grow ml-16">
         <InfoCard
           color={"#FF7976"}
-          title={"Estimated revenue"}
+          title={"Lifetime revenue"}
           value={
-            stats.views === "0" || stats.clicks === "0"
+            revenue === undefined 
               ? "N/A"
-              : "$" +
-                (
-                  parseInt(stats.views) * (1 / 1000) +
-                  parseInt(stats.clicks) * (25 / 1000)
-                ).toFixed(3)
+              : "$" + revenue.toFixed(3)
           }
           icon={"check-circle"}
           starting
