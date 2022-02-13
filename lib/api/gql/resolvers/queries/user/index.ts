@@ -156,7 +156,7 @@ export async function getAvalibleCreatorPayoutAmountQuery(
     )?.minimumPayout;
 
     return {
-      balance,
+      balance, 
       minimumPayout,
     };
   }

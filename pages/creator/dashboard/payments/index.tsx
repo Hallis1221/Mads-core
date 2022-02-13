@@ -41,8 +41,10 @@ export default function PaymentsPage({}) {
       setMinPayout(res.minimumPayout.toFixed(2));
     });
   }, [session]);
-  const eligible =
+  let eligible =
     parseInt(minPayout.toString()) < parseInt(avaliableTakout.toString());
+
+  if (!stripeID) eligible = false;
   return (
     <>
       <Head>
