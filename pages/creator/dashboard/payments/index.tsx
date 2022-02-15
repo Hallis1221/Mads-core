@@ -46,7 +46,7 @@ export default function PaymentsPage({}) {
     });
   }, [session]);
   let eligible =
-    parseInt(minPayout.toString()) < parseInt(avaliableTakout.toString());
+ true
 
   if (!stripeID) eligible = false;
   return (
@@ -85,6 +85,9 @@ export default function PaymentsPage({}) {
                     } else {
                       toast.error("Payment request failed.");
                     }
+                  }).catch((err: any) => {
+                    toast.dismiss();
+                    toast.error(err.message.split(` {"response":{"errors":[{"message":"`)[0]);
                   });
                 }}
               >
@@ -125,7 +128,7 @@ export default function PaymentsPage({}) {
                       <td className="border px-4 py-2">
                         {new Date(payment.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="border px-4 py-2">{payment.amount}</td>
+                      <td className="border px-4 py-2">{payment.amount.toFixed(2)}$</td>
                       <td className="border px-4 py-2">{payment.status}</td>
                       <td className="border px-4 py-2">{payment.type}</td>
                     </tr>
