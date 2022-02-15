@@ -151,6 +151,7 @@ export async function getAvalibleCreatorPayoutAmountQuery(
     let balance =
       (await calculateAccountEarnings(userID)) -
       (await calculateAccountPaidout(userID, "any"));
+      
     let minimumPayout = (
       await ConfigDB.findOne({ name: "prototyping" }).select("minimumPayout")
     )?.minimumPayout;
