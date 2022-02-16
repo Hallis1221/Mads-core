@@ -1,7 +1,9 @@
 import PaymentsDB from "../../db/currency/payments";
+import AdDataDB from "../../db/models/ad/data";
 import UserDB from "../../db/models/auth/user";
 import ConfigDB from "../../db/models/config";
 import ContentDB from "../../db/models/content";
+import ContentDataHistoryDB from "../../db/models/content/history";
 import { Content } from "../../types/content";
 import { ContentData } from "../../types/data/contentData";
 import { getUserContentData } from "../content/data/getContentData";
@@ -24,15 +26,55 @@ export default async function calculateAccountEarnings(userID: string) {
 
   // Iterate through the user's content
   for (var content of userContent) {
-    content = content[0] as ContentData;
+     content = content[0]
+    let matches = await AdDataDB.findOne({
+      // Check if the matches array on adData included a element with contentID equal to the current contentID
+      $or: [
+        {
+          matches: {
+            $elemMatch: {
+              contentID: content.contentID,
+            },
+          },
+        },
+        {
+          contentID: content.contentID,
+        },
+      ],
+    });
 
-    // Add the content's views to the total
-    totalViews += content.views || 0;
+    // If there are no matches, skip this content
+    if (!matches) continue;
 
-    // Add the content's clicks to the total
-    totalClicks += content.clicks || 0;
+    // For each match
+    for (var match of matches.matches) {
+      // Get the time duration of the match by taking match.ends - match.begins
+      let duration = match.ends - match.begins;
+
+      // Convert to how many half hours the match lasted
+      // TODO maybe have this be set from configDB
+
+      let halfHours = Math.floor(duration / (1000 * 60 * 30));
+
+      if (halfHours !== 1)
+        throw new Error(
+          "One match lasts for something other than half an hour"
+        );
+
+      // Get the contentdatahistory entry beginning at match.begins
+      let contentDataHistory = await ContentDataHistoryDB.findOne({
+        date: match.begins,
+      });
+    }
+
+    // Get the contentDataHistory entry with the same contentID as the current content
+    let contentDataHistory = await ContentDataHistoryDB.findOne({
+      contentID: content.contentID,
+    });
+
+    if (contentDataHistory.contentID !== content.contentID) continue; 
+    console.log(contentDataHistory, content.contentID);
   }
-
   // Calculate the earnings
   const earnings = totalClicks * prices.click + totalViews * prices.view;
 
