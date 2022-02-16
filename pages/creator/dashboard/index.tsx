@@ -50,8 +50,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (session && session.user) {
-      getEarnings().then((res: any) => {
-        console.log(res);
+      getEarnings(true).then((res: any) => {
         setRevenue(res);
       });
       toast.dismiss();

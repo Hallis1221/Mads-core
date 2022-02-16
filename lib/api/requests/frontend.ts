@@ -296,14 +296,17 @@ export async function getStripeOnboardingLink() {
   ).getUserStripeOnboardingLinkQuery;
 }
 
-export async function getEarnings() {
+export async function getEarnings(estimate: boolean) {
   return (
     await gqc.request(
       gql`
-        query Query($apiKey: String) {
-          calculateCreatorLifetimeEarningsQuery(apiKey: $apiKey)
+        query Query($estimate: Boolean!) {
+          calculateCreatorLifetimeEarningsQuery(estimate: $estimate)
         }
-      `
+      `,
+      {
+        estimate,
+      }
     )
   ).calculateCreatorLifetimeEarningsQuery;
 }
