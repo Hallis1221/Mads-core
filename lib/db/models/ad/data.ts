@@ -26,6 +26,15 @@ const AdDataSchema = new mongoose.Schema({
     required: false,
   },
 
+  // How much has been paid for this ad
+  paid: {
+    type: {
+      clicks: Number,
+      views: Number,
+    },
+    required: true,
+  },
+
   matches: {
     type: [
       {
