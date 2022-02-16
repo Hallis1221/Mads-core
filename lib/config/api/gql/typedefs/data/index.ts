@@ -7,7 +7,7 @@ export const dataTypeDefs = gql`
     isCreatorQuery(email: String): Boolean!
     getUserStripeIDQuery(apiKey: String): String!
     getUserStripeOnboardingLinkQuery(apiKey: String): String!
-    calculateCreatorLifetimeEarningsQuery(apiKey: String): Float!
+    calculateCreatorLifetimeEarningsQuery(apiKey: String, estimate: Boolean!): Float!
     getPaymentHistoryQuery(apiKey: String): [Payment!]!
     getAvalibleCreatorPayoutAmountQuery(apiKey: String): Mins!
   }
