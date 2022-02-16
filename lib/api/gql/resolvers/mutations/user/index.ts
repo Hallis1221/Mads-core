@@ -2,7 +2,7 @@ import { isAuthorized } from "../../../../../auth/checks";
 import ApiDB from "../../../../../db/models/auth/api";
 import UserDB from "../../../../../db/models/auth/user";
 import { logger } from "../../../../../log";
-import calculateAccountEarnings from "../../../../../server/currency/calculateEarnings";
+import calculateAccountEarnings, { calculateExcatAccountEarnings } from "../../../../../server/currency/calculateEarnings";
 import { quePayment } from "../../../../../server/currency/processPayment";
 import { createUserStripeID } from "../../../../../server/user";
 import { User } from "../../../../../types/user";
@@ -67,7 +67,7 @@ export async function createNewCreatorPaymentMutation(
 
     return await quePayment(
       userID,
-      await calculateAccountEarnings(userID),
+      await calculateExcatAccountEarnings(userID),
       "stripe.creator.payout"
     );
   }
@@ -78,7 +78,7 @@ export async function createNewCreatorPaymentMutation(
     
     return await quePayment(
       userDB._id.toString(),
-      await calculateAccountEarnings(userDB._id.toString()),
+      await calculateExcatAccountEarnings(userDB._id.toString()),
       "stripe.creator.payout"
     );
   }

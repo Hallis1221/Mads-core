@@ -5,7 +5,7 @@ import ApiDB from "../../../../../db/models/auth/api";
 import UserDB from "../../../../../db/models/auth/user";
 import ConfigDB from "../../../../../db/models/config";
 import calculateAccountEarnings, {
-  calculateAccountPaidout,
+  calculateAccountPaidout, calculateExcatAccountEarnings,
 } from "../../../../../server/currency/calculateEarnings";
 import {
   getStripeOnboardingLink,
@@ -82,9 +82,10 @@ export async function getUserStripeOnboardingLinkQuery(
 // This is the resolver for the calculateCreatorLifetimeEarnings query.
 export async function calculateCreatorLifetimeEarningsQuery(
   _: undefined,
-  { apiKey }: { apiKey: string },
-  { user }: { user: User }
+  { apiKey, estimate }: { apiKey: string;  estimate: boolean },
+  { user, }: { user: User;}
 ): Promise<number> {
+  console.log(estimate)
   if (apiKey) {
     if (!(await isAuthorized("creator", apiKey, { contentid: undefined })))
       throw new Error("API key is not authorized as creator");
@@ -94,13 +95,16 @@ export async function calculateCreatorLifetimeEarningsQuery(
 
     if (!userID) throw new Error("API key is not associated with a user");
 
-    return await calculateAccountEarnings(userID);
+    if (estimate) return await calculateAccountEarnings(userID);
+    else return await calculateExcatAccountEarnings(userID);
   }
   if (user) {
     const userDB = await UserDB.findOne({
       email: user.email || user.user.email,
     });
-    return await calculateAccountEarnings(userDB._id.toString());
+
+    if (estimate) return await calculateAccountEarnings(userDB._id.toString());
+    else return await calculateExcatAccountEarnings(userDB._id.toString());
   }
 
   throw new Error("Unathorized");
@@ -149,15 +153,15 @@ export async function getAvalibleCreatorPayoutAmountQuery(
     if (!userID) throw new Error("API key is not associated with a user");
 
     let balance =
-      (await calculateAccountEarnings(userID)) -
+      (await calculateExcatAccountEarnings(userID)) -
       (await calculateAccountPaidout(userID, "any"));
-      
+
     let minimumPayout = (
       await ConfigDB.findOne({ name: "prototyping" }).select("minimumPayout")
     )?.minimumPayout;
 
     return {
-      balance, 
+      balance,
       minimumPayout,
     };
   }
@@ -167,7 +171,7 @@ export async function getAvalibleCreatorPayoutAmountQuery(
     });
 
     let balance =
-      (await calculateAccountEarnings(userDB._id.toString())) -
+      (await calculateExcatAccountEarnings(userDB._id.toString())) -
       (await calculateAccountPaidout(userDB._id.toString(), "any"));
     let minimumPayout = (
       await ConfigDB.findOne({ name: "prototyping" }).select("minimumPayout")
