@@ -22,31 +22,40 @@ export default function PaymentsPage({}) {
   const [minPayout, setMinPayout] = useState(0);
 
   useEffect(() => {
-    getStripeID().then((res: any) => {
-      if (res) {
-        setStripeID(res);
-        getStripeOnboardingLink().then((res: any) => {
-          if (res) setOnboardingURL(res);
-        }).catch((err: any) => {
-          toast.error(err.message);
-        });
-      }
-    }).catch((err: any) => {
-      toast.error(err.message);
-    });
+    getStripeID()
+      .then((res: any) => {
+        toast.success("Stripe id fetched!");
+        if (res) {
+          setStripeID(res);
+          getStripeOnboardingLink()
+            .then((res: any) => {
+              toast.success("Onboarding url fetched!");
+              if (res) setOnboardingURL(res);
+            })
+            .catch((err: any) => {
+              toast.error(err.message);
+            });
+        }
+      })
+      .catch((err: any) => {
+        toast.error(err.message);
+      });
 
     getPaymentHistory().then((res: any) => {
+      toast.success("Payment history fetched!");
       if (res) setPaymentHistory(res);
     });
 
+    toast.loading("Fetching excat payout amount... This could take up to 30 seconds.");
     getAvalibleCreatorPayout().then((res: any) => {
+      toast.dismiss();
+      toast.success("Avaliable payout fetched!");
       if (res.balance < 0) res.balance = 0;
       setAvaliableTakout(res.balance.toFixed(2));
       setMinPayout(res.minimumPayout.toFixed(2));
     });
   }, [session]);
-  let eligible =
- true
+  let eligible = true;
 
   if (!stripeID) eligible = false;
   return (
@@ -78,17 +87,23 @@ export default function PaymentsPage({}) {
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-5 py-2 mx-5 px-4 rounded"
                 onClick={async () => {
                   toast.loading("Processing payment...", {});
-                  createNewPaymentRequest().then((res: any) => {
-                    toast.dismiss();
-                    if (res) {
-                      toast.success("Payment request created successfully.");
-                    } else {
-                      toast.error("Payment request failed.");
-                    }
-                  }).catch((err: any) => {
-                    toast.dismiss();
-                    toast.error(err.message.split(` {"response":{"errors":[{"message":"`)[0]);
-                  });
+                  createNewPaymentRequest()
+                    .then((res: any) => {
+                      toast.dismiss();
+                      if (res) {
+                        toast.success("Payment request created successfully.");
+                      } else {
+                        toast.error("Payment request failed.");
+                      }
+                    })
+                    .catch((err: any) => {
+                      toast.dismiss();
+                      toast.error(
+                        err.message.split(
+                          ` {"response":{"errors":[{"message":"`
+                        )[0]
+                      );
+                    });
                 }}
               >
                 Create new payout
@@ -128,7 +143,9 @@ export default function PaymentsPage({}) {
                       <td className="border px-4 py-2">
                         {new Date(payment.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="border px-4 py-2">{payment.amount.toFixed(2)}$</td>
+                      <td className="border px-4 py-2">
+                        {payment.amount.toFixed(2)}$
+                      </td>
                       <td className="border px-4 py-2">{payment.status}</td>
                       <td className="border px-4 py-2">{payment.type}</td>
                     </tr>
