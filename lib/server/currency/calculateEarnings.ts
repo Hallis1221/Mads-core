@@ -141,11 +141,24 @@ export async function calculateExcatAccountEarnings(userID: string) {
         .select("clicks");
 
       // Check if the ad has a input for amount paid for it
-      if (!adData.paid)
-        throw new Error(
-          `Ad ${ad.adID} has no amount paid for it. Please contact support.`
+      if (!adData.paid) {
+        logger.warn(
+          `Ad ${ad.adID} has no amount paid for it. Skipping and creating paid property on it` +
+            JSON.stringify(adData)
         );
-      else {
+        // Create a new paid property for the ad
+        await AdDataDB.updateOne(
+          { adID: ad.adID },
+          {
+            $set: {
+              paid: {
+                views: 0,
+                clicks: 0,
+              },
+            },
+          }
+        );
+      } else {
         // Calculate how many percent of the ad's views and clicks came from this content
         const viewDominance =
           Math.round((viewsForAd / adData.views) * 10000) / 100;

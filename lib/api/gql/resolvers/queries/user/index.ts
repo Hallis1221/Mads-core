@@ -85,7 +85,6 @@ export async function calculateCreatorLifetimeEarningsQuery(
   { apiKey, estimate }: { apiKey: string;  estimate: boolean },
   { user, }: { user: User;}
 ): Promise<number> {
-  console.log(estimate)
   if (apiKey) {
     if (!(await isAuthorized("creator", apiKey, { contentid: undefined })))
       throw new Error("API key is not authorized as creator");
