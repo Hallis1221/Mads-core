@@ -59,12 +59,11 @@ export async function matchWithAd(
 
     // Create a random number between 0 and 5 and add it to the ad relevance. This will make the ad more random and ensure that the ad is not always the same on the same content.
     // (Unless you have a very high priority tag, in which case it will be more likely to be the ad that is returned or you have a very specific theme, in which case it will be more likely to be the ad that is returned)
-
+try {
     score += Math.floor(Math.random() * 5);
-
     // Get the number of views for the ad
     const views: number = (
-      await AdDataDB.findOne({ adID: ad._id }).select("views")
+      await AdDataDB.findOne({ adID: ad._id })
     ).views;
 
     // Get the number of clicks for the ad
@@ -85,6 +84,15 @@ export async function matchWithAd(
       logger.warn(
         `Ad: ${ad.title} is not a winner because it has reached its max views or clicks`
       )
+    }} catch (error) {
+      logger.error(`Error with ad: ${ad.title}. Most likely the addata is not created yet. Creating it now.`)
+      await AdDataDB.create({
+        adID: ad._id,
+        views: 0,
+        clicks: 0,
+      });
+      
+      continue;
     }
   }
 

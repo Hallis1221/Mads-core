@@ -32,7 +32,7 @@ const AdDataSchema = new mongoose.Schema({
       clicks: Number,
       views: Number,
     },
-    required: true,
+    required: false,
   },
 
   matches: {
