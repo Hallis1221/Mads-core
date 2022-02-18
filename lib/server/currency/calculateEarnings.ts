@@ -103,8 +103,7 @@ export async function calculateExcatAccountEarnings(userID: string) {
     let processedAds: any[] = [];
     // Iterate through the matched ads
     for (var ad of matchedAds) {
-      if (processedAds.includes(ad.adID)) continue;
-
+      if (processedAds.includes(ad.adID.toString())) continue;
       let viewsForAd = 0;
       let clicksForAd = 0;
 
@@ -159,28 +158,51 @@ export async function calculateExcatAccountEarnings(userID: string) {
           }
         );
       } else {
+        if (processedAds.includes(ad.adID.toString())) continue;
         // Calculate how many percent of the ad's views and clicks came from this content
         const viewDominance =
           Math.round((viewsForAd / adData.views) * 10000) / 100;
         const clickDominance =
           Math.round((clicksForAd / adData.clicks) * 10000) / 100;
 
+  
         // Get that percentage of the ad's amount paid
         const amountPaid =
           adData.paid.views * (viewDominance / 100) +
           adData.paid.clicks * (clickDominance / 100);
 
+          logger.info(
+            `User ${userID} has ${viewDominance}% of views and ${clickDominance}% of clicks for ad ${ad.adID}. Resulting in ${amountPaid}$`
+          );
+
         if (amountPaid > adData.paid.views + adData.paid.clicks)
           throw new Error(
             `Ad ${ad.adID} has an amount paid that is greater than the total amount paid for it. Please contact support.`
           );
+        if (typeof amountPaid !== "number" || isNaN(amountPaid)) {
+          logger.warn(`Ad ${ad.adID} has an amount paid that is not a number.`);
+          // Create a new paid property for the ad
+          await AdDataDB.updateOne(
+            { adID: ad.adID },
+            {
+              $set: {
+                paid: {
+                  views: 0,
+                  clicks: 0,
+                },
+              },
+            }
+          );
+        }
         // Add the amount paid to the total
-        totalPaid += amountPaid;
+        else totalPaid += amountPaid;
+        
       }
 
       // Add the ad to the processedAds array
-      processedAds.push(ad.adID);
+      processedAds.push(ad.adID.toString());
     }
   }
+
   return totalPaid;
 }
