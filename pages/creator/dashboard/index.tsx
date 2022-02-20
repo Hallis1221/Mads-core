@@ -188,7 +188,7 @@ export default function Dashboard() {
       <div className="relative h-screen w-full bg-[#F2F7FF] overflow-hidden flex flex-row font-mulish">
         <SideBar items={creatorDashboardItems} />
         <div className="px-16 hidden xl:block">
-          <DashboardTopRow title={"Overview"} />
+        <DashboardTopRow title={"Overview"} />
           <DesktopDashboard
             contents={contents}
             stats={stats}
