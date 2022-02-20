@@ -1,18 +1,24 @@
 import toast from "react-hot-toast";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import SideBar from "../../../../components/dashboard/sidebar";
-import { creatorDashboardItems } from "../../../creator/dashboard";
 import { Payment } from "../../../../lib/types/data/payment";
-import { md5 } from "pure-md5";
 import { adminSideItems } from "..";
+import { getPendingPayments } from "../../../../lib/api/requests/frontend";
 
 export default function PaymentsPage({}) {
   // Use session to get user data
   const { data: session } = useSession();
   const [pendingPayments, setPendingPayments] = useState([]);
 
+  // Get pending payments
+  useEffect(() => {
+    if (!session) return;
+    getPendingPayments().then((res) => {
+      setPendingPayments(res);
+    });
+  }, [session]);
   return (
     <>
       <Head>
@@ -38,26 +44,25 @@ export default function PaymentsPage({}) {
                 </thead>
                 <tbody>
                   {pendingPayments.map((payment: Payment) => (
-                    <tr key={Math.random()*1000}>
+                    <tr key={Math.random() * 1000}>
                       <td className="border px-4 py-2">{payment.date}</td>
                       <td className="border px-4 py-2">{payment.amount}</td>
                       <td className="border px-4 py-2">{payment.status}</td>
                       <td className="border px-4 py-2">{payment.type}</td>
-                        <td className="border px-4 py-2">{payment.email}</td>
-                        <td className="border px-4 py-2">{payment.userID}</td>
-                        <td className="border px-4 py-2">{payment.stripeID}</td>
-                        <td className="border px-4 py-2">
-                            <button
-                                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                                onClick={() => {
-                                    console.log("Accept payment");
-                                    toast.success("Payment accepted");
-                                }}
-                            >
-                                Accept
-                            </button>
-                        </td>
-
+                      <td className="border px-4 py-2">{payment.email}</td>
+                      <td className="border px-4 py-2">{payment.userID}</td>
+                      <td className="border px-4 py-2">{payment.stripeID}</td>
+                      <td className="border px-4 py-2">
+                        <button
+                          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                          onClick={() => {
+                            console.log("Accept payment");
+                            toast.success("Payment accepted");
+                          }}
+                        >
+                          Accept
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

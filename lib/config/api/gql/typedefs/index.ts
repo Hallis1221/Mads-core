@@ -5,6 +5,7 @@ import { contentTypeDefs } from "./content";
 import { contentDataTypeDefs } from "./content/data";
 import { creatorTypeDefs } from "./creator";
 import { dataTypeDefs } from "./data";
+import { paymentTypeDefs } from "./payments";
 import { userTypeDefs } from "./user";
 import { waitlistTypeDefs } from "./waitlist";
 
@@ -17,6 +18,7 @@ const typeDefinitions: Array<DocumentNode> = [
   userTypeDefs,
   creatorTypeDefs,
   adDataTypeDefs,
+  paymentTypeDefs,
 ];
 
 export default typeDefinitions;

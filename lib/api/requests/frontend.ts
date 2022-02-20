@@ -394,3 +394,23 @@ export async function setCreator(email: string, newCreatorStatus: boolean) {
     )
   ).setCreatorMutation;
 }
+
+export async function getPendingPayments() {
+  return (
+    await gqc.request(
+      gql`
+        query GetPendingPaymentsQuery {
+          getPendingPaymentsQuery {
+            amount
+            status
+            type
+            date
+            stripeID
+            email
+            userID
+          }
+        }
+      `
+    )
+  ).getPendingPaymentsQuery;
+}

@@ -31,6 +31,7 @@ import {
   getLastContentDataQuery,
 } from "./queries/content/data";
 import { getAllContentHistoryQuery, getContentHistoryQuery } from "./queries/content/data/history/getContentHistory";
+import { getPendingPaymentsQuery } from "./queries/payments";
 import { calculateCreatorLifetimeEarningsQuery, getAllUsersQuery, getAvalibleCreatorPayoutAmountQuery, getPaymentHistoryQuery, getUserStripeIDQuery, getUserStripeOnboardingLinkQuery, isCreatorQuery } from "./queries/user";
 import { getUserInfoQuery } from "./queries/waitlist";
 
@@ -72,6 +73,7 @@ const resolvers = {
 
     // Admin 
     getAllUsersQuery,
+    getPendingPaymentsQuery,
   },
 
   Mutation: {
