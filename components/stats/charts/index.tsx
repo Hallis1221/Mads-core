@@ -10,9 +10,8 @@ import {
 } from "recharts";
 import { format } from "date-fns";
 
-function createMockData(days: number) {
+function createMockData(days: number, multiplier:number) {
   let data = [];
-  let multiplier = 1000;
   for (let i = 0; i < days; i++) {
     data.push({
       date: format(new Date(new Date(2019, 0, i + 1).getTime()), "dd") + "th",
@@ -31,9 +30,7 @@ function createMockData(days: number) {
   return data;
 }
 
-export default function Chart({ chartData }: { chartData: Array<any> }) {
-  let data = chartData;
-  let length = data.length;
+export default function Chart({ data, length }: { data: Array<any>, length: number }) {
 
   if (length <= 1) length = 31;
 

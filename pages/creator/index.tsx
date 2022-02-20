@@ -18,7 +18,7 @@ const CreatorWaitlist: NextPage = () => {
       <Head>
         <title>Mads Creator Waitlist</title>
       </Head>
-      <NavBar />
+      <NavBar>{"  "}</NavBar>
       <div className="w-screen h-full flex flex-col justify-center items-center pt-24">
         <div className="flex justify-between ">
           <button

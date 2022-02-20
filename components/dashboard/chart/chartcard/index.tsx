@@ -47,7 +47,7 @@ export default function ChartCard({
             ) : 
               
             (
-              <Chart chartData={chartData} />
+              <Chart data={chartData} length={chartData.length} />
             )}
           </div>
         </div>

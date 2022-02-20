@@ -159,6 +159,7 @@ export async function calculateExcatAccountEarnings(userID: string) {
         );
       } else {
         if (processedAds.includes(ad.adID.toString())) continue;
+
         // Calculate how many percent of the ad's views and clicks came from this content
         const viewDominance =
           Math.round((viewsForAd / adData.views) * 10000) / 100;

@@ -11,37 +11,15 @@ type DItem = {
   icon: Icons;
 };
 
-export default function SideBar() {
+export default function SideBar(
+  {
+    items
+  }: {
+    items: DItem[];
+  }
+) {
   const router = useRouter();
   let selected: number = 0;
-
-  let items: DItem[] = [
-    {
-      id: 1,
-      title: "Overview",
-      link: "/creator/dashboard",
-      icon: "briefcase",
-    },
-    {
-      id: 2,
-      // Later one this will be a page of all submissions and not just the submit page
-      title: "Submit",
-      link: "/creator/dashboard/submit",
-      icon: "plus",
-    },
-    {
-      id: 3,
-      title: "Account",
-      link: "/creator/dashboard/account",
-      icon: "user",
-    },
-    {
-      id: 4,
-      title: "Payments",
-      link: "/creator/dashboard/payments",
-      icon: "star",
-    }
-  ];
 
   items.forEach((item) => {
     if (item.link === router.route) selected = item.id;
