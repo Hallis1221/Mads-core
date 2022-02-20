@@ -25,7 +25,7 @@ export default function PaymentsPage({}) {
         <title>Mads Content Account Page</title>
       </Head>
       <main>
-        <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish overflow-hidden">
+        <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish overflow-scroll">
           <SideBar items={adminSideItems} />
           <div className="px-16 ">
             <div>
