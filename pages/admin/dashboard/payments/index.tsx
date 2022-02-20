@@ -39,6 +39,8 @@ export default function PaymentsPage({}) {
                     <th className="px-4 py-2">User email</th>
                     <th className="px-4 py-2">User ID</th>
                     <th className="px-4 py-2">Stripe ID</th>
+                    <th className="px-4 py-2">Total views</th>
+                    <th className="px-4 py-2">Total clicks</th>
                     <th className="px-4 py-2">Accept</th>
                   </tr>
                 </thead>
@@ -52,6 +54,10 @@ export default function PaymentsPage({}) {
                       <td className="border px-4 py-2">{payment.email}</td>
                       <td className="border px-4 py-2">{payment.userID}</td>
                       <td className="border px-4 py-2">{payment.stripeID}</td>
+                      <td className="border px-4 py-2">{payment.totalViews}</td>
+                      <td className="border px-4 py-2">
+                        {payment.totalClicks}
+                      </td>
                       <td className="border px-4 py-2">
                         <button
                           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"

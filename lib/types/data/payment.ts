@@ -6,4 +6,6 @@ export type Payment = {
   stripeID: string;
   email: string;
   userID: string;
+  totalViews: number;
+  totalClicks: number;
 };

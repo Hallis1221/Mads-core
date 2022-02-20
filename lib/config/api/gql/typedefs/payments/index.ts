@@ -15,5 +15,7 @@ export const paymentTypeDefs = gql`
     stripeID: String!
     email: String!
     userID: String!
+    totalViews: Int!
+    totalClicks: Int!
   }
 `;

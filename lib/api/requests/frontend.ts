@@ -408,6 +408,8 @@ export async function getPendingPayments() {
             stripeID
             email
             userID
+            totalViews
+            totalClicks
           }
         }
       `

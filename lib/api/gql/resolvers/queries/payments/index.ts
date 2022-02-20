@@ -1,6 +1,7 @@
 import { isAuthorized } from "../../../../../auth/checks";
 import PaymentsDB from "../../../../../db/currency/payments";
 import UserDB from "../../../../../db/models/auth/user";
+import ContentDataDB from "../../../../../db/models/content/data";
 import { Payment } from "../../../../../types/data/payment";
 import { User } from "../../../../../types/user";
 
@@ -27,6 +28,17 @@ export async function getPendingPaymentsQuery(
 
     for (let rawPayment of rawPayments) {
       let user = await UserDB.findById(rawPayment.userID);
+      let totalViews = 0;
+      let totalClicks = 0;
+
+      await ContentDataDB.find({
+        userID: rawPayment.userID,
+      }).then((data) => {
+        for (let contentData of data) {
+          totalViews += contentData.views;
+          totalClicks += contentData.clicks;
+        }
+      });
 
       let newPayment: Payment = {
         amount: rawPayment.amount,
@@ -36,6 +48,8 @@ export async function getPendingPaymentsQuery(
         stripeID: user.stripeID,
         email: user.email,
         userID: rawPayment.userID,
+        totalViews,
+        totalClicks,
       };
 
       payments.push(newPayment);
@@ -61,7 +75,17 @@ export async function getPendingPaymentsQuery(
 
     for (let rawPayment of rawPayments) {
       let user = await UserDB.findById(rawPayment.userID);
+      let totalViews = 0;
+      let totalClicks = 0;
 
+      await ContentDataDB.find({
+        userID: rawPayment.userID,
+      }).then((data) => {
+        for (let contentData of data) {
+          totalViews += contentData.views;
+          totalClicks += contentData.clicks;
+        }
+      });
       let newPayment: Payment = {
         amount: rawPayment.amount,
         status: rawPayment.status,
@@ -70,6 +94,8 @@ export async function getPendingPaymentsQuery(
         stripeID: user.stripeID,
         email: user.email,
         userID: rawPayment.userID,
+        totalViews,
+        totalClicks,
       };
 
       payments.push(newPayment);
