@@ -69,51 +69,53 @@ export default function UsersAdminPage({}) {
           <div className="w-full px-5">
             {" "}
             <DashboardTopRow title="Admin overview" />
-            
-          <div className="left-5 w-fit h-5/6 overflow-scroll">
-            <table className="table-auto ">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2">Image</th>
-                  <th className="px-4 py-2">Email</th>
-                  <th className="px-4 py-2">Creator</th>
-                  <th className="px-4 py-2">Admin</th>
-                  <th className="px-4 py-2">StripeID</th>
-                  <th className="px-4 py-2">ID</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user: any) => (
-                  <tr key={user.id}>
-                    <td className="border px-4 py-2">
-                      {" "}
-                      <Image
-                        priority
-                        src={user.image || `https://www.gravatar.com/avatar/${md5(
-                          user.email
-                        )}?s=200`}
-                        width={50}
-                        height={50}
-                        alt={`${user.email} profile picture `}
-                      />
-                    </td>
-                    <td className="border px-4 py-2">{user.email}</td>
-                    <td className="border px-4 py-2">
-                      {user.creator ? "Yes" : "No"}
-                    </td>
-                    <td className="border px-4 py-2">
-                      {user.admin ? "Yes" : "No"}
-                    </td>
-                    <td className="border px-4 py-2">{user.stripeID ? user.stripeID : "none"}</td>
-                    <td className="border px-4 py-2">{user.id}</td>
-
+            <div className="left-5 w-fit h-5/6 overflow-scroll">
+              <table className="table-auto ">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-2">Image</th>
+                    <th className="px-4 py-2">Email</th>
+                    <th className="px-4 py-2">Creator</th>
+                    <th className="px-4 py-2">Admin</th>
+                    <th className="px-4 py-2">StripeID</th>
+                    <th className="px-4 py-2">ID</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {users.map((user: any) => (
+                    <tr key={user.id}>
+                      <td className="border px-4 py-2">
+                        {" "}
+                        <Image
+                          priority
+                          src={
+                            user.image ||
+                            `https://www.gravatar.com/avatar/${md5(
+                              user.email
+                            )}?s=200`
+                          }
+                          width={50}
+                          height={50}
+                          alt={`${user.email} profile picture `}
+                        />
+                      </td>
+                      <td className="border px-4 py-2">{user.email}</td>
+                      <td className="border px-4 py-2">
+                        {user.creator ? "Yes" : "No"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {user.admin ? "Yes" : "No"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {user.stripeID ? user.stripeID : "none"}
+                      </td>
+                      <td className="border px-4 py-2">{user.id}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-          </div>
-
         </div>
       </main>
     </>
