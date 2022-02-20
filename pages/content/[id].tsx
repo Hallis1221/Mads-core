@@ -59,7 +59,7 @@ export default function AdPage(props: any): ReactElement {
       />
 
       <main className=" relative min-h-screen  flex-1 flex flex-col">
-        <NavBar />
+        <NavBar>{}</NavBar>
 
         <div className=" relative flex items-center flex-wrap flex-col pt-48 lg:relative lg:pt-32 md:pt-48 ">
           <div className="overflow-auto mb-4 p-0 pt-0 flex flex-col text-inherit border-2 border-solid border-gray-300 border-opacity-60 rounded-xl transition-colors duration-200 ease hover:text-blue-600 hover:border-blue-600 focus:text-blue-600 focus:border-blue-600 active:border-blue-600 active:text-blue-600">

@@ -11,7 +11,7 @@ const Waitlist: NextPage = () => {
       <title>Mads waitlists</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
-   <NavBar />
+   <NavBar>{}</NavBar>
       <div className="w-screen h-full flex flex-col justify-center items-center">
         <Link href="/waitlist/creator">Creator Waitlist </Link>
       </div>

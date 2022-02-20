@@ -22,7 +22,7 @@ export default function AccountPage({}: any) : React.ReactElement {
           <title>Mads Account</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <NavBar />
+        <NavBar>{}</NavBar>
         <div className="w-screen h-full flex flex-col justify-center items-center mt-64">
           Signed in as {session.user?.email} <br />
           {creator ? "Creator" : "Not Creator"}
@@ -37,7 +37,7 @@ export default function AccountPage({}: any) : React.ReactElement {
         <title>Mads Account</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar />
+      <NavBar >{}</NavBar>
       <div className="w-screen flex flex-col justify-center items-center pt-24">
         Not signed in <br />
         <MagicEmailSignin />
