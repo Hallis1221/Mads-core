@@ -63,7 +63,7 @@ export default function PaymentsPage({}) {
                           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                           onClick={() => {
                             console.log("Accept payment");
-                            toast.success("Payment accepted");
+                            toast.success("Payment accepted (not really)");
                           }}
                         >
                           Accept

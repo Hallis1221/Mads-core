@@ -7,6 +7,10 @@ export const paymentTypeDefs = gql`
     getPendingPaymentsQuery(apiKey: String): [Payment!]!
   }
 
+  type Mutation {
+    acceptPaymentMutation(apiKey: String, paymentID: String!): Payment!
+  }
+
   type Payment {
     amount: Float!
     status: String!
