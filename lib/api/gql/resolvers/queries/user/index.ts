@@ -202,10 +202,10 @@ export async function getAllUsersQuery(
 
     return await UserDB.find({});
   }
-  if (user) {
-    if (!(await isAuthorized("admin", user, { contentid: undefined })))
+  if (user.user.email) {
+    if (!(await isAuthorized("admin",  user.user, { contentid: undefined }))) throw new Error("User is not authorized as admin");
     return await UserDB.find();
   }
 
-  throw new Error("Unathorized");
+  throw new Error(`Unathorized user`);
 }

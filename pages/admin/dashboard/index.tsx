@@ -1,9 +1,11 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useEffect } from "react";
 import MagicEmailSignin from "../../../components/auth/signin";
 import TopAuth from "../../../components/auth/topbar";
 import SideBar from "../../../components/dashboard/sidebar";
 import DashboardTopRow from "../../../components/dashboard/toprow";
+import { getAllUsers } from "../../../lib/api/requests/frontend";
 
 export default function AdminDahboard({}) {
   // Get session

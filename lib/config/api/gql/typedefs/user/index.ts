@@ -32,5 +32,6 @@ export const userTypeDefs = gql`
     email: String!
     creator: Boolean
     admin: Boolean
+    image: String
   }
 `;

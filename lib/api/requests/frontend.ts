@@ -356,3 +356,20 @@ export async function createNewPaymentRequest() {
     )
   ).createNewCreatorPaymentMutation;
 }
+
+export async function getAllUsers() {
+  return (
+    await gqc.request(
+      gql`
+        query Query {
+          getAllUsersQuery {
+            email
+            id
+            creator
+            admin
+          }
+        }
+      `
+    )
+  ).getAllUsersQuery;
+}

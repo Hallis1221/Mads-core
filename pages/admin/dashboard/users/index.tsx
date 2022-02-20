@@ -1,9 +1,11 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useState } from "react";
+import { md5 } from "pure-md5";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import MagicEmailSignin from "../../../../components/auth/signin";
-import TopAuth from "../../../../components/auth/topbar";
 import SideBar from "../../../../components/dashboard/sidebar";
+import { getAllUsers } from "../../../../lib/api/requests/frontend";
 import DashboardTopRow from "../../../../components/dashboard/toprow";
 
 // The users page displays a list of users and their roles.
@@ -12,6 +14,13 @@ export default function UsersAdminPage({}) {
   const { data: session } = useSession();
 
   const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    if (session?.user)
+      getAllUsers().then((res) => {
+        setUsers(res);
+      });
+  });
 
   if (!session?.user)
     return (
@@ -56,34 +65,49 @@ export default function UsersAdminPage({}) {
               },
             ]}
           />
-          <div className="px-16 ">
-            <div>
-              <table className="table-auto w-full">
-                <thead>
-                  <tr>
-                    <th className="px-4 py-2">Email</th>
-                    <th className="px-4 py-2">Creator</th>
-                    <th className="px-4 py-2">Admin</th>
-               
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((user: any) => (
-                    <tr key={user._id}>
-                      <td className="border px-4 py-2">
-                        {new Date(user.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="border px-4 py-2">
-                        {user.amount.toFixed(2)}$
-                      </td>
-                      <td className="border px-4 py-2">{user.status}</td>
+          <div className="w-full px-5">
+            {" "}
+            <DashboardTopRow title="Admin overview" />
             
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          <div className="left-5 w-full h-10 ">
+            <table className="table-auto ">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2">Image</th>
+                  <th className="px-4 py-2">Email</th>
+                  <th className="px-4 py-2">Creator</th>
+                  <th className="px-4 py-2">Admin</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user: any) => (
+                  <tr key={user.id}>
+                    <td className="border px-4 py-2">
+                      {" "}
+                      <Image
+                        priority
+                        src={`https://www.gravatar.com/avatar/${md5(
+                          user.email
+                        )}?s=200`}
+                        width={50}
+                        height={50}
+                        alt={`${user.email} profile picture `}
+                      />
+                    </td>
+                    <td className="border px-4 py-2">{user.email}</td>
+                    <td className="border px-4 py-2">
+                      {user.creator ? "Yes" : "No"}
+                    </td>
+                    <td className="border px-4 py-2">
+                      {user.admin ? "Yes" : "No"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+          </div>
+
         </div>
       </main>
     </>

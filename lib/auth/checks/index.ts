@@ -57,7 +57,6 @@ export async function isAuthorized(
     else if (!authentication.email) throw new Error("User email is undefined");
     else if (await isAdmin(authentication.email)) return true;
   }
-
   if (!authentication.email && authentication.user.email)
     authentication.email = authentication.user.email;
 

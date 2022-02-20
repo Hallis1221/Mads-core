@@ -36,5 +36,9 @@ export async function isContentOwner(user: User, contentID: string): Promise<boo
 }
 
 export async function isAdmin(email: string): Promise<boolean> {
-  throw new Error("Function not implemented.");
+  // Get the user with the provided email and select the admin field
+  const admin: boolean | undefined = (await UserDB.findOne({ email }).select(
+    "admin"
+  ))?.admin;
+  return admin ? admin : false;
 }
