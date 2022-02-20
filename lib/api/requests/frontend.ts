@@ -362,11 +362,15 @@ export async function getAllUsers() {
     await gqc.request(
       gql`
         query Query {
-          getAllUsersQuery {
+          
+          getAllUsersQuery{
+            stripeID
+            emailVerified
             email
             id
             creator
             admin
+            image
           }
         }
       `

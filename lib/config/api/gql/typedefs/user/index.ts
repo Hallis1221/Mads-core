@@ -33,5 +33,7 @@ export const userTypeDefs = gql`
     creator: Boolean
     admin: Boolean
     image: String
+    stripeID: String
+    emailVerified: Date
   }
 `;

@@ -18,9 +18,10 @@ export default function UsersAdminPage({}) {
   useEffect(() => {
     if (session?.user)
       getAllUsers().then((res) => {
+        console.log(res);
         setUsers(res);
       });
-  });
+  }, [session]);
 
   if (!session?.user)
     return (
@@ -35,7 +36,7 @@ export default function UsersAdminPage({}) {
         <title>Mads Content Account Page</title>
       </Head>
       <main>
-        <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish overflow-hidden">
+        <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish ">
           <SideBar
             items={[
               {
@@ -69,7 +70,7 @@ export default function UsersAdminPage({}) {
             {" "}
             <DashboardTopRow title="Admin overview" />
             
-          <div className="left-5 w-full h-10 ">
+          <div className="left-5 w-fit h-5/6 overflow-scroll">
             <table className="table-auto ">
               <thead>
                 <tr>
@@ -77,6 +78,8 @@ export default function UsersAdminPage({}) {
                   <th className="px-4 py-2">Email</th>
                   <th className="px-4 py-2">Creator</th>
                   <th className="px-4 py-2">Admin</th>
+                  <th className="px-4 py-2">StripeID</th>
+                  <th className="px-4 py-2">ID</th>
                 </tr>
               </thead>
               <tbody>
@@ -86,7 +89,7 @@ export default function UsersAdminPage({}) {
                       {" "}
                       <Image
                         priority
-                        src={`https://www.gravatar.com/avatar/${md5(
+                        src={user.image || `https://www.gravatar.com/avatar/${md5(
                           user.email
                         )}?s=200`}
                         width={50}
@@ -101,6 +104,9 @@ export default function UsersAdminPage({}) {
                     <td className="border px-4 py-2">
                       {user.admin ? "Yes" : "No"}
                     </td>
+                    <td className="border px-4 py-2">{user.stripeID ? user.stripeID : "none"}</td>
+                    <td className="border px-4 py-2">{user.id}</td>
+
                   </tr>
                 ))}
               </tbody>
