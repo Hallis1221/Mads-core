@@ -15,7 +15,7 @@ import {
   registerClicksMutation,
   registerViewsMutation,
 } from "./mutations/register";
-import {defaultUserMutation, createUserStripeIDMutation, createNewCreatorPaymentMutation } from "./mutations/user";
+import {defaultUserMutation, createUserStripeIDMutation, createNewCreatorPaymentMutation, setCreatorMutation } from "./mutations/user";
 import { registerForCreatorWaitlistMutation } from "./mutations/waitlist";
 import getAdQuery from "./queries/ad";
 import getAdDataQuery from "./queries/ad/data";
@@ -106,6 +106,7 @@ const resolvers = {
 
     // Api
     createCreatorKeyMutation,
+    setCreatorMutation,
 
     // Payment
     createNewCreatorPaymentMutation

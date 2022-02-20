@@ -13,6 +13,7 @@ export const creatorTypeDefs = gql`
   type Mutation {
     createCreatorKeyMutation: String!
     createNewCreatorPaymentMutation(apiKey: String): Payment
+    setCreatorMutation(apiKey: String, creator: Boolean!, email: String!): User
   }
 
   type Payment {

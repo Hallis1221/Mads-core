@@ -5,8 +5,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import MagicEmailSignin from "../../../../components/auth/signin";
 import SideBar from "../../../../components/dashboard/sidebar";
-import { getAllUsers } from "../../../../lib/api/requests/frontend";
+import { getAllUsers, setCreator } from "../../../../lib/api/requests/frontend";
 import DashboardTopRow from "../../../../components/dashboard/toprow";
+import toast from "react-hot-toast";
 
 // The users page displays a list of users and their roles.
 export default function UsersAdminPage({}) {
@@ -76,6 +77,7 @@ export default function UsersAdminPage({}) {
                     <th className="px-4 py-2">Image</th>
                     <th className="px-4 py-2">Email</th>
                     <th className="px-4 py-2">Creator</th>
+                    <th className="px-4 py-2">Switch creator status</th>
                     <th className="px-4 py-2">Admin</th>
                     <th className="px-4 py-2">StripeID</th>
                     <th className="px-4 py-2">ID</th>
@@ -103,6 +105,29 @@ export default function UsersAdminPage({}) {
                       <td className="border px-4 py-2">
                         {user.creator ? "Yes" : "No"}
                       </td>
+                      <td className="border px-4 py-2">
+                        <button
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          onClick={() => {
+                            setCreator(user.email, !user.creator).then(() => {
+                              toast.success(
+                                `${user.email} is now ${
+                                  user.creator ? "not" : ""
+                                } a creator`
+                              );
+
+                              // Update the users list
+                              getAllUsers().then((res) => {
+                                setUsers(res);
+                              });
+                             
+                            });
+                          }}
+                        >
+                          {user.creator ? "Remove creator" : "Make creator"}
+                        </button>
+                      </td>
+
                       <td className="border px-4 py-2">
                         {user.admin ? "Yes" : "No"}
                       </td>

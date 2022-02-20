@@ -2,7 +2,9 @@ import { isAuthorized } from "../../../../../auth/checks";
 import ApiDB from "../../../../../db/models/auth/api";
 import UserDB from "../../../../../db/models/auth/user";
 import { logger } from "../../../../../log";
-import calculateAccountEarnings, { calculateExcatAccountEarnings } from "../../../../../server/currency/calculateEarnings";
+import calculateAccountEarnings, {
+  calculateExcatAccountEarnings,
+} from "../../../../../server/currency/calculateEarnings";
 import { quePayment } from "../../../../../server/currency/processPayment";
 import { createUserStripeID } from "../../../../../server/user";
 import { User } from "../../../../../types/user";
@@ -72,10 +74,12 @@ export async function createNewCreatorPaymentMutation(
     );
   }
   if (user) {
-    const userDB = await UserDB.findOne({ email: user.email || user.user.email });
+    const userDB = await UserDB.findOne({
+      email: user.email || user.user.email,
+    });
 
     if (!userDB) throw new Error("User not found");
-    
+
     return await quePayment(
       userDB._id.toString(),
       await calculateExcatAccountEarnings(userDB._id.toString()),
@@ -83,5 +87,33 @@ export async function createNewCreatorPaymentMutation(
     );
   }
 
+  throw new Error("Unathorized");
+}
+
+// This is the resolver for the setCreator mutation.
+export async function setCreatorMutation(
+  _: undefined,
+  {
+    apiKey,
+    creator,
+    email,
+  }: { apiKey: string; creator: boolean; email: string },
+  { user }: { user: User }
+) {
+  if (apiKey) {
+    if (!(await isAuthorized("admin", apiKey, { contentid: undefined })))
+      throw new Error("API key is not authorized as admin");
+    let updated = await UserDB.findOneAndUpdate({ email }, { creator });
+    logger.debug(`Set user: ${email} to creator: ${creator}`);
+
+    return updated;
+  } else if (user.user) {
+    if (!(await isAuthorized("admin", user.user, { contentid: undefined })))
+      throw new Error("User is not authorized as admin");
+    let updated = await UserDB.findOneAndUpdate({ email }, { creator });
+    logger.debug(`Set user: ${email} to creator: ${creator}`);
+
+    return updated;
+  }
   throw new Error("Unathorized");
 }

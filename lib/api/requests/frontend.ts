@@ -362,8 +362,7 @@ export async function getAllUsers() {
     await gqc.request(
       gql`
         query Query {
-          
-          getAllUsersQuery{
+          getAllUsersQuery {
             stripeID
             emailVerified
             email
@@ -376,4 +375,22 @@ export async function getAllUsers() {
       `
     )
   ).getAllUsersQuery;
+}
+
+export async function setCreator(email: string, newCreatorStatus: boolean) {
+  return (
+    await gqc.request(
+      gql`
+        mutation Mutation($creator: Boolean!, $email: String!) {
+          setCreatorMutation(creator: $creator, email: $email) {
+            email
+          }
+        }
+      `,
+      {
+        creator: newCreatorStatus,
+        email: email,
+      }
+    )
+  ).setCreatorMutation;
 }
