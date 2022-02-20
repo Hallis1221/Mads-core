@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { createUserContent } from "../../../../lib/api/requests/frontend";
+import { creatorDashboardItems } from "..";
 
 export default function SubmissionPage({}) {
   // Get authentication session
@@ -20,7 +21,7 @@ export default function SubmissionPage({}) {
       </Head>
       <main>
         <div className="absolute h-screen w-full bg-[#F2F7FF] overflow-hidden flex flex-row font-mulish">
-          <SideBar />
+          <SideBar items={creatorDashboardItems} />
           <div className="px-0 xl:px-16 ">
             <div className="text-3xl w-96 right-10 font-bold pt-5 xl:pl-0 pl-16 tracking-no">
               Submission Page

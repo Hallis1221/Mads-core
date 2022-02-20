@@ -18,6 +18,7 @@ import {
 } from "../../../lib/api/requests/frontend";
 import { ContentData } from "../../../lib/types/data/contentData";
 import ChartCard from "../../../components/dashboard/chart/chartcard";
+import DItem from "../../../lib/types/dashboard/navigation";
 
 // TODO move everything to mads core
 export default function Dashboard() {
@@ -185,35 +186,7 @@ export default function Dashboard() {
         <title>Mads Dashboard | {session.user.name}</title>
       </Head>
       <div className="relative h-screen w-full bg-[#F2F7FF] overflow-hidden flex flex-row font-mulish">
-        <SideBar
-          items={[
-            {
-              id: 1,
-              title: "Overview",
-              link: "/creator/dashboard",
-              icon: "briefcase",
-            },
-            {
-              id: 2,
-              // Later one this will be a page of all submissions and not just the submit page
-              title: "Submit",
-              link: "/creator/dashboard/submit",
-              icon: "plus",
-            },
-            {
-              id: 3,
-              title: "Account",
-              link: "/creator/dashboard/account",
-              icon: "user",
-            },
-            {
-              id: 4,
-              title: "Payments",
-              link: "/creator/dashboard/payments",
-              icon: "star",
-            },
-          ]}
-        />
+        <SideBar items={creatorDashboardItems} />
         <div className="px-16 hidden xl:block">
           <DashboardTopRow title={"Overview"} />
           <DesktopDashboard
@@ -371,3 +344,31 @@ function MobileDashboard({
     </div>
   );
 }
+
+export const creatorDashboardItems: DItem[] = [
+  {
+    id: 1,
+    title: "Overview",
+    link: "/creator/dashboard",
+    icon: "briefcase",
+  },
+  {
+    id: 2,
+    // Later one this will be a page of all submissions and not just the submit page
+    title: "Submit",
+    link: "/creator/dashboard/submit",
+    icon: "plus",
+  },
+  {
+    id: 3,
+    title: "Account",
+    link: "/creator/dashboard/account",
+    icon: "user",
+  },
+  {
+    id: 4,
+    title: "Payments",
+    link: "/creator/dashboard/payments",
+    icon: "star",
+  },
+];

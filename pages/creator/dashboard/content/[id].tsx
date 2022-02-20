@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { creatorDashboardItems } from "..";
 import MagicEmailSignin from "../../../../components/auth/signin";
 import DashboardMainCol from "../../../../components/dashboard";
 import InfoCard from "../../../../components/dashboard/cards/infocard";
@@ -129,7 +130,7 @@ export default function Page() {
       </Head>
       <main>
         <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish">
-          <SideBar />
+          <SideBar items={creatorDashboardItems}/>
           <div className="px-16 ">
             {editing ? (
               <Editable setContent={setContent} content={content} />

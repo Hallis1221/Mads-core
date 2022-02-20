@@ -3,13 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import DItem from "../../../lib/types/dashboard/navigation";
 
-type DItem = {
-  id: number;
-  title: string;
-  link: string;
-  icon: Icons;
-};
 
 export default function SideBar(
   {

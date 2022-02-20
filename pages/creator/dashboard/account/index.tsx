@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useState } from "react";
+import { creatorDashboardItems } from "..";
 import SideBar from "../../../../components/dashboard/sidebar";
 import { createApiKey } from "../../../../lib/api/requests/frontend";
 
@@ -16,7 +17,7 @@ export default function Page({}) {
       </Head>
       <main>
         <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish overflow-hidden">
-          <SideBar />
+          <SideBar items={creatorDashboardItems}/>
           <div className="px-16 ">
             <div className="text-3xl  font-bold pt-5 tracking-no">
               Hello, {session?.user?.email}

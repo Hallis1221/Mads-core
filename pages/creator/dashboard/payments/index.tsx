@@ -11,6 +11,7 @@ import {
 } from "../../../../lib/api/requests/frontend";
 import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
+import { creatorDashboardItems } from "..";
 
 export default function PaymentsPage({}) {
   // Use session to get user data
@@ -65,7 +66,7 @@ export default function PaymentsPage({}) {
       </Head>
       <main>
         <div className="relative h-screen w-full bg-[#F2F7FF] flex flex-row font-mulish overflow-hidden">
-          <SideBar />
+          <SideBar items={creatorDashboardItems} />
           <div className="px-16 ">
             <div className="text-3xl  font-bold pt-5 tracking-no">
               Hello, {session?.user?.email}
