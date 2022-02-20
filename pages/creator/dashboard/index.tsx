@@ -185,9 +185,37 @@ export default function Dashboard() {
         <title>Mads Dashboard | {session.user.name}</title>
       </Head>
       <div className="relative h-screen w-full bg-[#F2F7FF] overflow-hidden flex flex-row font-mulish">
-        <SideBar />
+        <SideBar
+          items={[
+            {
+              id: 1,
+              title: "Overview",
+              link: "/creator/dashboard",
+              icon: "briefcase",
+            },
+            {
+              id: 2,
+              // Later one this will be a page of all submissions and not just the submit page
+              title: "Submit",
+              link: "/creator/dashboard/submit",
+              icon: "plus",
+            },
+            {
+              id: 3,
+              title: "Account",
+              link: "/creator/dashboard/account",
+              icon: "user",
+            },
+            {
+              id: 4,
+              title: "Payments",
+              link: "/creator/dashboard/payments",
+              icon: "star",
+            },
+          ]}
+        />
         <div className="px-16 hidden xl:block">
-          <DashboardTopRow />
+          <DashboardTopRow title={"Overview"} />
           <DesktopDashboard
             contents={contents}
             stats={stats}
@@ -198,7 +226,7 @@ export default function Dashboard() {
         <div className="px-16 block xl:hidden">
           <div className="absolute top-0 left-14">
             {" "}
-            <DashboardTopRow />
+            <DashboardTopRow title={"Overview"} />
           </div>
 
           <MobileDashboard
@@ -249,11 +277,7 @@ function DesktopDashboard({
         <InfoCard
           color={"#FF7976"}
           title={"Lifetime revenue"}
-          value={
-            revenue === undefined 
-              ? "N/A"
-              : "$" + revenue.toFixed(3)
-          }
+          value={revenue === undefined ? "N/A" : "$" + revenue.toFixed(3)}
           icon={"check-circle"}
           starting
         />
