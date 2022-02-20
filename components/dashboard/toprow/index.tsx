@@ -8,7 +8,7 @@ export default function DashboardTopRow({
 }): ReactElement {
   return (
     <div className="pb-16">
-    <div className="flex flex-row py-10 items-start justify-between h-0 z-1 ">
+    <div className="flex flex-row pb-10 items-start justify-between h-0 z-1 ">
       <div className="text-3xl  font-bold pt-5 tracking-no">{title}</div>
 
       <TopAuth />
