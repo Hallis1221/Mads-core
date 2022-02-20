@@ -5,7 +5,8 @@ import ApiDB from "../../../../../db/models/auth/api";
 import UserDB from "../../../../../db/models/auth/user";
 import ConfigDB from "../../../../../db/models/config";
 import calculateAccountEarnings, {
-  calculateAccountPaidout, calculateExcatAccountEarnings,
+  calculateAccountPaidout,
+  calculateExcatAccountEarnings,
 } from "../../../../../server/currency/calculateEarnings";
 import {
   getStripeOnboardingLink,
@@ -82,8 +83,8 @@ export async function getUserStripeOnboardingLinkQuery(
 // This is the resolver for the calculateCreatorLifetimeEarnings query.
 export async function calculateCreatorLifetimeEarningsQuery(
   _: undefined,
-  { apiKey, estimate }: { apiKey: string;  estimate: boolean },
-  { user, }: { user: User;}
+  { apiKey, estimate }: { apiKey: string; estimate: boolean },
+  { user }: { user: User }
 ): Promise<number> {
   if (apiKey) {
     if (!(await isAuthorized("creator", apiKey, { contentid: undefined })))
@@ -180,6 +181,30 @@ export async function getAvalibleCreatorPayoutAmountQuery(
       balance,
       minimumPayout,
     };
+  }
+
+  throw new Error("Unathorized");
+}
+
+// Admin mutation to get all users
+export async function getAllUsersQuery(
+  _: undefined,
+  { apiKey }: { apiKey: string },
+  {
+    user,
+  }: {
+    user: User;
+  }
+): Promise<any> {
+  if (apiKey) {
+    if (!(await isAuthorized("admin", apiKey, { contentid: undefined })))
+      throw new Error("API key is not authorized as admin");
+
+    return await UserDB.find({});
+  }
+  if (user) {
+    if (!(await isAuthorized("admin", user, { contentid: undefined })))
+    return await UserDB.find();
   }
 
   throw new Error("Unathorized");

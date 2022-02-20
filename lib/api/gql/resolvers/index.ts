@@ -31,7 +31,7 @@ import {
   getLastContentDataQuery,
 } from "./queries/content/data";
 import { getAllContentHistoryQuery, getContentHistoryQuery } from "./queries/content/data/history/getContentHistory";
-import { calculateCreatorLifetimeEarningsQuery, getAvalibleCreatorPayoutAmountQuery, getPaymentHistoryQuery, getUserStripeIDQuery, getUserStripeOnboardingLinkQuery, isCreatorQuery } from "./queries/user";
+import { calculateCreatorLifetimeEarningsQuery, getAllUsersQuery, getAvalibleCreatorPayoutAmountQuery, getPaymentHistoryQuery, getUserStripeIDQuery, getUserStripeOnboardingLinkQuery, isCreatorQuery } from "./queries/user";
 import { getUserInfoQuery } from "./queries/waitlist";
 
 const resolvers = {
@@ -69,6 +69,9 @@ const resolvers = {
     calculateCreatorLifetimeEarningsQuery,
     getPaymentHistoryQuery,
     getAvalibleCreatorPayoutAmountQuery,
+
+    // Admin 
+    getAllUsersQuery,
   },
 
   Mutation: {
