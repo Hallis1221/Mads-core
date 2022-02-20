@@ -1,7 +1,9 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import MagicEmailSignin from "../../../components/auth/signin";
+import TopAuth from "../../../components/auth/topbar";
 import SideBar from "../../../components/dashboard/sidebar";
+import DashboardTopRow from "../../../components/dashboard/toprow";
 
 export default function AdminDahboard({}) {
   // Get session
@@ -26,14 +28,14 @@ export default function AdminDahboard({}) {
             {
               id: 1,
               title: "Overview",
-              link: "/creator/dashboard",
+              link: "/admin/dashboard",
               icon: "briefcase",
             },
             {
               id: 2,
               // Later one this will be a page of all submissions and not just the submit page
               title: "Users",
-              link: "/creator/dashboard/submit",
+              link: "/admin/dashboard/users",
               icon: "users",
             },
             {
@@ -50,6 +52,15 @@ export default function AdminDahboard({}) {
             },
           ]}
         />
+
+        <div className="w-full px-5">
+          {" "}
+          <DashboardTopRow title="Admin overview" />
+        </div>
+
+        <div className="w-full">
+          <TopAuth />
+        </div>
       </div>
     </>
   );
