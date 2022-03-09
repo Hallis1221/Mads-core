@@ -14,13 +14,8 @@ import { logger } from "../../lib/log";
 import requestIp from "request-ip";
 
 connectDB();
-const ApiProductionLanding = ApolloServerPluginLandingPageGraphQLPlayground({
-  workspaceName: "MADS api",
-  settings: {
-    "request.credentials": "include",
-    "schema.polling.enable": true,
-    "editor.theme": "dark",
-  },
+const ApiProductionLanding = ApolloServerPluginLandingPageLocalDefault({
+  footer: false,
 });
 const ApiLocalLanding = ApolloServerPluginLandingPageLocalDefault({
   footer: false,
@@ -28,6 +23,7 @@ const ApiLocalLanding = ApolloServerPluginLandingPageLocalDefault({
 
 const apolloServer = new ApolloServer({
   typeDefs: typeDefinitions,
+  introspection: true,
   resolvers,
   plugins: [
     // Install a landing page plugin based on NODE_ENV
