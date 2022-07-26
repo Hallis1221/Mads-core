@@ -31,7 +31,7 @@
     "react-hot-toast": "^2.1.1",
     "react-parallax": "^3.3.0",
     "react-player": "^2.9.0",
-    "recharts": "^2.1.8",
+    "recharts": "^2.1.13",
     "stripe": "^8.202.0",
     "winston": "^3.5.1",
     "yup": "^0.32.11"
