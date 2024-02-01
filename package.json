@@ -23,7 +23,7 @@
     "mongoose": "^6.1.4",
     "next": "^12.1.0",
     "next-auth": "^4.1.0",
-    "nodemailer": "^6.7.2",
+    "nodemailer": "^6.9.9",
     "pure-md5": "^0.1.13",
     "react": "17.0.2",
     "react-countdown": "^2.3.2",
