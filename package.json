@@ -19,7 +19,7 @@
     "graphql": "^15.8.0",
     "graphql-request": "^3.7.0",
     "micro": "^9.3.4",
-    "mongodb": "^4.3.0",
+    "mongodb": "^6.0.0",
     "mongoose": "^6.1.4",
     "next": "^12.1.0",
     "next-auth": "^4.1.0",
