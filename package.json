@@ -34,7 +34,7 @@
     "recharts": "^2.1.8",
     "stripe": "^8.202.0",
     "winston": "^3.5.1",
-    "yup": "^0.32.11"
+    "yup": "^1.0.0"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.1.0",
